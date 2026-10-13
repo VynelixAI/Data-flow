@@ -17,7 +17,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 
 from app.agent.agent import stream_agent
-from app.databricks.client import databricks_host, describe_uc_object, iter_health, list_tables
+from app.databricks.client import (
+    databricks_host,
+    describe_uc_object,
+    iter_health,
+    list_catalog_names,
+    list_schema_names,
+    list_tables,
+)
 from app.databricks.search import search_catalog
 from app.databricks.dqx_utils import build_dqx_checks
 from app.databricks.file_upload import upload_and_create_table
@@ -69,6 +76,16 @@ def health():
 def inspect_uc(name: str):
     """Check a Unity Catalog table or volume file. Does not create it."""
     return describe_uc_object(name)
+
+
+@app.get("/api/catalogs")
+def catalogs():
+    return {"catalogs": list_catalog_names()}
+
+
+@app.get("/api/catalog/schemas")
+def catalog_schemas(catalog: str):
+    return {"catalog": catalog, "schemas": list_schema_names(catalog)}
 
 
 @app.get("/api/catalog/tables")

@@ -82,6 +82,12 @@ def parse_uc_location(value: str) -> UcLocation:
             )
         return UcLocation("volume_file", "/Volumes/" + "/".join(parts[1:]), file_format)
     catalog, schema, table = parse_fqn(raw)
+    if catalog.lower() in _CODE_ROOTS:
+        raise DataflowError(
+            f"'{raw}' is notebook code, not a Unity Catalog table. "
+            "Use catalog.schema.table or /Volumes/catalog/schema/volume/file.csv.",
+            code="invalid_table_name",
+        )
     return UcLocation("table", f"{catalog}.{schema}.{table}")
 
 
@@ -165,6 +171,31 @@ _VOLUME_IN_TEXT = re.compile(
     r"/Volumes/(?:[A-Za-z0-9_\-]+(?:\.[A-Za-z0-9_\-]+)*/)+[A-Za-z0-9_\-]+(?:\.[A-Za-z0-9_\-]+)*\.(?:csv|xlsx|xls|xlsm|txt|tsv)",
     re.IGNORECASE,
 )
+# Notebook and library names. These are not Unity Catalog catalogs.
+_CODE_ROOTS = frozenset(
+    {
+        "dbutils",
+        "spark",
+        "pyspark",
+        "pandas",
+        "numpy",
+        "json",
+        "pathlib",
+        "functools",
+        "itertools",
+        "collections",
+        "datetime",
+        "typing",
+        "builtins",
+    }
+)
+
+
+def _is_code_name(name: str, text: str, end: int) -> bool:
+    root = name.split(".", 1)[0].lower()
+    if root in _CODE_ROOTS:
+        return True
+    return end < len(text) and text[end] == "("
 
 
 def locations_in_text(text: str) -> list[str]:
@@ -173,13 +204,40 @@ def locations_in_text(text: str) -> list[str]:
     for match in _VOLUME_IN_TEXT.finditer(text or ""):
         found.append((match.start(), match.group(0)))
     for match in _TABLE_IN_TEXT.finditer(text or ""):
-        found.append((match.start(), match.group(1)))
+        name = match.group(1)
+        if _is_code_name(name, text or "", match.end()):
+            continue
+        found.append((match.start(), name))
     found.sort(key=lambda item: item[0])
     ordered: list[str] = []
     for _, name in found:
         if name not in ordered:
             ordered.append(name)
     return ordered
+
+
+def coerce_location(value: str) -> str:
+    """Turn a tool argument into one Unity Catalog location.
+
+    A widget line such as dbutils.widgets.text("target_table", "/Volumes/...")
+    keeps the volume path and drops the notebook call.
+    """
+    text = (value or "").strip().strip("'\"")
+    if not text:
+        raise DataflowError("A source or destination path is required.", code="invalid_path")
+    try:
+        return parse_uc_location(text).name
+    except DataflowError as first:
+        found = locations_in_text(text)
+        volumes = [item for item in found if item.startswith("/Volumes/")]
+        chosen = volumes[0] if volumes else (found[0] if len(found) == 1 else None)
+        if chosen is None:
+            raise DataflowError(
+                f"'{text}' is not a Unity Catalog location. "
+                "Use catalog.schema.table or /Volumes/catalog/schema/volume/file.csv.",
+                code="invalid_path",
+            ) from first
+        return parse_uc_location(chosen).name
 
 
 def safe_filename(filename: str, *, default_ext: str) -> str:

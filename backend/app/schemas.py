@@ -30,10 +30,12 @@ class ChatContext(BaseModel):
 
 
 class ResumeDecision(BaseModel):
-    """Operator answer for a paused destination-creation step."""
+    """Operator answer for a paused create or notebook-review step."""
 
     approved: bool
     destination: str = ""
+    comment: str = ""
+    action: Literal["approve", "decline", "revise"] = "approve"
 
 
 class ChatRequest(BaseModel):
@@ -233,6 +235,7 @@ class ValidationReport(BaseModel):
     mismatched_keys: list[MismatchRow] = Field(default_factory=list)
     duplicate_key_samples: list[DuplicateKeySample] = Field(default_factory=list)
     quarantine_preview: list[MismatchRow] = Field(default_factory=list)
+    source_profile: dict[str, Any] = Field(default_factory=dict)
     warnings: list[str] = Field(default_factory=list)
     step_errors: dict[str, str] = Field(default_factory=dict)
     dqx_checks: list[dict[str, Any]] = Field(default_factory=list)

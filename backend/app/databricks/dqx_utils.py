@@ -40,6 +40,25 @@ def format_regex(rule: str) -> str:
     return pattern
 
 
+# Spark date patterns. MM is the month; the session default is not reliable enough on its own.
+_DATE_FORMATS = ("yyyy-MM-dd", "dd/MM/yyyy", "MM/dd/yyyy", "yyyy/MM/dd", "dd-MM-yyyy", "MM-dd-yyyy")
+
+
+def parseable_date_expression(ident: str) -> str:
+    """SQL that is true for null and for a date in one of the accepted formats.
+
+    DQX ``sql_expression`` fails the row when this expression is false.
+    Leave ``negate`` unset so it stays at that default.
+    """
+    value = f"trim(CAST({ident} AS STRING))"
+    clauses = [
+        f"{ident} IS NULL",
+        f"try_to_timestamp({value}) IS NOT NULL",
+    ]
+    clauses.extend(f"try_to_date({value}, '{fmt}') IS NOT NULL" for fmt in _DATE_FORMATS)
+    return " OR ".join(clauses)
+
+
 def sql_format_predicate(column: str, rule: str) -> str:
     """True when the value is present and does not match the format."""
     ident = quote_ident(require_ident(column))
@@ -100,7 +119,6 @@ def build_dqx_checks(
                 {
                     "expression": f"NOT ({predicate})",
                     "msg": f"{column} failed format rule {rule}",
-                    "negate": False,
                 },
             )
         )
@@ -114,7 +132,6 @@ def build_dqx_checks(
                 {
                     "expression": f"NOT ({predicate})",
                     "msg": f"{column} is not valid JSON",
-                    "negate": False,
                 },
             )
         )
@@ -207,7 +224,6 @@ def infer_quality_checks(
                         "'^[A-Za-z0-9._%+\\\\-]+@[A-Za-z0-9.\\\\-]+\\\\.[A-Za-z]{2,}$'"
                     ),
                     "msg": f"{original} must look like user@domain.tld",
-                    "negate": False,
                 },
             )
         looks_like_date = "date" in lower or lower.endswith(("_at", "_ts", "_dt"))
@@ -216,13 +232,8 @@ def infer_quality_checks(
                 f"{original}_is_valid_date",
                 "sql_expression",
                 {
-                    "expression": (
-                        f"{ident} IS NULL OR try_to_date(CAST({ident} AS STRING)) IS NOT NULL "
-                        f"OR try_to_date(CAST({ident} AS STRING), 'dd/MM/yyyy') IS NOT NULL "
-                        f"OR try_to_date(CAST({ident} AS STRING), 'MM/dd/yyyy') IS NOT NULL"
-                    ),
+                    "expression": parseable_date_expression(ident),
                     "msg": f"{original} must be a parseable date",
-                    "negate": False,
                 },
             )
         if any(token == lower or lower.endswith("_" + token) for token in _MONEY):
@@ -233,7 +244,6 @@ def infer_quality_checks(
                     {
                         "expression": f"{ident} IS NULL OR {ident} > 0",
                         "msg": f"{original} must be greater than zero",
-                        "negate": False,
                     },
                 )
             else:
@@ -244,7 +254,6 @@ def infer_quality_checks(
                     {
                         "expression": f"{ident} IS NULL OR CAST({ident} AS STRING) RLIKE '{numeric}'",
                         "msg": f"{original} must be numeric",
-                        "negate": False,
                     },
                 )
                 add(
@@ -256,7 +265,6 @@ def infer_quality_checks(
                             f"OR CAST({ident} AS DECIMAL(18,2)) > 0"
                         ),
                         "msg": f"{original} must be greater than zero",
-                        "negate": False,
                     },
                 )
         if any(token == lower or lower.endswith("_" + token) for token in _QUANTITY) and not _is_numeric_type(data_type):
@@ -267,7 +275,6 @@ def infer_quality_checks(
                 {
                     "expression": f"{ident} IS NULL OR CAST({ident} AS STRING) RLIKE '{numeric}'",
                     "msg": f"{original} must be numeric",
-                    "negate": False,
                 },
             )
         json_samples = any(value.lstrip()[:1] in "{[" for value in values)
@@ -282,7 +289,6 @@ def infer_quality_checks(
                         f"OR try_parse_json(CAST({ident} AS STRING)) IS NOT NULL"
                     ),
                     "msg": f"{original} should be valid JSON, blank, or null",
-                    "negate": False,
                 },
                 criticality="warn",
             )
@@ -310,7 +316,6 @@ def infer_quality_checks(
                             f"OR CAST({ident} AS STRING) IN ({canonical})"
                         ),
                         "msg": f"{original} casing is inconsistent with the other values in this source",
-                        "negate": False,
                     },
                     criticality="warn",
                 )

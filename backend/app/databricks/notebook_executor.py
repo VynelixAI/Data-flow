@@ -284,6 +284,16 @@ def _read_uc(raw):
     return spark.table(_quote_fqn(raw))
 
 
+def _parseable_date(ident):
+    """Pass condition for DQX sql_expression. Omit negate; the default fails the row when this is false."""
+    value = "trim(CAST(" + ident + " AS STRING))"
+    formats = ("yyyy-MM-dd", "dd/MM/yyyy", "MM/dd/yyyy", "yyyy/MM/dd", "dd-MM-yyyy", "MM-dd-yyyy")
+    parts = [ident + " IS NULL", "try_to_timestamp(" + value + ") IS NOT NULL"]
+    for fmt in formats:
+        parts.append("try_to_date(" + value + ", '" + fmt + "') IS NOT NULL")
+    return " OR ".join(parts)
+
+
 def _checks_from_frame(frame, keys):
     """DQX rules from the source that was just read. A different source builds different rules."""
     rows = frame.limit(40).collect()
@@ -321,13 +331,11 @@ def _checks_from_frame(frame, keys):
             add(original + "_valid_format", "sql_expression", {
                 "expression": ident + " IS NULL OR CAST(" + ident + " AS STRING) RLIKE '^[A-Za-z0-9._%+\\\\-]+@[A-Za-z0-9.\\\\-]+\\\\.[A-Za-z]{2,}$'",
                 "msg": original + " must look like user@domain.tld",
-                "negate": False,
             })
         if ("date" in lower or lower.endswith("_at") or lower.endswith("_ts") or lower.endswith("_dt")) and not data_type.startswith(date_types):
             add(original + "_is_valid_date", "sql_expression", {
-                "expression": ident + " IS NULL OR try_to_date(CAST(" + ident + " AS STRING)) IS NOT NULL OR try_to_date(CAST(" + ident + " AS STRING), 'dd/MM/yyyy') IS NOT NULL OR try_to_date(CAST(" + ident + " AS STRING), 'MM/dd/yyyy') IS NOT NULL",
+                "expression": _parseable_date(ident),
                 "msg": original + " must be a parseable date",
-                "negate": False,
             })
         is_money = lower in money or any(lower.endswith("_" + token) for token in money)
         is_quantity = lower in quantity or any(lower.endswith("_" + token) for token in quantity)
@@ -335,26 +343,22 @@ def _checks_from_frame(frame, keys):
             add(original + "_greater_than_zero", "sql_expression", {
                 "expression": ident + " IS NULL OR " + ident + " > 0",
                 "msg": original + " must be greater than zero",
-                "negate": False,
             })
         elif is_money or is_quantity:
             numeric = "^-?[0-9]+(\\\\.[0-9]+)?$" if is_quantity and not is_money else "^[0-9]+(\\\\.[0-9]+)?$"
             add(original + "_is_numeric", "sql_expression", {
                 "expression": ident + " IS NULL OR CAST(" + ident + " AS STRING) RLIKE '" + numeric + "'",
                 "msg": original + " must be numeric",
-                "negate": False,
             })
             if is_money:
                 add(original + "_greater_than_zero", "sql_expression", {
                     "expression": ident + " IS NULL OR NOT (CAST(" + ident + " AS STRING) RLIKE '" + numeric + "') OR CAST(" + ident + " AS DECIMAL(18,2)) > 0",
                     "msg": original + " must be greater than zero",
-                    "negate": False,
                 })
         if "json" in lower or lower in json_names or any(value.lstrip()[:1] in "{[" for value in values):
             add(original + "_valid_json", "sql_expression", {
                 "expression": ident + " IS NULL OR TRIM(CAST(" + ident + " AS STRING)) = '' OR lower(TRIM(CAST(" + ident + " AS STRING))) = 'null' OR try_parse_json(CAST(" + ident + " AS STRING)) IS NOT NULL",
                 "msg": original + " should be valid JSON, blank, or null",
-                "negate": False,
             }, "warn")
         if lower in category_names:
             add(original + "_not_null", "is_not_null", {"column": original})
@@ -373,7 +377,6 @@ def _checks_from_frame(frame, keys):
                 add(original + "_case_inconsistent", "sql_expression", {
                     "expression": ident + " IS NULL OR lower(CAST(" + ident + " AS STRING)) NOT IN (" + allowed + ") OR CAST(" + ident + " AS STRING) IN (" + canonical + ")",
                     "msg": original + " casing is inconsistent with the other values in this source",
-                    "negate": False,
                 }, "warn")
     if len(keys) > 1 or (len(keys) == 1 and keys[0]):
         safe_keys = [key for key in keys if _IDENT.match(key)]
@@ -418,7 +421,7 @@ def _apply_learned(checks, learned):
         elif kind == "json" and column + "_valid_json" not in names:
             ident = "`" + column + "`"
             expression = ident + " IS NULL OR TRIM(CAST(" + ident + " AS STRING)) = '' OR lower(TRIM(CAST(" + ident + " AS STRING))) = 'null' OR try_parse_json(CAST(" + ident + " AS STRING)) IS NOT NULL"
-            kept.append({"name": column + "_valid_json", "criticality": "warn", "check": {"function": "sql_expression", "arguments": {"expression": expression, "msg": column + " should be valid JSON", "negate": False}}})
+            kept.append({"name": column + "_valid_json", "criticality": "warn", "check": {"function": "sql_expression", "arguments": {"expression": expression, "msg": column + " should be valid JSON"}}})
             names.add(column + "_valid_json")
         elif kind == "allowed_values" and column + "_allowed_values" not in names:
             values = [part.strip() for part in str(item.get("detail") or "").split(",") if part.strip()][:20]
@@ -427,7 +430,7 @@ def _apply_learned(checks, learned):
             ident = "`" + column + "`"
             quoted = ", ".join(json.dumps(value) for value in values)
             expression = ident + " IS NULL OR CAST(" + ident + " AS STRING) IN (" + quoted + ")"
-            kept.append({"name": column + "_allowed_values", "criticality": "error", "check": {"function": "sql_expression", "arguments": {"expression": expression, "msg": column + " must be one of the learned values", "negate": False}}})
+            kept.append({"name": column + "_allowed_values", "criticality": "error", "check": {"function": "sql_expression", "arguments": {"expression": expression, "msg": column + " must be one of the learned values"}}})
             names.add(column + "_allowed_values")
     return kept
 '''
@@ -451,15 +454,64 @@ else:
 if soft_delete_column and soft_delete_column in source_df.columns:
     deleted = F.lower(F.col(soft_delete_column).cast("string")).isin("true", "1", "yes", "y")
     source_df = source_df.filter(~F.coalesce(deleted, F.lit(False)))
-"""
-    quality = f"""DQX_SPEC = {checks_json}
+""" + '''
+def _profile_source(frame, keys):
+    """Row, null, and duplicate-key counts for the source frame only."""
+    present = [key for key in keys if key in frame.columns]
+    tracked = []
+    aggregates = [F.count(F.lit(1)).alias("_rows")]
+    for field in frame.schema.fields:
+        name = field.name
+        if not _IDENT.match(name):
+            continue
+        tracked.append(name)
+        aggregates.append(
+            F.sum(F.when(F.col(name).isNull(), F.lit(1)).otherwise(F.lit(0))).alias("n_" + str(len(tracked)))
+        )
+    stats = frame.agg(*aggregates).collect()[0]
+    row_count = int(stats["_rows"] or 0)
+    nulls = []
+    for index, name in enumerate(tracked, start=1):
+        nulls.append({"column": name, "null_count": int(stats["n_" + str(index)] or 0), "total": row_count})
+    duplicate_groups = 0
+    duplicate_rows = 0
+    samples = []
+    if present:
+        grouped = frame.groupBy(*present).count().where(F.col("count") > 1)
+        duplicate_groups = int(grouped.count())
+        total = grouped.agg(F.sum(F.col("count")).alias("rows")).collect()
+        duplicate_rows = int(total[0]["rows"] or 0) if total else 0
+        for row in grouped.limit(10).collect():
+            samples.append({
+                "primary_key": {key: None if row[key] is None else str(row[key]) for key in present},
+                "occurrences": int(row["count"]),
+            })
+    return {
+        "table": source_raw,
+        "row_count": row_count,
+        "nulls": nulls,
+        "duplicate_key_groups": duplicate_groups,
+        "duplicate_key_rows": duplicate_rows,
+        "duplicate_key_samples": samples,
+        "primary_keys": present,
+    }
+
+source_profile = _profile_source(source_df, primary_keys)
+print(
+    "source_profile table=" + source_raw
+    + " rows=" + str(source_profile["row_count"])
+    + " duplicate_keys=" + str(source_profile["duplicate_key_groups"])
+)
+'''
+    quality = f"""import json
+DQX_SPEC = json.loads({json.dumps(checks_json)})
 try:
     DQX_CHECKS = _checks_from_frame(projected, primary_keys)
 except Exception as _dqx_build_error:
     print("Using column rules from the notebook spec. Live rule build failed: " + str(_dqx_build_error))
     DQX_CHECKS = list(DQX_SPEC)
 _check_names = set(item["name"] for item in DQX_CHECKS)
-LEARNED_RULES = {learned_json}
+LEARNED_RULES = json.loads({json.dumps(learned_json)})
 DQX_CHECKS = _apply_learned(DQX_CHECKS, LEARNED_RULES)
 _check_names = set(item["name"] for item in DQX_CHECKS)
 for _spec_check in DQX_SPEC:
@@ -614,6 +666,7 @@ else:
     "target": target_raw,
     "quarantine": quarantine_raw,
     "dqx": dqx_summary,
+    "source_profile": source_profile,
 }
 payload = json.dumps(summary)
 print(payload)
@@ -645,7 +698,7 @@ try:
     copy["target"] = target_raw
 except Exception:
     pass
-payload = json.dumps({{"copy": copy, "results": results, "errors": errors, "dqx": dqx_summary}}, default=str)
+payload = json.dumps({{"copy": copy, "results": results, "errors": errors, "dqx": dqx_summary, "source_profile": source_profile}}, default=str)
 print(payload)
 dbutils.notebook.exit(payload)
 """

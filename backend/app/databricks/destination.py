@@ -59,6 +59,17 @@ dbutils.notebook.exit(target_raw)
 
 
 def _ensure_schema(catalog: str, schema: str) -> None:
+    from app.databricks.client import list_catalog_names
+
+    names = list_catalog_names()
+    if catalog not in names:
+        available = ", ".join(names) or "none"
+        raise DataflowError(
+            f"Catalog '{catalog}' does not exist. Available catalogs: {available}. "
+            "In /Volumes/catalog/schema/volume/file.csv the catalog is the first folder. "
+            "Notebook calls such as dbutils.widgets.text are not catalogs.",
+            code="catalog_missing",
+        )
     client = get_workspace_client()
     full_name = f"{catalog}.{schema}"
     try:

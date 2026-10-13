@@ -48,6 +48,9 @@ def warehouse_id() -> str:
             code="warehouse_not_configured",
             status=503,
         )
+    marker = "/warehouses/"
+    if marker in warehouse:
+        warehouse = warehouse.split(marker, 1)[1].strip().strip("/")
     return warehouse
 
 
@@ -69,15 +72,89 @@ def list_tables(catalog: str, schema: str) -> list[dict[str, str]]:
     require_ident(schema, what="schema")
     client = get_workspace_client()
     rows: list[dict[str, str]] = []
-    for table in client.tables.list(catalog_name=catalog, schema_name=schema):
-        rows.append(
-            {
-                "name": table.name or "",
-                "full_name": table.full_name or f"{catalog}.{schema}.{table.name}",
-                "table_type": str(table.table_type or ""),
-            }
-        )
+    try:
+        tables = client.tables.list(catalog_name=catalog, schema_name=schema, include_browse=True)
+        for table in tables:
+            rows.append(
+                {
+                    "name": table.name or "",
+                    "full_name": table.full_name or f"{catalog}.{schema}.{table.name}",
+                    "table_type": str(table.table_type or ""),
+                }
+            )
+    except DataflowError:
+        raise
+    except Exception as exc:
+        raise DataflowError(
+            f"Could not list tables in {catalog}.{schema}: {exc}",
+            code="catalog_list_failed",
+            status=502,
+        ) from exc
     return rows
+
+
+_SKIPPED_CATALOGS = {"system", "samples", "hive_metastore"}
+
+
+def list_catalog_names() -> list[str]:
+    client = get_workspace_client()
+    names: list[str] = []
+    try:
+        for catalog in client.catalogs.list():
+            if catalog.name:
+                names.append(catalog.name)
+    except DataflowError:
+        raise
+    except Exception as exc:
+        raise DataflowError(f"Could not list catalogs: {exc}", code="catalog_list_failed", status=502) from exc
+    return names
+
+
+def list_schema_names(catalog: str) -> list[str]:
+    require_ident(catalog, what="catalog")
+    client = get_workspace_client()
+    names: list[str] = []
+    try:
+        for schema in client.schemas.list(catalog_name=catalog):
+            if schema.name:
+                names.append(schema.name)
+    except DataflowError:
+        raise
+    except Exception as exc:
+        raise DataflowError(
+            f"Could not list schemas in {catalog}: {exc}",
+            code="catalog_list_failed",
+            status=502,
+        ) from exc
+    return names
+
+
+def resolve_upload_catalog(requested: str | None = None) -> str:
+    """Pick a catalog that exists. Never assume `main` is present."""
+    names = list_catalog_names()
+    if requested:
+        chosen = require_ident(requested, what="catalog")
+        if chosen not in names:
+            available = ", ".join(names) or "none"
+            raise DataflowError(
+                f"Catalog '{chosen}' does not exist. Available catalogs: {available}.",
+                code="catalog_missing",
+            )
+        return chosen
+    configured = env("DATABRICKS_CATALOG")
+    if configured and configured in names:
+        return require_ident(configured, what="catalog")
+    if "workspace" in names:
+        return "workspace"
+    for name in names:
+        if name not in _SKIPPED_CATALOGS:
+            return require_ident(name, what="catalog")
+    available = ", ".join(names) or "none"
+    raise DataflowError(
+        f"No writable Unity Catalog was found. Available catalogs: {available}. "
+        "Set DATABRICKS_CATALOG to a catalog that exists.",
+        code="catalog_missing",
+    )
 
 
 def _is_absent(exc: Exception) -> bool:

@@ -16,32 +16,38 @@ export default function ApprovalsView({
         <p className="text-xs uppercase tracking-[0.16em] text-muted">Approvals</p>
         <h1 className="mt-2 font-display text-3xl">Nothing new is written until someone says so.</h1>
         <p className="mt-2 text-sm leading-6 text-muted">
-          A missing destination table or CSV/Excel file waits here. Approving lets the notebook create it. Declining
-          leaves the catalog untouched.
+          A missing destination waits here before it is created. A prepared notebook waits here before any rows are copied.
         </p>
         <div className="mt-6 space-y-3">
           {pending.length === 0 && (
-            <p className="rounded-2xl border border-line bg-panel px-4 py-4 text-sm text-muted">No destinations are waiting.</p>
+            <p className="rounded-2xl border border-line bg-panel px-4 py-4 text-sm text-muted">Nothing is waiting for review.</p>
           )}
           {pending.map((approval) => (
             <article key={approval.id} className="rounded-2xl border border-lime/40 bg-panel px-4 py-4">
               <p className="text-sm leading-6">{approval.message}</p>
               <p className="mt-2 font-mono text-xs text-accent">{approval.destination}</p>
               {approval.stage && <p className="mt-1 text-xs text-muted">{stageLabel(approval.stage)}</p>}
+              {(approval.notes || []).length > 0 && (
+                <ul className="mt-2 space-y-1 text-sm text-muted">
+                  {approval.notes?.map((note) => (
+                    <li key={note}>{note}</li>
+                  ))}
+                </ul>
+              )}
               <div className="mt-3 flex gap-2">
                 <button
                   type="button"
                   onClick={() => onDecide(approval, true)}
                   className="rounded-full bg-lime px-4 py-2 text-sm font-semibold text-white"
                 >
-                  {approval.draft ? "Approve and generate" : "Create it"}
+                  {approval.kind === "run" ? "Run the copy" : approval.draft ? "Approve and generate" : "Create it"}
                 </button>
                 <button
                   type="button"
                   onClick={() => onDecide(approval, false)}
                   className="rounded-full border border-line px-4 py-2 text-sm"
                 >
-                  Don't create
+                  {approval.kind === "run" ? "Don't run" : "Don't create"}
                 </button>
               </div>
             </article>

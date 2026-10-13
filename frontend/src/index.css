@@ -15,6 +15,13 @@
   --color-teal: #34d399;
   --color-coral: #fb7185;
   --color-amber: #fbbf24;
+  --color-banner: #2a2018;
+  --color-ok: #052e21;
+  --color-code-comment: #8f977f;
+  --color-code-string: #e6b35a;
+  --color-code-keyword: #d6f25c;
+  --color-code-gutter: #667056;
+  --color-code-hover: rgb(255 255 255 / 0.05);
 }
 
 html,
@@ -23,20 +30,51 @@ body,
   height: 100%;
 }
 
-body {
-  margin: 0;
-  background-color: #05070d;
-  background-image:
+:root {
+  color-scheme: dark;
+  --mesh:
     radial-gradient(42% 36% at 8% 0%, color-mix(in srgb, #3b82f6 22%, transparent), transparent 62%),
     radial-gradient(38% 32% at 96% 0%, color-mix(in srgb, #22d3ee 16%, transparent), transparent 64%),
     linear-gradient(180deg, #05070d 0%, #070b16 48%, #060a14 100%);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --color-ink: #f3f6fb;
+  --color-panel: #ffffff;
+  --color-panel-2: #e7eef8;
+  --color-line: #d3dce8;
+  --color-paper: #0f172a;
+  --color-muted: #52627a;
+  --color-lime: #2563eb;
+  --color-accent: #0e7490;
+  --color-teal: #047857;
+  --color-coral: #e11d48;
+  --color-amber: #b45309;
+  --color-banner: #fff7ed;
+  --color-ok: #d1fae5;
+  --color-code-comment: #64748b;
+  --color-code-string: #b45309;
+  --color-code-keyword: #1d4ed8;
+  --color-code-gutter: #94a3b8;
+  --color-code-hover: rgb(15 23 42 / 0.04);
+  --mesh:
+    radial-gradient(42% 36% at 8% 0%, color-mix(in srgb, #2563eb 14%, transparent), transparent 62%),
+    radial-gradient(38% 32% at 96% 0%, color-mix(in srgb, #0891b2 12%, transparent), transparent 64%),
+    linear-gradient(180deg, #f3f6fb 0%, #eef3f9 48%, #f7f9fc 100%);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-ink);
+  background-image: var(--mesh);
   color: var(--color-paper);
   font-family: var(--font-sans);
 }
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #1e293b transparent;
+  scrollbar-color: var(--color-line) transparent;
 }
 
 button,
@@ -49,4 +87,59 @@ select {
 ::selection {
   background: #3b82f6;
   color: #ffffff;
+}
+
+.prose-dataflow {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.prose-dataflow p,
+.prose-dataflow li,
+.prose-dataflow h1,
+.prose-dataflow h2,
+.prose-dataflow h3,
+.prose-dataflow a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.prose-dataflow pre,
+.prose-dataflow code {
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.prose-dataflow pre,
+.prose-dataflow table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.notebook-scroll {
+  overflow: auto;
+  scrollbar-gutter: stable;
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-muted) transparent;
+}
+
+.notebook-scroll::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+.notebook-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--color-muted);
+  border: 3px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+.notebook-scroll::-webkit-scrollbar-track {
+  background: transparent;
 }

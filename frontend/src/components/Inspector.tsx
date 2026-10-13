@@ -58,14 +58,14 @@ export default function Inspector({
           </button>
         ))}
       </div>
-      <div className="min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {tab === "code" && <CodeViewer code={code} title={codeTitle} sql={sql} />}
         {tab === "validation" && (
-          <ValidationReportView report={report} warnings={warnings} running={validating} onRun={onRunValidation} />
+          <ValidationReportView report={report} warnings={warnings} sql={sql} running={validating} onRun={onRunValidation} />
         )}
         {tab === "quarantine" && (
           <div className="h-full overflow-auto px-4 py-4">
-            <QuarantineTable rows={report?.quarantine_preview ?? []} />
+            <QuarantineTable report={report} />
           </div>
         )}
         {tab === "run" && <ExecutionStatus run={run} code={code} running={executing} onExecute={onExecute} />}

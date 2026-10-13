@@ -3,15 +3,17 @@
 from __future__ import annotations
 
 import io
+import json
 import re
 from datetime import datetime, timezone
 
 from app.databricks.client import (
-    default_catalog,
     default_schema,
     default_volume,
+    env,
     get_columns,
     get_workspace_client,
+    resolve_upload_catalog,
     run_sql,
 )
 from app.databricks.identifiers import quote_fqn, require_ident, safe_filename, safe_upload_stem, volume_uri
@@ -140,6 +142,45 @@ def _ensure_schema(catalog: str, schema: str) -> None:
         ) from exc
 
 
+def _materialize_table(create_sql: str, full_name: str, catalog: str, schema: str) -> int | None:
+    """Create the Delta table on the SQL warehouse, or on serverless when no warehouse is set."""
+    if env("DATABRICKS_WAREHOUSE_ID"):
+        run_sql(create_sql, catalog=catalog, schema=schema)
+        counts = run_sql(
+            f"SELECT COUNT(*) AS row_count FROM {quote_fqn(full_name)}",
+            catalog=catalog,
+            schema=schema,
+        )
+        return int(float(counts[0]["row_count"])) if counts else None
+
+    from app.databricks.notebook_executor import execute_notebook
+
+    code = f"""
+import json
+spark.sql({json.dumps(create_sql)})
+count = spark.table({json.dumps(full_name)}).count()
+dbutils.notebook.exit(json.dumps({{"row_count": int(count)}}))
+"""
+    status = execute_notebook(code, notebook_name="dataflow_upload", wait=True, timeout_seconds=600)
+    text = (status.output or "").strip()
+    start = text.find("{")
+    end = text.rfind("}")
+    if start >= 0 and end > start:
+        try:
+            parsed = json.loads(text[start : end + 1])
+        except json.JSONDecodeError:
+            parsed = None
+        if isinstance(parsed, dict) and parsed.get("row_count") is not None:
+            return int(parsed["row_count"])
+    if status.result_state not in {None, "SUCCESS"}:
+        raise DataflowError(
+            status.error or status.state_message or "Upload notebook did not create the Delta table.",
+            code="upload_failed",
+            status=502,
+        )
+    return None
+
+
 def upload_and_create_table(
     content: bytes,
     filename: str,
@@ -156,7 +197,7 @@ def upload_and_create_table(
     if len(content) > _MAX_BYTES:
         raise DataflowError("File exceeds the 50 MB upload limit.", code="file_too_large")
 
-    catalog_name = require_ident(catalog or default_catalog(), what="catalog")
+    catalog_name = resolve_upload_catalog(catalog)
     schema_name = require_ident(schema or default_schema(), what="schema")
     volume_name = require_ident(volume or default_volume(), what="volume")
     csv_bytes, chosen_sheet, has_timestamp = _to_csv_bytes(content, filename, sheet)
@@ -195,12 +236,10 @@ FROM read_files(
   inferSchema => true
 ) src
 """.strip()
-    run_sql(create_sql, catalog=catalog_name, schema=schema_name)
+    row_count = _materialize_table(create_sql, full_name, catalog_name, schema_name)
 
     columns = get_columns(full_name)
     added_timestamp = any(column.name.lower() == "domain_published_ts" for column in columns)
-    counts = run_sql(f"SELECT COUNT(*) AS row_count FROM {quote_fqn(full_name)}", catalog=catalog_name, schema=schema_name)
-    row_count = int(float(counts[0]["row_count"])) if counts else None
     return UploadResult(
         table=full_name,
         volume_path=destination,

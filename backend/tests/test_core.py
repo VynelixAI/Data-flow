@@ -415,7 +415,12 @@ def test_dqx_rules_follow_the_source_columns():
     order_checks = {check["name"]: check for check in infer_quality_checks(orders)}
     assert order_checks["order_id_not_null"]["criticality"] == "error"
     assert order_checks["email_not_null"]["criticality"] == "warn"
-    assert "dd/MM/yyyy" in order_checks["order_date_is_valid_date"]["check"]["arguments"]["expression"]
+    date_args = order_checks["order_date_is_valid_date"]["check"]["arguments"]
+    assert "negate" not in date_args
+    assert "yyyy-MM-dd" in date_args["expression"]
+    assert "dd/MM/yyyy" in date_args["expression"]
+    assert "MM/dd/yyyy" in date_args["expression"]
+    assert date_args["expression"].startswith("`order_date` IS NULL OR ")
     assert "DECIMAL(18,2)) > 0" in order_checks["amount_greater_than_zero"]["check"]["arguments"]["expression"]
     assert "user@domain" in order_checks["email_valid_format"]["check"]["arguments"]["msg"]
     assert "try_parse_json" in order_checks["extra_info_valid_json"]["check"]["arguments"]["expression"]
@@ -451,6 +456,19 @@ def test_dqx_rules_follow_the_source_columns():
     assert "dataflow-quality" in code
     assert "apply_checks_by_metadata" in code
     assert "dqx_summary" in code
+    assert "source_profile" in code
+    assert "DQX_SPEC = json.loads(" in code
+    assert "LEARNED_RULES = json.loads(" in code
+    spec_line = next(line for line in code.splitlines() if line.startswith("DQX_SPEC = json.loads("))
+    loaded: dict = {}
+    exec("import json\n" + spec_line, loaded)
+    date_rule = next(item for item in loaded["DQX_SPEC"] if item["name"] == "order_date_is_valid_date")
+    assert date_rule["check"]["function"] == "sql_expression"
+    assert "negate" not in date_rule["check"]["arguments"]
+    assert "yyyy-MM-dd" in date_rule["check"]["arguments"]["expression"]
+    assert all("negate" not in item["check"]["arguments"] for item in loaded["DQX_SPEC"])
+    assert '"negate": false' not in code
+    assert '"negate": False' not in code
     assert "Delivered" not in code
 
 
@@ -478,6 +496,77 @@ def test_chat_paths_replace_example_tables():
     assert bound["source_table"] == "workspace.default.customer_orders_raw"
     assert bound["target_table"] == "/Volumes/workspace/default/customervolume/customer_orders_raw.csv"
     assert bound["compare_columns"] is None
+    profiled = bind_user_locations(
+        "profile_table",
+        {"table": "main.silver.orders", "primary_keys": ["order_id"]},
+        [{"role": "user", "content": text}],
+    )
+    assert profiled["table"] == "workspace.default.customer_orders_raw"
+
+
+def test_review_rejects_a_copy_onto_itself():
+    from app.agent.review import review_copy
+    from app.agent.session_memory import close_thread, get_run, open_run
+    from app.schemas import PipelineSpec
+
+    spec = PipelineSpec(
+        source_table="main.bronze.orders",
+        target_table="main.bronze.orders",
+        primary_keys=["order_id"],
+    )
+    review = review_copy(spec, _columns(), _columns(), [])
+    assert review["ok"] is False
+    assert any("same object" in blocker for blocker in review["blockers"])
+    record = open_run(notebook="print(1)", notes=["temporary"])
+    assert get_run(record["review_id"])["notes"] == ["temporary"]
+    close_thread("")
+    assert get_run(record["review_id"]) is None
+
+
+def test_notebook_code_is_not_a_catalog():
+    from app.agent.tools import bind_user_locations, execute_tool
+    from app.databricks.identifiers import coerce_location, locations_in_text, parse_uc_location
+    from app.errors import DataflowError
+
+    text = (
+        'dbutils.widgets.text("source_table", "/Volumes/workspace/default/customervolume/customer_orders_raw.csv")\n'
+        'dbutils.widgets.text("target_table", "/Volumes/workspace/default/customervolume/customer_orders_raw3_validated.csv")'
+    )
+    assert locations_in_text(text) == [
+        "/Volumes/workspace/default/customervolume/customer_orders_raw.csv",
+        "/Volumes/workspace/default/customervolume/customer_orders_raw3_validated.csv",
+    ]
+    bound = bind_user_locations(
+        "create_destination",
+        {"source_table": "dbutils.widgets.text", "target_table": "dbutils.widgets.text", "confirm": True},
+        [{"role": "user", "content": text}],
+    )
+    assert bound["source_table"].startswith("/Volumes/workspace/default/customervolume/")
+    assert bound["target_table"].endswith("customer_orders_raw3_validated.csv")
+    widget_line = (
+        'dbutils.widgets.text("target_table", "/Volumes/workspace/default/customervolume/customer_orders_raw3_validated.csv")'
+    )
+    assert coerce_location(widget_line).endswith("customer_orders_raw3_validated.csv")
+    try:
+        parse_uc_location("dbutils.widgets.text")
+    except DataflowError as exc:
+        assert exc.code == "invalid_table_name"
+    else:
+        raise AssertionError("dbutils.widgets.text was accepted as a table")
+    refused = execute_tool(
+        "inspect_uc_object",
+        {"name": "dbutils.widgets.text"},
+    )
+    assert refused["result"]["code"] == "invalid_path"
+    from app.agent.graph import _confirmed_locations
+
+    source, destination = _confirmed_locations(
+        "dbutils.widgets.text",
+        "dbutils.widgets.text",
+        [{"role": "user", "content": text}, {"role": "user", "content": "yes"}],
+    )
+    assert source.endswith("customer_orders_raw.csv")
+    assert destination.endswith("customer_orders_raw3_validated.csv")
 
 
 def test_empty_compare_list_checks_shared_columns():
@@ -563,19 +652,33 @@ def test_generate_copies_rows_and_returns_the_validation_report(monkeypatch, tmp
             "compare_columns": ["status", "amount"],
         },
     )
+    assert "code" not in captured
+    assert result["result"]["confirmation_required"] is True
+    assert result["result"]["kind"] == "run"
+    assert result["result"]["copied"] is False
+    assert any("shared column" in note or "status" in note for note in result["result"]["notes"])
+    assert result["artifacts"][0]["kind"] == "code"
+    assert result["artifacts"][1]["confirmation_kind"] == "run"
+    from app.agent.session_memory import get_run
+    from app.agent.tools import run_prepared_copy
+
+    review_id = result["result"]["review_id"]
+    assert get_run(review_id) is not None
+    finished = run_prepared_copy(review_id, "keep the primary key")
     assert captured["wait"] is True
     assert captured["confirm"] == "true"
+    assert captured["code"].startswith("# Operator comment for this run:")
     assert "spark.sql" in captured["code"]
     assert "main.bronze.orders" in captured["code"]
-    kinds = [artifact["kind"] for artifact in result["artifacts"]]
-    assert kinds[0] == "code"
+    kinds = [artifact["kind"] for artifact in finished["artifacts"]]
     assert "execution" in kinds
     assert "validation" in kinds
-    report = next(artifact["report"] for artifact in result["artifacts"] if artifact["kind"] == "validation")
+    report = next(artifact["report"] for artifact in finished["artifacts"] if artifact["kind"] == "validation")
     assert report["status"] == "PASS"
     assert report["source_count"] == 2
-    assert result["result"]["copied"] is True
-    assert result["result"]["valid_rows"] == 2
+    assert finished["result"]["copied"] is True
+    assert finished["result"]["valid_rows"] == 2
+    assert get_run(review_id) is None
     use_memory_path(None)
 
 
@@ -682,3 +785,119 @@ def test_upload_names_and_excel_normalization():
     assert header == "order_id,order_id_1,payload"
     assert has_timestamp is False
     assert '{"sku": "A"}' in text or '{""sku"": ""A""}' in text
+
+
+def test_warehouse_id_accepts_the_sql_http_path(monkeypatch):
+    from app.databricks.client import warehouse_id
+
+    monkeypatch.setenv("DATABRICKS_WAREHOUSE_ID", "/sql/1.0/warehouses/7f0a512e4f1a41ef")
+    assert warehouse_id() == "7f0a512e4f1a41ef"
+    monkeypatch.setenv("DATABRICKS_WAREHOUSE_ID", "7f0a512e4f1a41ef")
+    assert warehouse_id() == "7f0a512e4f1a41ef"
+
+
+def test_list_tables_reports_the_databricks_error(monkeypatch):
+    from app.databricks.client import list_tables
+
+    class Tables:
+        def list(self, catalog_name, schema_name, include_browse=None):
+            raise RuntimeError("SCHEMA_DOES_NOT_EXIST")
+
+    class Client:
+        tables = Tables()
+
+    monkeypatch.setattr("app.databricks.client.get_workspace_client", lambda: Client())
+    try:
+        list_tables("workspace", "default")
+    except DataflowError as exc:
+        assert "SCHEMA_DOES_NOT_EXIST" in exc.message
+        assert "workspace.default" in exc.message
+    else:
+        raise AssertionError("list_tables should surface the Databricks error")
+
+
+def test_upload_catalog_skips_missing_main(monkeypatch):
+    from app.databricks.client import resolve_upload_catalog
+
+    class Catalog:
+        def __init__(self, name):
+            self.name = name
+
+    class Catalogs:
+        def list(self):
+            return [Catalog("system"), Catalog("samples"), Catalog("workspace")]
+
+    class Client:
+        catalogs = Catalogs()
+
+    monkeypatch.setattr("app.databricks.client.get_workspace_client", lambda: Client())
+    monkeypatch.delenv("DATABRICKS_CATALOG", raising=False)
+    assert resolve_upload_catalog(None) == "workspace"
+    monkeypatch.setenv("DATABRICKS_CATALOG", "main")
+    assert resolve_upload_catalog(None) == "workspace"
+    assert resolve_upload_catalog("workspace") == "workspace"
+
+
+def test_dqx_samples_become_quarantine_rows():
+    from app.databricks.validation import dqx_quarantine_rows
+
+    rows = dqx_quarantine_rows(
+        [
+            {
+                "name": "amount_numeric",
+                "message": "amount must be numeric",
+                "count": 1,
+                "criticality": "error",
+                "samples": ["order_id=1007"],
+            }
+        ]
+    )
+    assert rows[0].primary_key == {"order_id": "1007"}
+    assert rows[0].column_diffs[0].column == "amount_numeric"
+    assert rows[0].column_diffs[0].source_value == "amount must be numeric"
+
+
+def test_validation_without_warehouse_runs_a_notebook(monkeypatch):
+    monkeypatch.delenv("DATABRICKS_WAREHOUSE_ID", raising=False)
+    monkeypatch.setattr(
+        "app.databricks.client.env",
+        lambda name, default=None: None if name == "DATABRICKS_WAREHOUSE_ID" else __import__("os").getenv(name, default),
+    )
+
+    def describe(name):
+        return {"checked": True, "exists": True, "name": name}
+
+    class Status:
+        result_state = "SUCCESS"
+        finished = True
+        error = None
+        state_message = None
+        output = json.dumps(
+            {
+                "results": {
+                    "metrics": [
+                        {
+                            "source_count": 10,
+                            "target_count": 8,
+                            "duplicate_keys_source": 1,
+                            "null_pk_source": 2,
+                        }
+                    ]
+                },
+                "errors": {},
+                "source_profile": {"table": "src_cat.src_sch.src_table", "row_count": 10},
+            }
+        )
+
+    monkeypatch.setattr("app.databricks.client.describe_uc_object", describe)
+    monkeypatch.setattr(
+        "app.databricks.notebook_executor.execute_notebook",
+        lambda code, **kwargs: Status(),
+    )
+    outcome = run_validation(_request(execute=True))
+    assert outcome.report is not None
+    assert outcome.report.source_count == 10
+    assert outcome.report.target_count == 8
+    assert outcome.report.duplicate_keys_source == 1
+    assert outcome.report.null_pk_source == 2
+    assert outcome.notebook

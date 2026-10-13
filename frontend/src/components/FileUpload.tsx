@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { apiError } from "../apiError";
 import type { UploadedTable } from "../types";
 
 export default function FileUpload({
@@ -20,7 +21,7 @@ export default function FileUpload({
       const response = await fetch("/api/upload", { method: "POST", body });
       const payload = await response.json();
       if (!response.ok) {
-        throw new Error(payload.error || "Upload failed");
+        throw new Error(apiError(payload, "Upload failed"));
       }
       onUploaded(payload as UploadedTable);
     } catch (err) {

@@ -29,21 +29,21 @@ const KEYWORDS = new Set([
 
 function paint(text: string) {
   if (text.trimStart().startsWith("#")) {
-    return <span className="text-[#8f977f]">{text || " "}</span>;
+    return <span className="text-code-comment">{text || " "}</span>;
   }
   const parts = text.split(/("(?:\\.|[^"])*"|'(?:\\.|[^'])*'|\b[A-Za-z_][A-Za-z0-9_]*\b)/g);
   return parts.map((part, index) => {
     if (!part) return null;
     if (part.startsWith('"') || part.startsWith("'")) {
       return (
-        <span key={index} className="text-[#e6b35a]">
+        <span key={index} className="text-code-string">
           {part}
         </span>
       );
     }
     if (KEYWORDS.has(part)) {
       return (
-        <span key={index} className="text-[#d6f25c]">
+        <span key={index} className="text-code-keyword">
           {part}
         </span>
       );
@@ -75,7 +75,7 @@ export default function CodeViewer({
     return (
       <Empty
         title="No notebook yet"
-        body="Ask the agent to generate a pipeline, or run a validation. The Spark and DQX code lands here."
+        body="The notebook stays empty until you name a source and a destination. It appears here after the agent generates it."
       />
     );
   }
@@ -83,7 +83,7 @@ export default function CodeViewer({
   const active = tab === "sql" && sql && sql.length ? sql.map((step) => `-- ${step.name}\n${step.sql}`).join("\n") : code ?? "";
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
       <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-3">
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-medium">{title || "Generated notebook"}</p>
@@ -120,11 +120,11 @@ export default function CodeViewer({
           </button>
         </div>
       </div>
-      <pre className="min-h-0 flex-1 overflow-auto px-0 py-3 font-mono text-[12.5px] leading-6">
+      <pre className="notebook-scroll min-h-0 flex-1 px-0 py-3 font-mono text-[12.5px] leading-6">
         {(tab === "sql" && sql ? sql.flatMap((step) => [`-- ${step.name}`, ...step.sql.split("\n"), ""]) : lines).map(
           (line, index) => (
-            <div key={`${index}-${line.slice(0, 12)}`} className="grid grid-cols-[3.2rem_1fr] gap-3 px-4 hover:bg-white/5">
-              <span className="text-right text-[#667056]">{index + 1}</span>
+            <div key={`${index}-${line.slice(0, 12)}`} className="grid grid-cols-[3.2rem_1fr] gap-3 px-4 hover:bg-code-hover">
+              <span className="text-right text-code-gutter">{index + 1}</span>
               <code className="whitespace-pre-wrap break-words">{paint(line)}</code>
             </div>
           ),

@@ -9,7 +9,14 @@ from pydantic import ValidationError
 
 from app.databricks.client import describe_uc_object, env, get_columns, list_tables, run_sql
 from app.databricks.dqx_utils import build_dqx_checks, suggest_repairs
-from app.databricks.identifiers import locations_in_text, parse_uc_location, quote_ident, require_ident, sql_relation
+from app.databricks.identifiers import (
+    coerce_location,
+    locations_in_text,
+    parse_uc_location,
+    quote_ident,
+    require_ident,
+    sql_relation,
+)
 from app.databricks.notebook_executor import (
     execute_notebook,
     get_run_status,
@@ -17,9 +24,15 @@ from app.databricks.notebook_executor import (
     render_pipeline_notebook,
     render_validation_notebook,
 )
-from app.databricks.validation import assemble_report, build_validation_plan, run_validation, type_family
+from app.databricks.validation import (
+    assemble_report,
+    build_validation_plan,
+    merge_dqx_quarantine,
+    run_validation,
+    type_family,
+)
 from app.errors import DataflowError
-from app.schemas import ColumnSpec, PipelineSpec, RunStatus, ValidationRequest
+from app.schemas import ColumnSpec, PipelineSpec, RunStatus, SchemaDrift, SqlStep, ValidationRequest
 
 LABELS = {
     "list_tables": "Listing Unity Catalog tables",
@@ -28,7 +41,7 @@ LABELS = {
     "search_catalog": "Searching Unity Catalog",
     "inspect_uc_object": "Checking Unity Catalog",
     "create_destination": "Creating the Unity Catalog destination",
-    "generate_pipeline": "Copying data and running validation",
+    "generate_pipeline": "Reviewing the copy before it runs",
     "validate_source_to_target": "Validating source against target",
     "execute_notebook": "Running notebook on Databricks",
     "get_job_run_status": "Checking Databricks run",
@@ -97,16 +110,19 @@ TOOL_SPECS = [
     ),
     _function(
         "profile_table",
-        "Profile the latest snapshot: nulls, distinct counts, samples, and repair suggestions. Requires a SQL warehouse.",
+        "Profile the source table the user named. Never pass the destination. "
+        "Returns that table's row_count, null counts, empty counts, and duplicate primary-key groups.",
         {
             "table": _STRING,
             "timestamp_column": _STRING,
+            "primary_keys": _STRING_LIST,
         },
         ["table"],
     ),
     _function(
         "generate_pipeline",
-        "Copy the source into the destination on Databricks and run the validation SQL in that same notebook. "
+        "Prepare the copy notebook and validate the plan. This does not copy rows. "
+        "The operator reviews the notebook, may add a comment, and then approves the run. "
         "Use this once the source exists and the destination exists or the user has agreed to create it. "
         "If the destination does not exist yet, leave confirm_create_destination false; the tool then only asks "
         "for confirmation and does not copy rows.",
@@ -225,7 +241,32 @@ def _truncate(text: str, limit: int = 3500) -> str:
     return text[:limit] + "\n# ... full notebook is in the code panel"
 
 
-def profile_table(table: str, timestamp_column: str = "domain_published_ts") -> dict[str, Any]:
+def _row_field(row: dict[str, Any], name: str) -> Any:
+    wanted = name.lower()
+    for key, value in row.items():
+        if str(key).lower() == wanted:
+            return value
+    return None
+
+
+def profile_table(
+    table: str,
+    timestamp_column: str = "domain_published_ts",
+    primary_keys: list[str] | None = None,
+) -> dict[str, Any]:
+    """Profile one Unity Catalog object. The caller must pass the source, not the destination."""
+    parse_uc_location(table)
+    keys = [require_ident(key, what="primary key") for key in (primary_keys or [])]
+    if not env("DATABRICKS_WAREHOUSE_ID"):
+        profile = _profile_with_notebook(table, keys)
+    else:
+        profile = _profile_with_sql(table, timestamp_column, keys)
+    profile["profiled_table"] = table
+    profile["repair_suggestions"] = suggest_repairs(profile)
+    return profile
+
+
+def _profile_with_sql(table: str, timestamp_column: str, primary_keys: list[str]) -> dict[str, Any]:
     columns = get_columns(table)
     require_ident(timestamp_column)
     chosen = columns[:40]
@@ -252,7 +293,7 @@ def profile_table(table: str, timestamp_column: str = "domain_published_ts") -> 
     for column in chosen:
         samples = []
         for row in sample_rows:
-            value = row.get(column.name)
+            value = _row_field(row, column.name)
             if value is not None:
                 samples.append(str(value)[:180])
         profile_columns.append(
@@ -260,21 +301,134 @@ def profile_table(table: str, timestamp_column: str = "domain_published_ts") -> 
                 "name": column.name,
                 "data_type": column.data_type,
                 "family": type_family(column.data_type),
-                "null_count": int(float(summary.get(f"nulls__{column.name}") or 0)),
-                "empty_string_count": int(float(summary.get(f"empty__{column.name}") or 0)),
-                "approx_distinct": summary.get(f"distinct__{column.name}"),
+                "null_count": int(float(_row_field(summary, f"nulls__{column.name}") or 0)),
+                "empty_string_count": int(float(_row_field(summary, f"empty__{column.name}") or 0)),
+                "approx_distinct": _row_field(summary, f"distinct__{column.name}"),
                 "samples": samples[:3],
             }
         )
-    profile = {
+    known = {column.name.lower() for column in columns}
+    keys = [key for key in primary_keys if key.lower() in known]
+    duplicate_groups = 0
+    duplicate_rows = 0
+    duplicate_samples: list[dict[str, Any]] = []
+    if keys:
+        key_sql = ", ".join(quote_ident(key) for key in keys)
+        grouped = run_sql(
+            f"SELECT {key_sql}, COUNT(*) AS occurrences FROM {relation} snapshot "
+            f"GROUP BY {key_sql} HAVING COUNT(*) > 1 LIMIT 10"
+        )
+        duplicate_groups_row = run_sql(
+            "SELECT COUNT(*) AS duplicate_key_groups, COALESCE(SUM(occurrences), 0) AS duplicate_key_rows FROM ("
+            f"SELECT COUNT(*) AS occurrences FROM {relation} snapshot GROUP BY {key_sql} HAVING COUNT(*) > 1"
+            ") grouped"
+        )
+        if duplicate_groups_row:
+            duplicate_groups = int(float(_row_field(duplicate_groups_row[0], "duplicate_key_groups") or 0))
+            duplicate_rows = int(float(_row_field(duplicate_groups_row[0], "duplicate_key_rows") or 0))
+        for row in grouped:
+            duplicate_samples.append(
+                {
+                    "primary_key": {key: None if _row_field(row, key) is None else str(_row_field(row, key)) for key in keys},
+                    "occurrences": int(float(_row_field(row, "occurrences") or 0)),
+                }
+            )
+    return {
         "table": table,
-        "row_count": int(float(summary.get("row_count") or 0)),
+        "row_count": int(float(_row_field(summary, "row_count") or 0)),
         "timestamp_column": timestamp_column if has_timestamp else None,
         "columns": profile_columns,
         "truncated": len(columns) > len(chosen),
+        "primary_keys": keys,
+        "duplicate_key_groups": duplicate_groups,
+        "duplicate_key_rows": duplicate_rows,
+        "duplicate_key_samples": duplicate_samples,
     }
-    profile["repair_suggestions"] = suggest_repairs(profile)
-    return profile
+
+
+def _profile_with_notebook(table: str, primary_keys: list[str]) -> dict[str, Any]:
+    code = f"""
+import json
+from pyspark.sql import functions as F
+
+table_name = {json.dumps(table)}
+keys = {json.dumps(primary_keys)}
+
+def _read(raw):
+    if raw.startswith("/Volumes/"):
+        lower = raw.lower()
+        if lower.endswith((".xlsx", ".xls", ".xlsm")):
+            import pandas as pd
+            return spark.createDataFrame(pd.read_excel(raw))
+        return spark.read.option("header", True).option("inferSchema", True).csv(raw)
+    return spark.table(raw)
+
+frame = _read(table_name)
+tracked = [name for name in frame.columns if name.replace("_", "a").isalnum()]
+aggregates = [F.count(F.lit(1)).alias("_rows")]
+for index, name in enumerate(tracked, start=1):
+    aggregates.append(F.sum(F.when(F.col(name).isNull(), F.lit(1)).otherwise(F.lit(0))).alias("n_" + str(index)))
+    aggregates.append(F.sum(F.when(F.col(name).cast("string") == "", F.lit(1)).otherwise(F.lit(0))).alias("e_" + str(index)))
+stats = frame.agg(*aggregates).collect()[0]
+row_count = int(stats["_rows"] or 0)
+columns = []
+for index, name in enumerate(tracked, start=1):
+    samples = []
+    for row in frame.select(name).where(F.col(name).isNotNull()).limit(3).collect():
+        samples.append(str(row[0])[:180])
+    columns.append({{
+        "name": name,
+        "data_type": frame.schema[name].dataType.simpleString(),
+        "null_count": int(stats["n_" + str(index)] or 0),
+        "empty_string_count": int(stats["e_" + str(index)] or 0),
+        "approx_distinct": None,
+        "samples": samples,
+    }})
+present = [key for key in keys if key in frame.columns]
+duplicate_groups = 0
+duplicate_rows = 0
+duplicate_samples = []
+if present:
+    grouped = frame.groupBy(*present).count().where(F.col("count") > 1)
+    duplicate_groups = int(grouped.count())
+    total = grouped.agg(F.sum(F.col("count")).alias("rows")).collect()
+    duplicate_rows = int(total[0]["rows"] or 0) if total else 0
+    for row in grouped.limit(10).collect():
+        duplicate_samples.append({{
+            "primary_key": {{key: None if row[key] is None else str(row[key]) for key in present}},
+            "occurrences": int(row["count"]),
+        }})
+payload = {{
+    "table": table_name,
+    "row_count": row_count,
+    "columns": columns,
+    "primary_keys": present,
+    "duplicate_key_groups": duplicate_groups,
+    "duplicate_key_rows": duplicate_rows,
+    "duplicate_key_samples": duplicate_samples,
+}}
+dbutils.notebook.exit(json.dumps(payload))
+"""
+    status = execute_notebook(code, notebook_name="dataflow_profile", wait=True, timeout_seconds=600)
+    text = (status.output or "").strip()
+    start = text.find("{")
+    end = text.rfind("}")
+    parsed: dict[str, Any] = {}
+    if start >= 0 and end > start:
+        try:
+            loaded = json.loads(text[start : end + 1])
+            if isinstance(loaded, dict):
+                parsed = loaded
+        except json.JSONDecodeError:
+            parsed = {}
+    if not parsed:
+        raise DataflowError(
+            status.error or status.state_message or "Profiling notebook did not return the source profile.",
+            code="profile_failed",
+            status=502,
+        )
+    parsed["table"] = table
+    return parsed
 
 
 def _confirmation(destination: str, message: str, *, kind: str, source: str) -> dict[str, Any]:
@@ -434,13 +588,23 @@ def _generate(arguments: dict[str, Any]) -> dict[str, Any]:
             ],
         }
     spec.confirm_create_destination = True
-    from app.agent.memory import observe_episode, recall
-
+    from app.agent.memory import recall
+    from app.agent.review import review_copy
+    from app.agent.session_memory import open_run
     from app.agent.skills import quality_activation
 
     column_names = [column.name for column in source_columns]
     learned = recall(column_names)
     activated = quality_activation()
+    checks = build_dqx_checks(
+        primary_keys=spec.primary_keys,
+        not_null_columns=spec.not_null_columns or spec.primary_keys,
+        formats=spec.formats,
+        json_columns=spec.json_columns,
+        compare_columns=[column.name for column, _pair in pairs],
+        columns=column_names,
+    )
+    review = review_copy(spec, source_columns, target_columns, checks)
     notebook = render_pipeline_notebook(spec, steps, columns=column_names, learned=learned)
     code_artifact = {
         "kind": "code",
@@ -449,6 +613,146 @@ def _generate(arguments: dict[str, Any]) -> dict[str, Any]:
         "content": notebook,
         "sql": [step.model_dump() for step in steps],
     }
+    if not review["ok"]:
+        return {
+            "result": {
+                "error": " ".join(review["blockers"]),
+                "code": "plan_rejected",
+                "notebook_preview": _truncate(notebook),
+                "notes": review["notes"],
+                "blockers": review["blockers"],
+                "message": "The notebook is in the code panel. The copy did not start.",
+            },
+            "artifacts": [code_artifact],
+        }
+    prepared = open_run(
+        source=spec.source_table,
+        destination=spec.target_table,
+        notebook=notebook,
+        spec=spec.model_dump(),
+        steps=[step.model_dump() for step in steps],
+        drift=drift.model_dump(),
+        warnings=[*column_warnings, *plan_warnings],
+        compare_columns=[column.name for column, _pair in pairs],
+        column_names=column_names,
+        learned=learned,
+        skills=activated["names"],
+        notes=review["notes"],
+        source_info=source,
+        destination_info=destination,
+        title=title,
+    )
+    message = (
+        "Review the notebook in the code panel. "
+        + " ".join(review["notes"])
+        + " Add a comment if something should change, then run the copy."
+    )
+    return {
+        "result": {
+            "confirmation_required": True,
+            "kind": "run",
+            "review_id": prepared["review_id"],
+            "destination": spec.target_table,
+            "source": spec.source_table,
+            "notes": review["notes"],
+            "shared_columns": review["shared_columns"],
+            "notebook_preview": _truncate(notebook),
+            "message": message,
+            "copied": False,
+        },
+        "artifacts": [
+            code_artifact,
+            {
+                "kind": "confirmation",
+                "confirmation_kind": "run",
+                "title": "Review the notebook",
+                "destination": spec.target_table,
+                "source": spec.source_table,
+                "message": message,
+                "notes": review["notes"],
+                "review_id": prepared["review_id"],
+            },
+        ],
+    }
+
+
+def _comment_header(comment: str) -> str:
+    lines = ["# Operator comment for this run:"]
+    for line in str(comment or "").replace("\r", "").split("\n")[:20]:
+        lines.append("# " + line[:200])
+    return "\n".join(lines) + "\n\n"
+
+
+def run_prepared_copy(review_id: str, comment: str = "") -> dict[str, Any]:
+    """Copy rows for a notebook the operator has already reviewed."""
+    from app.agent.session_memory import add_comment, close_run, get_run
+
+    prepared = get_run(review_id)
+    if prepared is None:
+        raise DataflowError(
+            "That notebook review has already been closed. Generate the notebook again.",
+            code="review_closed",
+        )
+    if comment.strip():
+        add_comment(review_id, comment)
+    spec = PipelineSpec.model_validate(prepared["spec"])
+    notebook = str(prepared["notebook"])
+    if comment.strip():
+        notebook = _comment_header(comment) + notebook
+    source = prepared.get("source_info") or {}
+    destination = prepared.get("destination_info") or {}
+    steps = [SqlStep.model_validate(item) for item in prepared.get("steps") or []]
+    drift = SchemaDrift.model_validate(prepared.get("drift") or {})
+    column_warnings = list(prepared.get("warnings") or [])
+    compare_columns = list(prepared.get("compare_columns") or [])
+    column_names = list(prepared.get("column_names") or [])
+    learned = list(prepared.get("learned") or [])
+    title = str(prepared.get("title") or f"{spec.source_table} → {spec.target_table}")
+    code_artifact = {
+        "kind": "code",
+        "title": title,
+        "language": "python",
+        "content": notebook,
+        "sql": [step.model_dump() for step in steps],
+    }
+    try:
+        finished = _execute_prepared(
+            spec,
+            notebook,
+            source,
+            destination,
+            steps,
+            drift,
+            column_warnings,
+            compare_columns,
+            column_names,
+            learned,
+            list(prepared.get("skills") or []),
+            code_artifact,
+        )
+    finally:
+        close_run(review_id)
+    return finished
+
+
+def _execute_prepared(
+    spec: PipelineSpec,
+    notebook: str,
+    source: dict[str, Any],
+    destination: dict[str, Any],
+    steps: list[SqlStep],
+    drift: SchemaDrift,
+    column_warnings: list[str],
+    compare_columns: list[str],
+    column_names: list[str],
+    learned: list[dict[str, Any]],
+    skills: list[str],
+    code_artifact: dict[str, Any],
+) -> dict[str, Any]:
+    from app.agent.memory import observe_episode
+
+    request = _validation_request(spec)
+    warnings = list(dict.fromkeys(column_warnings))
     try:
         status = _run_copy(spec, notebook)
     except DataflowError as exc:
@@ -478,9 +782,9 @@ def _generate(arguments: dict[str, Any]) -> dict[str, Any]:
         "destination": destination,
         "run": payload,
         "copied": not failed,
-        "warnings": [*column_warnings, *plan_warnings],
+        "warnings": warnings,
         "lessons": learned,
-        "skills": activated["names"],
+        "skills": skills,
     }
     if failed:
         result["error"] = status.error or status.state_message or parsed.get("message") or "Databricks did not finish the copy."
@@ -495,18 +799,20 @@ def _generate(arguments: dict[str, Any]) -> dict[str, Any]:
             not_null_columns=spec.not_null_columns or spec.primary_keys,
             formats=spec.formats,
             json_columns=spec.json_columns,
-            compare_columns=[column.name for column, _pair in pairs],
-            columns=[column.name for column in source_columns],
+            compare_columns=compare_columns,
+            columns=column_names,
         )
         report = assemble_report(
             request,
             results=parsed["results"],
             step_errors={key: str(value) for key, value in (parsed.get("errors") or {}).items()},
             drift=drift,
-            warnings=[*column_warnings, *plan_warnings],
+            warnings=warnings,
             dqx_checks=dqx_checks,
             duplicate_keys_collapsed=True,
         )
+        if isinstance(parsed.get("source_profile"), dict):
+            report.source_profile = parsed["source_profile"]
         report_payload = report.model_dump()
         artifacts.append({"kind": "validation", "title": "Validation report", "report": report_payload, "warnings": report_payload["warnings"]})
         result["report"] = {
@@ -522,6 +828,18 @@ def _generate(arguments: dict[str, Any]) -> dict[str, Any]:
         result["valid_rows"] = copy.get("valid_rows")
         result["quarantine_rows"] = copy.get("quarantine_rows")
     dqx = parsed.get("dqx") if isinstance(parsed.get("dqx"), list) else []
+    if dqx and report is not None:
+        merge_dqx_quarantine(report, dqx)
+        refreshed = report.model_dump()
+        result["report"] = {
+            **refreshed,
+            "mismatched_keys": refreshed["mismatched_keys"][:20],
+            "quarantine_preview": refreshed["quarantine_preview"][:40],
+        }
+        for artifact in artifacts:
+            if artifact.get("kind") == "validation" and isinstance(artifact.get("report"), dict):
+                artifact["report"] = refreshed
+        artifacts.append({"kind": "quarantine", "title": "Quarantine preview", "report": refreshed, "warnings": refreshed.get("warnings") or []})
     if dqx:
         result["dqx"] = dqx
         lines = [
@@ -546,6 +864,9 @@ def _generate(arguments: dict[str, Any]) -> dict[str, Any]:
                 report_warnings = list(artifact["report"].get("warnings") or [])
                 report_warnings.extend(lines)
                 artifact["report"]["warnings"] = report_warnings
+    if report is not None and not any(artifact.get("kind") == "quarantine" for artifact in artifacts):
+        dumped = report.model_dump()
+        artifacts.append({"kind": "quarantine", "title": "Quarantine preview", "report": dumped, "warnings": dumped.get("warnings") or []})
     failing = [str(item.get("name")) for item in dqx if isinstance(item, dict) and item.get("name")]
     observe_episode(
         source=spec.source_table,
@@ -615,6 +936,7 @@ def _validate(arguments: dict[str, Any]) -> dict[str, Any]:
 
 def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     try:
+        arguments = _coerce_tool_locations(name, arguments)
         if name == "search_catalog":
             from app.databricks.search import search_catalog
 
@@ -648,7 +970,11 @@ def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
                 "artifacts": [],
             }
         if name == "profile_table":
-            profile = profile_table(arguments["table"], arguments.get("timestamp_column") or "domain_published_ts")
+            profile = profile_table(
+                arguments["table"],
+                arguments.get("timestamp_column") or "domain_published_ts",
+                primary_keys=_listify(arguments.get("primary_keys")) or [],
+            )
             return {"result": profile, "artifacts": []}
         if name == "generate_pipeline":
             return _generate(arguments)
@@ -729,10 +1055,19 @@ _LOCATION_ARGUMENTS = {
     "validate_source_to_target": ("source_table", "target_table"),
     "create_destination": ("source_table", "target_table"),
 }
+_SINGLE_LOCATION_ARGUMENTS = {
+    "inspect_uc_object": ("name",),
+    "describe_table": ("table",),
+    "profile_table": ("table",),
+}
 
 
 def user_locations(messages: list[dict[str, Any]]) -> list[str]:
-    """Source then destination from the latest user message that names both."""
+    """Source then destination from the latest user message that names both.
+
+    Two /Volumes paths win over a dotted name. Notebook calls such as
+    dbutils.widgets.text are not locations.
+    """
     for message in reversed(messages):
         if message.get("role") != "user":
             continue
@@ -740,13 +1075,35 @@ def user_locations(messages: list[dict[str, Any]]) -> list[str]:
         if not isinstance(content, str):
             continue
         found = locations_in_text(content)
+        volumes = [item for item in found if item.startswith("/Volumes/")]
+        if len(volumes) >= 2:
+            return volumes[:2]
         if len(found) >= 2:
             return found[:2]
     return []
 
 
+def _coerce_tool_locations(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
+    keys = _LOCATION_ARGUMENTS.get(name) or _SINGLE_LOCATION_ARGUMENTS.get(name)
+    if not keys:
+        return arguments
+    bound = dict(arguments)
+    for key in keys:
+        value = bound.get(key)
+        if isinstance(value, str) and value.strip():
+            bound[key] = coerce_location(value)
+    return bound
+
+
 def bind_user_locations(name: str, arguments: dict[str, Any], messages: list[dict[str, Any]]) -> dict[str, Any]:
     """Keep tool calls on the source and destination the user wrote."""
+    if name == "profile_table":
+        pair = user_locations(messages)
+        if len(pair) >= 2:
+            bound = dict(arguments)
+            bound["table"] = pair[0]
+            return bound
+        return arguments
     keys = _LOCATION_ARGUMENTS.get(name)
     pair = user_locations(messages)
     if not keys or len(pair) < 2:

@@ -58,7 +58,17 @@ export type ValidationReport = {
   deserialization_failures: { side: string; column: string; rule: string; failure_count: number; total: number }[];
   aggregate_mismatches: { dimension: Record<string, string | null>; metric: string; source_value: string | null; target_value: string | null }[];
   mismatched_keys: MismatchRow[];
+  duplicate_key_samples?: { side: string; primary_key: Record<string, string | null>; occurrences: number }[];
   quarantine_preview: MismatchRow[];
+  source_profile?: {
+    table?: string;
+    row_count?: number;
+    nulls?: { column: string; null_count: number; total: number }[];
+    duplicate_key_groups?: number;
+    duplicate_key_rows?: number;
+    duplicate_key_samples?: { primary_key: Record<string, string | null>; occurrences: number }[];
+    primary_keys?: string[];
+  };
   warnings: string[];
   step_errors: Record<string, string>;
 };
@@ -84,6 +94,16 @@ export type RunStatus = {
 export type Confirmation = {
   message: string;
   destination: string;
+  kind?: "create" | "run";
+  notes?: string[];
+  reviewId?: string;
+};
+
+export type ResumePayload = {
+  approved: boolean;
+  destination: string;
+  comment?: string;
+  action?: "approve" | "decline" | "revise";
 };
 
 export type Artifact = {
@@ -97,6 +117,10 @@ export type Artifact = {
   warnings?: string[];
   message?: string;
   destination?: string;
+  source?: string;
+  confirmationKind?: "create" | "run";
+  notes?: string[];
+  reviewId?: string;
 };
 
 export type ToolStep = {
@@ -154,6 +178,8 @@ export type Approval = {
   createdAt: string;
   stage?: Stage;
   threadId?: string;
+  kind?: "create" | "run";
+  notes?: string[];
   draft?: Omit<PipelineRecord, "id" | "code" | "updatedAt" | "status">;
 };
 

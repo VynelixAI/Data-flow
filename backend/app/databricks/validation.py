@@ -614,6 +614,14 @@ LIMIT 200
 """
 
 
+def _metric(row: dict[str, Any], name: str) -> Any:
+    wanted = name.lower()
+    for key, value in row.items():
+        if str(key).lower() == wanted:
+            return value
+    return None
+
+
 def _as_int(value: Any) -> int:
     if value is None or value == "":
         return 0
@@ -670,21 +678,21 @@ def assemble_report(
         warnings=list(warnings),
         step_errors=dict(step_errors),
         dqx_checks=dqx_checks,
-        source_domain_published_ts=_as_str(metrics.get("source_used_ts")),
-        target_domain_published_ts=_as_str(metrics.get("target_used_ts")),
-        source_max_domain_published_ts=_as_str(metrics.get("source_max_ts")),
-        target_max_domain_published_ts=_as_str(metrics.get("target_max_ts")),
-        source_count=_as_int(metrics.get("source_count")),
-        target_count=_as_int(metrics.get("target_count")),
-        missing_in_target_count=_as_int(metrics.get("missing_in_target")),
-        missing_in_source_count=_as_int(metrics.get("missing_in_source")),
-        value_mismatch_count=_as_int(metrics.get("value_mismatch")),
-        duplicate_keys_source=_as_int(metrics.get("duplicate_keys_source")),
-        duplicate_keys_target=_as_int(metrics.get("duplicate_keys_target")),
-        duplicate_rows_source=_as_int(metrics.get("duplicate_rows_source")),
-        duplicate_rows_target=_as_int(metrics.get("duplicate_rows_target")),
-        null_pk_source=_as_int(metrics.get("null_pk_source")),
-        null_pk_target=_as_int(metrics.get("null_pk_target")),
+        source_domain_published_ts=_as_str(_metric(metrics, "source_used_ts")),
+        target_domain_published_ts=_as_str(_metric(metrics, "target_used_ts")),
+        source_max_domain_published_ts=_as_str(_metric(metrics, "source_max_ts")),
+        target_max_domain_published_ts=_as_str(_metric(metrics, "target_max_ts")),
+        source_count=_as_int(_metric(metrics, "source_count")),
+        target_count=_as_int(_metric(metrics, "target_count")),
+        missing_in_target_count=_as_int(_metric(metrics, "missing_in_target")),
+        missing_in_source_count=_as_int(_metric(metrics, "missing_in_source")),
+        value_mismatch_count=_as_int(_metric(metrics, "value_mismatch")),
+        duplicate_keys_source=_as_int(_metric(metrics, "duplicate_keys_source")),
+        duplicate_keys_target=_as_int(_metric(metrics, "duplicate_keys_target")),
+        duplicate_rows_source=_as_int(_metric(metrics, "duplicate_rows_source")),
+        duplicate_rows_target=_as_int(_metric(metrics, "duplicate_rows_target")),
+        null_pk_source=_as_int(_metric(metrics, "null_pk_source")),
+        null_pk_target=_as_int(_metric(metrics, "null_pk_target")),
     )
     report.mismatch_count = (
         report.missing_in_target_count + report.missing_in_source_count + report.value_mismatch_count
@@ -896,6 +904,76 @@ def resolve_metadata(request: ValidationRequest) -> tuple[list[ColumnSpec], list
         )
 
 
+def dqx_quarantine_rows(items: list[Any]) -> list[MismatchRow]:
+    """Turn DQX sample keys into quarantine rows the UI can list."""
+    rows: list[MismatchRow] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        name = str(item.get("name") or "check")
+        message = str(item.get("message") or "")
+        criticality = str(item.get("criticality") or "error")
+        samples = item.get("samples") or []
+        if not samples:
+            if not item.get("count"):
+                continue
+            rows.append(
+                MismatchRow(
+                    primary_key={"check": name},
+                    mismatch_type="VALUE_MISMATCH",
+                    column_diffs=[
+                        ColumnDiff(column=name, source_value=message or criticality, target_value=f"count={item.get('count')}")
+                    ],
+                )
+            )
+            continue
+        for sample in samples:
+            key: dict[str, str | None] = {}
+            for part in str(sample).split(","):
+                if "=" not in part:
+                    continue
+                left, right = part.split("=", 1)
+                key[left.strip()] = right.strip()
+            if not key:
+                key = {"sample": str(sample)}
+            rows.append(
+                MismatchRow(
+                    primary_key=key,
+                    mismatch_type="VALUE_MISMATCH",
+                    column_diffs=[
+                        ColumnDiff(column=name, source_value=message or str(sample), target_value=criticality)
+                    ],
+                )
+            )
+    return rows
+
+
+def merge_dqx_quarantine(report: ValidationReport, items: list[Any]) -> None:
+    seen = {
+        (json.dumps(row.primary_key, sort_keys=True), tuple(diff.column for diff in row.column_diffs))
+        for row in report.quarantine_preview
+    }
+    for row in dqx_quarantine_rows(items):
+        marker = (json.dumps(row.primary_key, sort_keys=True), tuple(diff.column for diff in row.column_diffs))
+        if marker in seen:
+            continue
+        seen.add(marker)
+        report.quarantine_preview.append(row)
+
+
+def _notebook_object(output: str | None) -> dict[str, Any]:
+    text = (output or "").strip()
+    start = text.find("{")
+    end = text.rfind("}")
+    if start < 0 or end < start:
+        return {}
+    try:
+        parsed = json.loads(text[start : end + 1])
+    except json.JSONDecodeError:
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
+
+
 def run_validation(request: ValidationRequest) -> ValidationOutcome:
     source_location = parse_uc_location(request.source_table)
     parse_uc_location(request.target_table)
@@ -918,7 +996,7 @@ def run_validation(request: ValidationRequest) -> ValidationOutcome:
             warnings=warnings,
         )
 
-    from app.databricks.client import describe_uc_object, run_sql
+    from app.databricks.client import describe_uc_object, env, run_sql
 
     for label, name in (("Source", request.source_table), ("Destination", request.target_table)):
         found = describe_uc_object(name)
@@ -928,20 +1006,42 @@ def run_validation(request: ValidationRequest) -> ValidationOutcome:
                 f"{label} {name} is not in Unity Catalog. Validation only reads existing tables and volume files.",
                 code=code,
             )
-    catalog, schema = uc_namespace(source_location)
-    results: dict[str, list[dict[str, Any]]] = {}
-    step_errors: dict[str, str] = {}
-    for step in steps:
-        try:
-            results[step.name] = run_sql(step.sql, catalog=catalog, schema=schema)
-        except DataflowError as exc:
-            step_errors[step.name] = exc.message
-            if step.critical:
-                break
-        except Exception as exc:  # pragma: no cover - network/SDK failures
-            step_errors[step.name] = str(exc)
-            if step.critical:
-                break
+
+    notebook = None
+    if env("DATABRICKS_WAREHOUSE_ID"):
+        catalog, schema = uc_namespace(source_location)
+        results: dict[str, list[dict[str, Any]]] = {}
+        step_errors: dict[str, str] = {}
+        for step in steps:
+            try:
+                results[step.name] = run_sql(step.sql, catalog=catalog, schema=schema)
+            except DataflowError as exc:
+                step_errors[step.name] = exc.message
+                if step.critical:
+                    break
+            except Exception as exc:  # pragma: no cover - network/SDK failures
+                step_errors[step.name] = str(exc)
+                if step.critical:
+                    break
+    else:
+        from app.databricks.notebook_executor import execute_notebook, render_validation_notebook
+
+        notebook = render_validation_notebook(request, steps)
+        status = execute_notebook(
+            notebook,
+            notebook_name="dataflow_validation",
+            wait=True,
+            timeout_seconds=600,
+        )
+        parsed = _notebook_object(status.output)
+        results = parsed.get("results") if isinstance(parsed.get("results"), dict) else {}
+        step_errors = {key: str(value) for key, value in (parsed.get("errors") or {}).items()}
+        if not results:
+            raise DataflowError(
+                status.error or status.state_message or "Validation notebook did not return a report.",
+                code="validation_failed",
+                status=502,
+            )
     report = assemble_report(
         request,
         results=results,
@@ -955,6 +1055,7 @@ def run_validation(request: ValidationRequest) -> ValidationOutcome:
         report=report,
         sql_steps=steps,
         dqx_checks=dqx_checks,
+        notebook=notebook,
         schema_drift=drift,
         warnings=warnings,
     )

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { apiError } from "./apiError";
 import Chat from "./components/Chat";
 import Inspector from "./components/Inspector";
 import Sidebar from "./components/Sidebar";
+import SplitPane from "./components/SplitPane";
 import ValidationReportView from "./components/ValidationReport";
 import type {
   Approval,
@@ -10,6 +12,7 @@ import type {
   Confirmation,
   Health,
   PipelineRecord,
+  ResumePayload,
   RunRecord,
   RunStatus,
   StreamEvent,
@@ -73,6 +76,12 @@ function loadSession(): Session {
       pipelines: parsed.pipelines ?? [],
       approvals: parsed.approvals ?? [],
       workspace: parsed.workspace ?? "desk",
+      code: null,
+      codeTitle: "",
+      sql: [],
+      report: null,
+      warnings: [],
+      run: null,
     };
   } catch {
     return EMPTY;
@@ -112,7 +121,14 @@ export default function App() {
     setSession((current) => {
       const next = { ...current };
       if (artifact.kind === "confirmation" && artifact.destination && artifact.message) {
-        next.confirmation = { destination: artifact.destination, message: artifact.message };
+        const kind = artifact.confirmationKind === "run" ? "run" : "create";
+        next.confirmation = {
+          destination: artifact.destination,
+          message: artifact.message,
+          kind,
+          notes: artifact.notes || [],
+          reviewId: artifact.reviewId,
+        };
         const approval: Approval = {
           id: newId(),
           destination: artifact.destination,
@@ -120,6 +136,8 @@ export default function App() {
           status: "pending",
           createdAt: new Date().toISOString(),
           threadId: current.agentThreadId ?? undefined,
+          kind,
+          notes: artifact.notes || [],
         };
         next.approvals = [
           approval,
@@ -146,7 +164,7 @@ export default function App() {
               writeMode: "merge",
               code: artifact.content,
               updatedAt: new Date().toISOString(),
-              status: "ready",
+              status: "needs_approval",
             };
             next.pipelines = [record, ...current.pipelines.filter((item) => item.destination !== destination)];
             next.approvals = current.approvals.map((item) =>
@@ -179,7 +197,7 @@ export default function App() {
 
   async function send(
     text: string,
-    resume?: { approved: boolean; destination: string },
+    resume?: ResumePayload,
     threadId?: string | null,
   ) {
     const user: ChatTurn = { id: newId(), role: "user", content: text, steps: [] };
@@ -188,13 +206,27 @@ export default function App() {
     const history = [...session.messages, user];
     const typed =
       resume ??
-      (session.confirmation ? replyDecision(text, session.confirmation.destination) : undefined);
+      (session.confirmation
+        ? replyDecision(text, session.confirmation.destination) ??
+          (session.confirmation.kind === "run" && text.trim()
+            ? {
+                approved: true,
+                destination: session.confirmation.destination,
+                comment: text.trim(),
+                action: "revise" as const,
+              }
+            : undefined)
+        : undefined);
     const resumeThread = threadId ?? session.agentThreadId;
+    const clearCode = !typed;
     setSession((current) => ({
       ...current,
       workspace: "chat",
       messages: [...history, assistant],
       confirmation: null,
+      ...(clearCode
+        ? { code: null, codeTitle: "", sql: [], report: null, warnings: [], run: null }
+        : {}),
       approvals: typed
         ? current.approvals.map((item) =>
             item.destination === typed.destination && item.status === "pending"
@@ -328,7 +360,7 @@ export default function App() {
         body: JSON.stringify(payload),
       });
       const body = await response.json();
-      if (!response.ok) throw new Error(body.error || "Validation failed");
+      if (!response.ok) throw new Error(apiError(body, "Validation failed"));
       if (body.notebook) {
         applyArtifact({
           kind: "code",
@@ -337,12 +369,15 @@ export default function App() {
           language: "python",
           sql: body.sql_steps,
         });
+      } else if (body.sql_steps) {
+        setSession((current) => ({ ...current, sql: body.sql_steps }));
       }
       if (body.report) {
         applyArtifact({ kind: "validation", report: body.report, warnings: body.warnings });
+        applyArtifact({ kind: "quarantine", report: body.report, warnings: body.warnings });
       } else {
         setInspectorTab("code");
-        setSession((current) => ({ ...current, warnings: body.warnings || [] }));
+        setSession((current) => ({ ...current, warnings: body.warnings || [], sql: body.sql_steps || current.sql }));
       }
     } catch (error) {
       setBanner(error instanceof Error ? error.message : "Validation failed");
@@ -426,10 +461,15 @@ export default function App() {
       void generateApproved(approval);
       return;
     }
+    const running = approval.kind === "run";
     const text = approved
-      ? `Yes, create the Unity Catalog destination ${approval.destination}. Generate the pipeline with confirm_create_destination true.`
-      : `Do not create ${approval.destination}. Leave that destination alone.`;
-    void send(text, { approved, destination: approval.destination }, approval.threadId);
+      ? running
+        ? `Run the reviewed notebook and copy into ${approval.destination}.`
+        : `Yes, create the Unity Catalog destination ${approval.destination}. Generate the pipeline with confirm_create_destination true.`
+      : running
+        ? `Do not run the copy to ${approval.destination}.`
+        : `Do not create ${approval.destination}. Leave that destination alone.`;
+    void send(text, { approved, destination: approval.destination, action: approved ? "approve" : "decline" }, approval.threadId);
   }
 
   const pendingApprovals = session.approvals.filter((item) => item.status === "pending").length;
@@ -441,21 +481,22 @@ export default function App() {
           <p className="font-display text-base leading-none">DataFlow</p>
           <p className="mt-1 text-xs text-muted">Catalog, quality, and runs</p>
         </div>
-        <div className="flex items-center gap-2 text-[11px]">
+        <div className="flex flex-wrap items-center justify-end gap-2 text-[11px]">
+          <ThemeToggle />
           <Pill ok={health?.agent_runtime === "langgraph"} label="Agent graph" />
           <Pill ok={health?.databricks_token_configured} label="Databricks" />
           <Pill ok={health?.databricks_warehouse_configured} label="Warehouse" />
           <Pill ok={health?.openai_configured} label="OpenAI" />
         </div>
       </header>
-      {banner && <div className="border-b border-line bg-[#2a2018] px-4 py-2 text-sm text-amber">{banner}</div>}
+      {banner && <div className="border-b border-line bg-banner px-4 py-2 text-sm text-amber">{banner}</div>}
       <div className="flex min-h-0 flex-1 flex-col md:flex-row">
         <Sidebar
           workspace={session.workspace}
           pendingApprovals={pendingApprovals}
           onSelect={(workspace) => setSession((current) => ({ ...current, workspace }))}
         />
-        <main className="min-h-0 min-w-0 flex-1">
+        <main className="flex h-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           {session.workspace === "desk" && (
             <DeskView
               pipelines={session.pipelines}
@@ -467,7 +508,10 @@ export default function App() {
             />
           )}
           {session.workspace === "chat" && (
-            <div className="grid h-full min-h-0 grid-rows-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:grid-rows-1 md:grid-cols-[minmax(0,1.05fr)_minmax(280px,0.95fr)]">
+            <SplitPane
+              storageKey="dataflow-chat-split"
+              initial={0.54}
+              first={
               <Chat
                 messages={session.messages}
                 streaming={streaming}
@@ -481,6 +525,12 @@ export default function App() {
                     messages: [],
                     confirmation: null,
                     agentThreadId: null,
+                    code: null,
+                    codeTitle: "",
+                    sql: [],
+                    report: null,
+                    warnings: [],
+                    run: null,
                   }))
                 }
                 onUploaded={(upload) => {
@@ -488,6 +538,8 @@ export default function App() {
                   setBanner(`Created ${upload.table}. Mention it in the next message and the agent can use it.`);
                 }}
               />
+              }
+              second={
               <Inspector
                 code={session.code}
                 codeTitle={session.codeTitle}
@@ -501,7 +553,8 @@ export default function App() {
                 onRunValidation={(payload) => void runValidation(payload)}
                 onExecute={() => void executeCurrent()}
               />
-            </div>
+              }
+            />
           )}
           {session.workspace === "pipelines" && (
             <PipelinesView
@@ -586,6 +639,7 @@ export default function App() {
                 <ValidationReportView
                   report={session.report}
                   warnings={session.warnings}
+                  sql={session.sql}
                   running={validating}
                   onRun={(payload) => void runValidation(payload)}
                 />
@@ -607,20 +661,48 @@ export default function App() {
   );
 }
 
-function replyDecision(text: string, destination: string) {
+function replyDecision(text: string, destination: string): ResumePayload | undefined {
   const value = text.trim().toLowerCase().replace(/[.!]+$/g, "");
-  if (/^(y|yes|yeah|yep|ok|okay|create|create it|do it|go ahead)\b/.test(value)) {
-    return { approved: true, destination };
+  if (/^(y|yes|yeah|yep|ok|okay|create|create it|do it|go ahead|run|run it)\b/.test(value)) {
+    return { approved: true, destination, action: "approve" };
   }
   if (/^(n|no|nope|don't|dont|do not)\b/.test(value)) {
-    return { approved: false, destination };
+    return { approved: false, destination, action: "decline" };
   }
   return undefined;
 }
 
+function ThemeToggle() {
+  const [theme, setTheme] = useState<"dark" | "light">(() =>
+    document.documentElement.dataset.theme === "light" ? "light" : "dark",
+  );
+
+  function choose(next: "dark" | "light") {
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem("dataflow-theme", next);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute("content", next === "light" ? "#f3f6fb" : "#05070d");
+    setTheme(next);
+  }
+
+  return (
+    <div className="flex rounded-full border border-line p-0.5">
+      {(["dark", "light"] as const).map((option) => (
+        <button
+          key={option}
+          type="button"
+          onClick={() => choose(option)}
+          className={`rounded-full px-2.5 py-1 capitalize ${theme === option ? "bg-lime text-white" : "text-muted"}`}
+        >
+          {option}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 function Pill({ ok, label }: { ok?: boolean; label: string }) {
   return (
-    <span className={`rounded-full px-2 py-1 ${ok ? "bg-[#052e21] text-teal" : "bg-panel-2 text-muted"}`}>{label}</span>
+    <span className={`rounded-full px-2 py-1 ${ok ? "bg-ok text-teal" : "bg-panel-2 text-muted"}`}>{label}</span>
   );
 }
 

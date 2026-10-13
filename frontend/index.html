@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>DataFlow</title>
     <meta name="theme-color" content="#05070d" />
+    <script>
+      try {
+        var savedTheme = localStorage.getItem("dataflow-theme");
+        document.documentElement.dataset.theme = savedTheme === "light" ? "light" : "dark";
+        document.querySelector('meta[name="theme-color"]').setAttribute(
+          "content",
+          savedTheme === "light" ? "#f3f6fb" : "#05070d",
+        );
+      } catch (e) {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

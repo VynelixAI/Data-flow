@@ -148,8 +148,11 @@ async def agent_node(state: GraphState, config: RunnableConfig) -> GraphState:
 
 
 async def tools_node(state: GraphState, config: RunnableConfig) -> GraphState:
+    from app.agent.session_memory import bind_thread
+
     messages = list(state.get("messages") or [])
     assistant = messages[-1] if messages else {}
+    bind_thread(str((config.get("configurable") or {}).get("thread_id") or ""))
     pending: dict[str, Any] | None = None
     for call in assistant.get("tool_calls") or []:
         name = call["function"]["name"]
@@ -169,6 +172,9 @@ async def tools_node(state: GraphState, config: RunnableConfig) -> GraphState:
                     "destination": artifact.get("destination") or "",
                     "source": artifact.get("source") or "",
                     "message": artifact.get("message") or "Create this destination?",
+                    "kind": artifact.get("confirmation_kind") or "create",
+                    "review_id": artifact.get("review_id") or "",
+                    "notes": artifact.get("notes") or [],
                 }
         result = outcome.get("result") or {}
         if result.get("confirmation_required") and pending is None:
@@ -176,6 +182,9 @@ async def tools_node(state: GraphState, config: RunnableConfig) -> GraphState:
                 "destination": result.get("destination") or "",
                 "source": result.get("source") or "",
                 "message": result.get("message") or "Create this destination?",
+                "kind": result.get("kind") or "create",
+                "review_id": result.get("review_id") or "",
+                "notes": result.get("notes") or [],
             }
         await _emit(config, {"type": "tool_end", "name": name, "ok": "error" not in result})
         messages.append(
@@ -186,6 +195,84 @@ async def tools_node(state: GraphState, config: RunnableConfig) -> GraphState:
             }
         )
     return {"messages": messages, "pending_confirmation": pending, "stop": False}
+
+
+async def _finish_reviewed_run(
+    state: GraphState,
+    config: RunnableConfig,
+    pending: dict[str, Any],
+    action: str,
+    comment: str,
+    source: str,
+    destination: str,
+) -> GraphState:
+    """Run the reviewed notebook, or send a comment back so the notebook can be revised."""
+    messages = list(state.get("messages") or [])
+    if action == "revise":
+        from app.agent.session_memory import add_comment
+
+        review_id = str(pending.get("review_id") or "")
+        add_comment(review_id, comment)
+        note = comment.strip() or "No extra comment."
+        await _emit(
+            config,
+            {"type": "token", "content": f"Updating the notebook with your comment: {note} "},
+        )
+        messages.append(
+            {
+                "role": "user",
+                "content": (
+                    f"The operator reviewed the notebook for {destination} and asked for this change: {note} "
+                    "Regenerate the notebook with that change and stop for review again. Do not copy rows."
+                ),
+            }
+        )
+        return {"messages": messages, "pending_confirmation": None, "approved": True, "stop": False}
+
+    from app.agent.tools import run_prepared_copy
+
+    await _emit(config, {"type": "tool_start", "name": "generate_pipeline", "label": "Copying the reviewed data"})
+    try:
+        outcome = await asyncio.to_thread(run_prepared_copy, str(pending.get("review_id") or ""), comment)
+    except DataflowError as exc:
+        await _emit(config, {"type": "tool_end", "name": "generate_pipeline", "ok": False})
+        await _emit(config, {"type": "error", "message": exc.message, "code": exc.code})
+        return {"pending_confirmation": None, "approved": False, "stop": True}
+    result = outcome.get("result") or {}
+    for artifact in outcome.get("artifacts") or []:
+        await _emit(config, {"type": "artifact", **artifact})
+    await _emit(config, {"type": "tool_end", "name": "generate_pipeline", "ok": "error" not in result})
+    summary = str(result.get("message") or "The copy finished.")
+    await _emit(config, {"type": "token", "content": summary + " "})
+    messages.append(
+        {
+            "role": "user",
+            "content": (
+                f"The operator approved the notebook and the copy from {source} to {destination} has finished. "
+                f"Result: {summary} Explain that result. Do not call generate_pipeline again."
+            ),
+        }
+    )
+    return {"messages": messages, "pending_confirmation": None, "approved": True, "stop": False}
+
+
+def _confirmed_locations(source: str, destination: str, messages: list[dict]) -> tuple[str, str]:
+    """Drop notebook code such as dbutils.widgets.text and keep the user's volume paths."""
+    from app.agent.tools import user_locations
+    from app.databricks.identifiers import coerce_location
+    from app.errors import DataflowError
+
+    pair = user_locations(messages)
+
+    def one(value: str, index: int) -> str:
+        try:
+            return coerce_location(value)
+        except DataflowError:
+            if len(pair) > index:
+                return pair[index]
+            raise
+
+    return one(source, 0), one(destination, 1)
 
 
 async def approve_node(state: GraphState, config: RunnableConfig) -> GraphState:
@@ -200,18 +287,33 @@ async def approve_node(state: GraphState, config: RunnableConfig) -> GraphState:
     if not pending:
         return {"approved": False, "stop": True}
     decision = interrupt(pending)
-    approved = bool(isinstance(decision, dict) and decision.get("approved"))
+    decision = decision if isinstance(decision, dict) else {}
+    approved = bool(decision.get("approved"))
+    action = str(decision.get("action") or ("approve" if approved else "decline"))
+    comment = str(decision.get("comment") or "")
     destination = str(pending.get("destination") or decision.get("destination") or "")
     source = str(pending.get("source") or "")
-    if not approved:
+    kind = str(pending.get("kind") or "create")
+    if approved and kind != "run":
+        try:
+            source, destination = _confirmed_locations(source, destination, list(state.get("messages") or []))
+        except DataflowError as exc:
+            await _emit(config, {"type": "error", "message": exc.message, "code": exc.code})
+            return {"pending_confirmation": None, "approved": False, "stop": True}
+    if not approved or action == "decline":
+        from app.agent.session_memory import close_run
+
+        close_run(str(pending.get("review_id") or ""))
         await _emit(
             config,
             {
                 "type": "token",
-                "content": f"Left {destination} unchanged. Nothing was created.",
+                "content": f"Left {destination} unchanged. Nothing was written.",
             },
         )
         return {"pending_confirmation": None, "approved": False, "stop": True}
+    if kind == "run":
+        return await _finish_reviewed_run(state, config, pending, action, comment, source, destination)
     if not source:
         await _emit(
             config,
@@ -237,7 +339,7 @@ async def approve_node(state: GraphState, config: RunnableConfig) -> GraphState:
             "content": (
                 f"The operator approved creating {destination}. The object now exists. "
                 "Call generate_pipeline with confirm_create_destination true. "
-                "That copies the source rows and runs validation. Do not ask for the path again."
+                "That prepares the notebook for review and does not copy rows. Do not ask for the path again."
             ),
         }
     )

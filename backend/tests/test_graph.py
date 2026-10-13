@@ -81,6 +81,67 @@ def _approve_yes():
     return run()
 
 
+def test_run_approval_copies_only_after_review(monkeypatch):
+    called = {}
+
+    def fake_copy(review_id: str, comment: str = "") -> dict:
+        called["review_id"] = review_id
+        called["comment"] = comment
+        return {"result": {"message": "Copied the data and validated it. Status PASS."}, "artifacts": []}
+
+    monkeypatch.setattr("app.agent.tools.run_prepared_copy", fake_copy)
+    asyncio.run(_approve_run())
+    assert called == {"review_id": "review-1", "comment": "check order_id first"}
+
+
+def _approve_run():
+    graph = StateGraph(GraphState)
+    graph.add_node("approve", approve_node)
+    graph.add_edge(START, "approve")
+    graph.add_conditional_edges("approve", route_after_approve, {"agent": END, "end": END})
+    compiled = graph.compile(checkpointer=MemorySaver())
+
+    async def run():
+        queue = asyncio.Queue()
+        thread_id = "approval-run"
+        bind_emitter(thread_id, queue)
+        config = {"configurable": {"thread_id": thread_id}}
+        try:
+            await compiled.ainvoke(
+                {
+                    "messages": [],
+                    "pending_confirmation": {
+                        "destination": "main.silver.orders",
+                        "source": "main.bronze.orders",
+                        "message": "Review the notebook.",
+                        "kind": "run",
+                        "review_id": "review-1",
+                    },
+                },
+                config,
+            )
+            await compiled.ainvoke(
+                Command(
+                    resume={
+                        "approved": True,
+                        "destination": "main.silver.orders",
+                        "action": "approve",
+                        "comment": "check order_id first",
+                    }
+                ),
+                config,
+            )
+            kinds = []
+            while not queue.empty():
+                event = await queue.get()
+                kinds.append(event["type"])
+            assert "token" in kinds
+        finally:
+            release_emitter(thread_id)
+
+    return run()
+
+
 def test_approval_pauses_and_resumes_without_creating():
     asyncio.run(_pause_and_resume())
 

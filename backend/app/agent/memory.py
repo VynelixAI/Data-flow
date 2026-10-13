@@ -259,7 +259,6 @@ def apply_lessons(checks: list[dict[str, Any]], lessons: list[dict[str, Any]]) -
                                     f"OR try_parse_json(CAST({ident} AS STRING)) IS NOT NULL"
                                 ),
                                 "msg": f"{column} should be valid JSON, blank, or null",
-                                "negate": False,
                             },
                         },
                     }
@@ -290,7 +289,6 @@ def apply_lessons(checks: list[dict[str, Any]], lessons: list[dict[str, Any]]) -
                                 f"OR CAST({ident} AS STRING) RLIKE '{escaped}'"
                             ),
                             "msg": f"{column} must match {rule}",
-                            "negate": False,
                         },
                     },
                 }
@@ -314,7 +312,6 @@ def apply_lessons(checks: list[dict[str, Any]], lessons: list[dict[str, Any]]) -
                         "arguments": {
                             "expression": f"{ident} IS NULL OR CAST({ident} AS STRING) IN ({quoted})",
                             "msg": f"{column} must be one of the learned values",
-                            "negate": False,
                         },
                     },
                 }

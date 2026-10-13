@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { apiError } from "../apiError";
 import CatalogSearch from "../components/CatalogSearch";
 
 type TableRow = { name: string; full_name: string; table_type: string };
@@ -15,6 +16,47 @@ export default function CatalogView({
   const [busy, setBusy] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const response = await fetch("/api/catalogs");
+        const body = await response.json();
+        if (!response.ok || cancelled) return;
+        const names = (body.catalogs || []) as string[];
+        setCatalog((current) => {
+          if (names.includes(current)) return current;
+          return names.find((name) => name === "workspace") || names.find((name) => !["system", "samples", "hive_metastore"].includes(name)) || current;
+        });
+      } catch {
+        return;
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const name = catalog.trim();
+    if (!name) return;
+    let cancelled = false;
+    void (async () => {
+      try {
+        const response = await fetch(`/api/catalog/schemas?catalog=${encodeURIComponent(name)}`);
+        const body = await response.json();
+        if (!response.ok || cancelled) return;
+        const names = (body.schemas || []) as string[];
+        setSchema((current) => (names.includes(current) ? current : names.includes("default") ? "default" : names[0] || current));
+      } catch {
+        return;
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [catalog]);
+
   async function load() {
     setBusy(true);
     setError(null);
@@ -22,7 +64,7 @@ export default function CatalogView({
       const params = new URLSearchParams({ catalog: catalog.trim(), schema_name: schema.trim() });
       const response = await fetch(`/api/catalog/tables?${params.toString()}`);
       const body = await response.json();
-      if (!response.ok) throw new Error(body.error || "Could not list tables");
+      if (!response.ok) throw new Error(apiError(body, "Could not list tables"));
       setTables(body.tables || []);
       setLoaded(true);
     } catch (reason) {

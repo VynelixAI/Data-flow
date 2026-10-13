@@ -9,6 +9,7 @@ from collections.abc import AsyncIterator
 from typing import Any
 
 from app.agent.graph import bind_emitter, get_graph, initial_state, release_emitter
+from app.agent.session_memory import close_thread
 from app.errors import DataflowError
 from app.schemas import ChatRequest
 
@@ -38,12 +39,20 @@ async def stream_agent(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
     config = {"configurable": {"thread_id": thread_id}, "recursion_limit": 40}
 
     async def drive() -> None:
+        holding = False
         try:
             if request.resume:
                 snapshot = await graph.aget_state(config)
                 if snapshot.next:
                     await graph.ainvoke(
-                        Command(resume={"approved": request.resume.approved, "destination": request.resume.destination}),
+                        Command(
+                            resume={
+                                "approved": request.resume.approved,
+                                "destination": request.resume.destination,
+                                "comment": request.resume.comment,
+                                "action": request.resume.action,
+                            }
+                        ),
                         config,
                     )
                 else:
@@ -52,6 +61,7 @@ async def stream_agent(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
                 await graph.ainvoke(initial_state(request), config)
             snapshot = await graph.aget_state(config)
             if snapshot.next:
+                holding = True
                 await queue.put({"type": "hold", "thread_id": thread_id})
             await queue.put({"type": "done"})
         except DataflowError as exc:
@@ -61,6 +71,8 @@ async def stream_agent(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
             await queue.put({"type": "error", "message": str(exc), "code": "chat_failed"})
             await queue.put({"type": "done"})
         finally:
+            if not holding:
+                close_thread(thread_id)
             release_emitter(thread_id)
 
     task = asyncio.create_task(drive())

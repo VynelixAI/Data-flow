@@ -1,6 +1,8 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { apiError } from "../apiError";
 import CatalogSearch from "../components/CatalogSearch";
 import CodeViewer from "../components/CodeViewer";
+import SplitPane from "../components/SplitPane";
 import { CADENCES, DOMAINS, STAGES, cadenceLabel, stageLabel } from "../domains";
 import type { Cadence, DomainId, PipelineRecord, Stage } from "../types";
 
@@ -46,7 +48,7 @@ export default function PipelinesView({
   async function inspect(name: string) {
     const response = await fetch(`/api/uc/inspect?name=${encodeURIComponent(name)}`);
     const body = await response.json();
-    if (!response.ok) throw new Error(body.error || "Could not inspect Unity Catalog");
+    if (!response.ok) throw new Error(apiError(body, "Could not inspect Unity Catalog"));
     return body as { name: string; exists: boolean | null; checked: boolean; kind: string };
   }
 
@@ -104,7 +106,7 @@ export default function PipelinesView({
         }),
       });
       const body = await response.json();
-      if (!response.ok) throw new Error(body.error || "Could not generate the notebook");
+      if (!response.ok) throw new Error(apiError(body, "Could not generate the notebook"));
       const record: PipelineRecord = {
         id: crypto.randomUUID(),
         name: name.trim() || `${sourceName} to ${destinationName}`,
@@ -131,8 +133,12 @@ export default function PipelinesView({
   }
 
   return (
-    <div className="grid h-full min-h-0 lg:grid-cols-[minmax(320px,420px)_minmax(0,1fr)]">
-      <div className="overflow-auto border-b border-line px-4 py-5 lg:border-b-0 lg:border-r">
+    <SplitPane
+      storageKey="dataflow-pipeline-split"
+      initial={0.38}
+      wideAt={1024}
+      first={
+      <div className="h-full overflow-auto px-4 py-5">
         <p className="text-xs uppercase tracking-[0.16em] text-muted">Pipeline contract</p>
         <h1 className="mt-2 font-display text-2xl">File the copy before it runs.</h1>
         <p className="mt-2 text-sm leading-6 text-muted">
@@ -236,10 +242,13 @@ export default function PipelinesView({
           ))}
         </ul>
       </div>
-      <div className="min-h-[360px]">
+      }
+      second={
+      <div className="flex h-full min-h-0 flex-col">
         <CodeViewer code={current?.code ?? null} title={current?.name ?? "Notebook"} sql={[]} />
       </div>
-    </div>
+      }
+    />
   );
 }
 

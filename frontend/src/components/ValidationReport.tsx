@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import type { MismatchRow, ValidationReport } from "../types";
+import type { MismatchRow, SqlStep, ValidationReport } from "../types";
 import { Empty } from "./CodeViewer";
 
 function StatusPill({ status }: { status: ValidationReport["status"] }) {
@@ -23,10 +23,78 @@ function keyLabel(row: MismatchRow) {
     .join(", ");
 }
 
-export function QuarantineTable({ rows }: { rows: MismatchRow[] }) {
-  if (!rows.length) {
+export function QuarantineTable({ rows, report }: { rows?: MismatchRow[]; report?: ValidationReport | null }) {
+  const preview = rows ?? report?.quarantine_preview ?? [];
+  const profile = report?.source_profile;
+  const nulls = (report?.null_checks ?? []).filter((item) => item.null_count > 0);
+  const duplicates = report?.duplicate_key_samples ?? [];
+  const profileDuplicates = profile?.duplicate_key_samples ?? [];
+  const profileNulls = (profile?.nulls ?? []).filter((item) => item.null_count > 0);
+  const empty = !preview.length && !nulls.length && !duplicates.length && !profile && !profileDuplicates.length;
+  if (empty) {
     return <p className="text-sm text-muted">No quarantined keys in this sample.</p>;
   }
+  return (
+    <div className="space-y-4">
+      {profile && (
+        <div className="rounded-2xl border border-line bg-panel-2 px-3 py-3 text-sm">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-muted">Source profile</p>
+          <p className="mt-1 font-mono text-xs">{profile.table}</p>
+          <p className="mt-2">
+            Rows {profile.row_count ?? 0}
+            {" · "}
+            Duplicate key groups {profile.duplicate_key_groups ?? 0}
+            {" · "}
+            Duplicate key rows {profile.duplicate_key_rows ?? 0}
+          </p>
+          {profileNulls.length > 0 && (
+            <ul className="mt-2 space-y-1 text-xs text-muted">
+              {profileNulls.map((item) => (
+                <li key={item.column}>
+                  {item.column}: {item.null_count} nulls of {item.total}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+      {profileDuplicates.length > 0 && (
+        <ul className="space-y-1 text-sm">
+          {profileDuplicates.map((item, index) => (
+            <li key={`profile-dup-${index}`} className="font-mono text-xs">
+              Source duplicate{" "}
+              {Object.entries(item.primary_key)
+                .map(([key, value]) => `${key}=${value ?? "null"}`)
+                .join(", ")}{" "}
+              × {item.occurrences}
+            </li>
+          ))}
+        </ul>
+      )}
+      {(nulls.length > 0 || duplicates.length > 0) && (
+        <div className="space-y-1 text-sm">
+          {nulls.map((item) => (
+            <p key={`${item.side}-${item.column}`}>
+              {item.side}.{item.column}: {item.null_count} nulls of {item.total}
+            </p>
+          ))}
+          {duplicates.map((item, index) => (
+            <p key={`dup-${index}`} className="font-mono text-xs">
+              {item.side}{" "}
+              {Object.entries(item.primary_key)
+                .map(([key, value]) => `${key}=${value ?? "null"}`)
+                .join(", ")}{" "}
+              × {item.occurrences}
+            </p>
+          ))}
+        </div>
+      )}
+      {preview.length > 0 && <QuarantineRows rows={preview} />}
+    </div>
+  );
+}
+
+function QuarantineRows({ rows }: { rows: MismatchRow[] }) {
   return (
     <div className="overflow-auto rounded-2xl border border-line">
       <table className="w-full min-w-[640px] text-left text-sm">
@@ -63,11 +131,13 @@ export function QuarantineTable({ rows }: { rows: MismatchRow[] }) {
 export default function ValidationReportView({
   report,
   warnings,
+  sql = [],
   onRun,
   running,
 }: {
   report: ValidationReport | null;
   warnings: string[];
+  sql?: SqlStep[];
   onRun: (payload: Record<string, unknown>) => void;
   running: boolean;
 }) {
@@ -78,8 +148,9 @@ export default function ValidationReportView({
   const [timestampColumn, setTimestampColumn] = useState("domain_published_ts");
   const [alignment, setAlignment] = useState("latest_each");
   const [softDelete, setSoftDelete] = useState("");
-  const [execute, setExecute] = useState(false);
+  const [execute, setExecute] = useState(true);
   const [advanced, setAdvanced] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-auto">
@@ -87,10 +158,18 @@ export default function ValidationReportView({
         className="space-y-3 border-b border-line px-4 py-4"
         onSubmit={(event) => {
           event.preventDefault();
+          const sourceName = source.trim();
+          const targetName = target.trim();
+          const primaryKeys = keys.split(",").map((item) => item.trim()).filter(Boolean);
+          if (!sourceName || !targetName || primaryKeys.length === 0) {
+            setFormError("Enter a source, a destination, and at least one primary key.");
+            return;
+          }
+          setFormError(null);
           onRun({
-            source_table: source.trim(),
-            target_table: target.trim(),
-            primary_keys: keys.split(",").map((item) => item.trim()).filter(Boolean),
+            source_table: sourceName,
+            target_table: targetName,
+            primary_keys: primaryKeys,
             compare_columns: compare.trim() ? compare.split(",").map((item) => item.trim()).filter(Boolean) : null,
             timestamp_column: timestampColumn.trim() || "domain_published_ts",
             timestamp_alignment: alignment,
@@ -129,26 +208,43 @@ export default function ValidationReportView({
               </label>
             </div>
             <Field label="Soft-delete column" value={softDelete} onChange={setSoftDelete} />
-            <label className="flex items-center gap-2 text-sm text-muted">
-              <input type="checkbox" checked={execute} onChange={(event) => setExecute(event.target.checked)} />
-              Execute on the SQL warehouse
-            </label>
           </div>
         )}
+        <label className="flex items-center gap-2 text-sm text-muted">
+          <input type="checkbox" checked={execute} onChange={(event) => setExecute(event.target.checked)} />
+          Run the check and return a report
+        </label>
+        {formError && <p className="text-sm text-amber">{formError}</p>}
         <button
           type="submit"
           disabled={running}
           className="rounded-full bg-lime px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
         >
-          {running ? "Running…" : execute ? "Run validation" : "Generate validation SQL"}
+          {running ? "Running…" : "Generate validation SQL"}
         </button>
       </form>
 
       {!report ? (
-        <Empty
-          title="No report yet"
-          body="Generate SQL here, or ask the chat to validate a source against a target. Execution needs a SQL warehouse."
-        />
+        sql.length > 0 ? (
+          <div className="space-y-3 px-4 py-4">
+            {warnings.map((warning) => (
+              <p key={warning} className="text-sm text-amber">
+                {warning}
+              </p>
+            ))}
+            {sql.map((step) => (
+              <section key={step.name}>
+                <p className="text-xs uppercase tracking-[0.14em] text-muted">{step.name}</p>
+                <pre className="mt-2 overflow-auto rounded-2xl border border-line bg-ink p-3 text-xs leading-5">{step.sql}</pre>
+              </section>
+            ))}
+          </div>
+        ) : (
+          <Empty
+            title="No report yet"
+            body="Generate validation SQL to run the source-to-target check. The report lists row counts, nulls, and quarantined keys."
+          />
+        )
       ) : (
         <div className="space-y-4 px-4 py-4">
           <div className="flex flex-wrap items-center gap-3">
@@ -210,6 +306,15 @@ export default function ValidationReportView({
               </p>
             ))}
           </Section>
+          {report.source_profile?.table && (
+            <Section title="Source profile">
+              <p className="font-mono text-xs">{report.source_profile.table}</p>
+              <p className="text-sm">
+                Rows {report.source_profile.row_count ?? 0}. Duplicate key groups{" "}
+                {report.source_profile.duplicate_key_groups ?? 0}.
+              </p>
+            </Section>
+          )}
           <Section title="Mismatched keys">
             <QuarantineTable rows={report.mismatched_keys} />
           </Section>
