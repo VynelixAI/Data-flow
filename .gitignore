@@ -1,10 +1,21 @@
+# Python virtual environments
 .venv/
+venv/
+backend/venv/
+
+# Python cache and tests
 __pycache__/
 .pytest_cache/
 *.pyc
+
+# Environment variables
 .env
+
+# Frontend dependencies and builds
 node_modules/
 dist/
-.DS_Store
 .vite/
+
+# Other
+.DS_Store
 backend/data/

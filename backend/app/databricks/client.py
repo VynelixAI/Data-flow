@@ -342,3 +342,41 @@ def iter_health() -> Iterator[tuple[str, bool]]:
     yield "databricks_token_configured", bool(env(_ENV_TOKEN))
     yield "databricks_warehouse_configured", bool(env(_ENV_WAREHOUSE))
     yield "openai_configured", bool(env("OPENAI_API_KEY"))
+
+
+def list_volume_files(
+    catalog: str,
+    schema: str,
+    volume: str,
+) -> list[dict[str, Any]]:
+    """List files in a Unity Catalog volume without changing its contents."""
+    require_ident(catalog, what="catalog")
+    require_ident(schema, what="schema")
+    require_ident(volume, what="volume")
+
+    directory = f"/Volumes/{catalog}/{schema}/{volume}"
+    client = get_workspace_client()
+    rows: list[dict[str, Any]] = []
+
+    try:
+        for item in client.files.list_directory_contents(
+            directory_path=directory
+        ):
+            path = item.path or ""
+            name = item.name or path.rsplit("/", 1)[-1]
+
+            rows.append({
+                "name": name,
+                "path": path,
+                "is_directory": bool(item.is_directory),
+                "size": item.file_size,
+            })
+
+    except Exception as exc:
+        raise DataflowError(
+            f"Could not list files in {directory}: {exc}",
+            code="volume_list_failed",
+            status=502,
+        ) from exc
+
+    return rows

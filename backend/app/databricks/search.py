@@ -98,7 +98,7 @@ def search_catalog(
                 examined, truncated = _take_tables(client, cat, schema, needle, objects, examined)
                 if truncated:
                     break
-            if len(objects) > before or match_rank(needle, schema) or schema == preferred_schema:
+            # if len(objects) > before or match_rank(needle, schema) or schema == preferred_schema:
                 examined, truncated = _take_files(client, cat, schema, needle, objects, examined)
             if truncated:
                 break

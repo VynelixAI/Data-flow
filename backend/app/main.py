@@ -24,6 +24,7 @@ from app.databricks.client import (
     list_catalog_names,
     list_schema_names,
     list_tables,
+    list_volume_files,
 )
 from app.databricks.search import search_catalog
 from app.databricks.dqx_utils import build_dqx_checks
@@ -184,3 +185,20 @@ if __name__ == "__main__":
     import uvicorn
 
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+
+@app.get("/api/catalog/volume-files")
+def catalog_volume_files(
+    catalog: str,
+    schema_name: str,
+    volume: str,
+):
+    return {
+        "catalog": catalog,
+        "schema": schema_name,
+        "volume": volume,
+        "files": list_volume_files(
+            catalog,
+            schema_name,
+            volume,
+        ),
+    }
