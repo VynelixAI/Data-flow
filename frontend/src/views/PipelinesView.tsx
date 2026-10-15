@@ -6,6 +6,46 @@ import SplitPane from "../components/SplitPane";
 import { CADENCES, DOMAINS, STAGES, cadenceLabel, stageLabel } from "../domains";
 import type { Cadence, DomainId, PipelineRecord, Stage } from "../types";
 
+const PIPELINE_DRAFT_KEY = "dataflow-pipeline-form-draft";
+
+type PipelineFormDraft = {
+  name: string;
+  domain: DomainId;
+  stage: Stage;
+  cadence: Cadence;
+  source: string;
+  destination: string;
+  keys: string;
+  writeMode: "merge" | "overwrite" | "append";
+};
+
+const DEFAULT_PIPELINE_DRAFT: PipelineFormDraft = {
+  name: "Store inventory publish",
+  domain: "stores",
+  stage: "dev",
+  cadence: "after_close",
+  source: "main.bronze.store_inventory",
+  destination: "main.silver.store_inventory",
+  keys: "store_id,sku",
+  writeMode: "merge",
+};
+
+function loadPipelineDraft(): PipelineFormDraft {
+  try {
+    const saved = localStorage.getItem(PIPELINE_DRAFT_KEY);
+    if (saved) {
+      return {
+        ...DEFAULT_PIPELINE_DRAFT,
+        ...JSON.parse(saved),
+      };
+    }
+  } catch {
+    // Use defaults if the saved draft cannot be read.
+  }
+
+  return DEFAULT_PIPELINE_DRAFT;
+}
+
 export default function PipelinesView({
   pipelines,
   seed,
@@ -24,14 +64,19 @@ export default function PipelinesView({
   }) => void;
   onSelectCode: (code: string, title: string) => void;
 }) {
-  const [name, setName] = useState("Store inventory publish");
-  const [domain, setDomain] = useState<DomainId>("stores");
-  const [stage, setStage] = useState<Stage>("dev");
-  const [cadence, setCadence] = useState<Cadence>("after_close");
-  const [source, setSource] = useState("main.bronze.store_inventory");
-  const [destination, setDestination] = useState("main.silver.store_inventory");
-  const [keys, setKeys] = useState("store_id,sku");
-  const [writeMode, setWriteMode] = useState<"merge" | "overwrite" | "append">("merge");
+  
+const [initialDraft] = useState(loadPipelineDraft);
+
+const [name, setName] = useState(initialDraft.name);
+const [domain, setDomain] = useState<DomainId>(initialDraft.domain);
+const [stage, setStage] = useState<Stage>(initialDraft.stage);
+const [cadence, setCadence] = useState<Cadence>(initialDraft.cadence);
+const [source, setSource] = useState(initialDraft.source);
+const [destination, setDestination] = useState(initialDraft.destination);
+const [keys, setKeys] = useState(initialDraft.keys);
+const [writeMode, setWriteMode] =
+  useState<"merge" | "overwrite" | "append">(initialDraft.writeMode);
+
   const [selected, setSelected] = useState<string | null>(pipelines[0]?.id ?? null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,6 +87,37 @@ export default function PipelinesView({
     if (seed.source) setSource(seed.source);
     if (seed.destination) setDestination(seed.destination);
   }, [seed]);
+  
+useEffect(() => {
+  const draft: PipelineFormDraft = {
+    name,
+    domain,
+    stage,
+    cadence,
+    source,
+    destination,
+    keys,
+    writeMode,
+  };
+
+  try {
+    localStorage.setItem(
+      PIPELINE_DRAFT_KEY,
+      JSON.stringify(draft)
+    );
+  } catch {
+    // Keep the form usable if storage fails.
+  }
+}, [
+  name,
+  domain,
+  stage,
+  cadence,
+  source,
+  destination,
+  keys,
+  writeMode,
+]);
 
   const current = pipelines.find((pipeline) => pipeline.id === selected) ?? null;
 

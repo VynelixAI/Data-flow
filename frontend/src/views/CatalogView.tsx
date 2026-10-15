@@ -21,18 +21,51 @@ export default function CatalogView({
 }: {
   onUse: (fullName: string, role: "source" | "destination") => void;
 }) {
-  const [catalog, setCatalog] = useState("main");
-  const [schema, setSchema] = useState("dataflow");
+  
+const [catalog, setCatalog] = useState(() => {
+  try {
+    return localStorage.getItem("dataflow-catalog") ?? "main";
+  } catch {
+    return "main";
+  }
+});
+
+const [schema, setSchema] = useState(() => {
+  try {
+    return localStorage.getItem("dataflow-schema") ?? "dataflow";
+  } catch {
+    return "dataflow";
+  }
+});
+
   const [tables, setTables] = useState<TableRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  const [volume, setVolume] = useState("dummy_data");
+  
+const [volume, setVolume] = useState(() => {
+  try {
+    return localStorage.getItem("dataflow-volume") ?? "dummy_data";
+  } catch {
+    return "dummy_data";
+  }
+});
+
   const [files, setFiles] = useState<VolumeFile[]>([]);
   const [filesError, setFilesError] = useState<string | null>(null);
   const [filesBusy, setFilesBusy] = useState(false);
   const [filesLoaded, setFilesLoaded] = useState(false);
+  
+useEffect(() => {
+  try {
+    localStorage.setItem("dataflow-catalog", catalog);
+    localStorage.setItem("dataflow-schema", schema);
+    localStorage.setItem("dataflow-volume", volume);
+  } catch {
+    // Keep Catalog usable if storage is unavailable.
+  }
+}, [catalog, schema, volume]);
 
   // Load available catalogs.
   useEffect(() => {

@@ -1,5 +1,4 @@
-import { useState, type ReactNode } from "react";
-import type { MismatchRow, SqlStep, ValidationReport } from "../types";
+import { useEffect, useState, type ReactNode } from "react";import type { MismatchRow, SqlStep, ValidationReport } from "../types";
 import { Empty } from "./CodeViewer";
 
 function StatusPill({ status }: { status: ValidationReport["status"] }) {
@@ -141,16 +140,90 @@ export default function ValidationReportView({
   onRun: (payload: Record<string, unknown>) => void;
   running: boolean;
 }) {
-  const [source, setSource] = useState("");
-  const [target, setTarget] = useState("");
-  const [keys, setKeys] = useState("order_id");
-  const [compare, setCompare] = useState("");
-  const [timestampColumn, setTimestampColumn] = useState("domain_published_ts");
-  const [alignment, setAlignment] = useState("latest_each");
-  const [softDelete, setSoftDelete] = useState("");
-  const [execute, setExecute] = useState(true);
+  
+  const [source, setSource] = useState(() => {
+    try {
+      return localStorage.getItem("dataflow-quality-source") ?? "";
+    } catch {
+      return "";
+    }
+  });
+  const [target, setTarget] = useState(() => {
+    try {
+      return localStorage.getItem("dataflow-quality-target") ?? "";
+    } catch {
+      return "";
+    }
+  });
+  const [keys, setKeys] = useState(() => {
+    try {
+      return localStorage.getItem("dataflow-quality-keys") ?? "order_id";
+    } catch {
+      return "order_id";
+    }
+  });
+  const [compare, setCompare] = useState(() => {
+    try {
+      return localStorage.getItem("dataflow-quality-compare") ?? "";
+    } catch {
+      return "";
+    }
+  });
+  const [timestampColumn, setTimestampColumn] = useState(() => {
+    try {
+      return localStorage.getItem("dataflow-quality-timestamp") ?? "domain_published_ts";
+    } catch {
+      return "domain_published_ts";
+    }
+  });
+  const [alignment, setAlignment] = useState(() => {
+    try {
+      return localStorage.getItem("dataflow-quality-alignment") ?? "latest_each";
+    } catch {
+      return "latest_each";
+    }
+  });
+  const [softDelete, setSoftDelete] = useState(() => {
+    try {
+      return localStorage.getItem("dataflow-quality-soft-delete") ?? "";
+    } catch {
+      return "";
+    }
+  });
+  const [execute, setExecute] = useState(() => {
+    try {
+      return localStorage.getItem("dataflow-quality-execute") !== "false";
+    } catch {
+      return true;
+    }
+  });
   const [advanced, setAdvanced] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  
+  useEffect(() => {
+    try {
+      localStorage.setItem("dataflow-quality-source", source);
+      localStorage.setItem("dataflow-quality-target", target);
+      localStorage.setItem("dataflow-quality-keys", keys);
+      localStorage.setItem("dataflow-quality-compare", compare);
+      localStorage.setItem("dataflow-quality-timestamp", timestampColumn);
+      localStorage.setItem("dataflow-quality-alignment", alignment);
+      localStorage.setItem("dataflow-quality-soft-delete", softDelete);
+      localStorage.setItem("dataflow-quality-execute", String(execute));
+    } catch {
+      // Keep Quality usable if storage is unavailable.
+    }
+  }, [
+    source,
+    target,
+    keys,
+    compare,
+    timestampColumn,
+    alignment,
+    softDelete,
+    execute,
+  ]);
+
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-auto">

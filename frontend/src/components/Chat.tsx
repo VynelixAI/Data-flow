@@ -29,9 +29,21 @@ export default function Chat({
   onReset: () => void;
   onUploaded: (table: UploadedTable) => void;
 }) {
-  const [draft, setDraft] = useState("");
-  const [comment, setComment] = useState("");
+const [draft, setDraft] = useState(() => {
+  try {
+    return localStorage.getItem("dataflow-chat-draft") ?? "";
+  } catch {
+    return "";
+  }
+});  const [comment, setComment] = useState("");
   const scroller = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+  try {
+    localStorage.setItem("dataflow-chat-draft", draft);
+  } catch {
+    // Keep Chat usable if storage is unavailable.
+  }
+}, [draft]);
 
   useEffect(() => {
     setComment("");
