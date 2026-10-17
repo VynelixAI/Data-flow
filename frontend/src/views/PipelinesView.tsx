@@ -82,11 +82,13 @@ const [writeMode, setWriteMode] =
   const [error, setError] = useState<string | null>(null);
   const [pendingDest, setPendingDest] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!seed) return;
-    if (seed.source) setSource(seed.source);
-    if (seed.destination) setDestination(seed.destination);
-  }, [seed]);
+  
+useEffect(() => {
+  if (!seed) return;
+  if (seed.source) setSource(seed.source);
+  if (seed.destination) setDestination(seed.destination);
+}, [seed]);
+
   
 useEffect(() => {
   const draft: PipelineFormDraft = {
