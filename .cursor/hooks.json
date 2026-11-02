@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "command": "curl -sf -X POST -H \"Content-Type: application/json\" --data @- \"http://127.0.0.1:51995/hook/skill-invoke?agent=cursor&cwd=%2FUsers%2Fpremkumargontrand%2FDownloads%2Fdataflow-agent\" || true",
+        "matcher": "Skill|Read|read|fs_read|fileread|mcp__filesystem__read_file|mcp__filesystem__search_in_file|mcp__filesystem__search_files",
+        "timeout": 8
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "command": "curl -sf -X POST -H \"Content-Type: application/json\" --data @- \"http://127.0.0.1:51995/hook/prompt-context?agent=cursor&cwd=%2FUsers%2Fpremkumargontrand%2FDownloads%2Fdataflow-agent\" || true",
+        "timeout": 8
+      },
+      {
+        "command": "curl -sf -X POST -H \"Content-Type: application/json\" --data @- \"http://127.0.0.1:51995/hook/budget?agent=cursor&cwd=%2FUsers%2Fpremkumargontrand%2FDownloads%2Fdataflow-agent\" || true",
+        "timeout": 8
+      },
+      {
+        "command": "curl -sf -X POST -H \"Content-Type: application/json\" --data @- \"http://127.0.0.1:51995/hook/task-drift?agent=cursor&cwd=%2FUsers%2Fpremkumargontrand%2FDownloads%2Fdataflow-agent\" || true",
+        "timeout": 8
+      }
+    ]
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "computedAt": "2026-11-01T15:59:06.817Z",
+  "skills": {
+    "deployment-practical": {
+      "skill": "deployment-practical",
+      "observations": 0,
+      "manualInvocations": 0,
+      "recommendationInvocations": 0,
+      "successCount": 0,
+      "reuseCount": 0,
+      "affinityScore": 0
+    },
+    "doc-coauthoring": {
+      "skill": "doc-coauthoring",
+      "observations": 0,
+      "manualInvocations": 0,
+      "recommendationInvocations": 0,
+      "successCount": 0,
+      "reuseCount": 0,
+      "affinityScore": 0
+    },
+    "github-actions-ci": {
+      "skill": "github-actions-ci",
+      "observations": 0,
+      "manualInvocations": 0,
+      "recommendationInvocations": 0,
+      "successCount": 0,
+      "reuseCount": 0,
+      "affinityScore": 0
+    },
+    "skill-feedback-adaptation": {
+      "skill": "skill-feedback-adaptation",
+      "observations": 0,
+      "manualInvocations": 0,
+      "recommendationInvocations": 0,
+      "successCount": 0,
+      "reuseCount": 0,
+      "affinityScore": 0
+    },
+    "skill-usage-insights": {
+      "skill": "skill-usage-insights",
+      "observations": 0,
+      "manualInvocations": 0,
+      "recommendationInvocations": 0,
+      "successCount": 0,
+      "reuseCount": 0,
+      "affinityScore": 0
+    },
+    "extension-value-audit": {
+      "skill": "extension-value-audit",
+      "observations": 0,
+      "manualInvocations": 0,
+      "recommendationInvocations": 0,
+      "successCount": 0,
+      "reuseCount": 0,
+      "affinityScore": 0
+    }
+  }
+}

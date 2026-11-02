@@ -1,0 +1,1330 @@
+[2026-10-26T14:48:57.431Z] Project profile: Multi-agent team — Git analysis: 68 tracked files, 3 branches (3 local, 1 remote), 4 commits (4 last 30d), 2 authors (30d), low activity, ~1 KB git objects, 12d old. Remote git (git@github-gontrand2027:VynelixAI/Data-flow.git): 1 remote branch, 2 remote authors (30d), via remote-tracking. Collaborative or multi-branch product — full sync and attribution.
+[2026-10-26T14:48:57.682Z] Attribution v2 hooks installed (claude/cursor/kiro/copilot as enabled).
+[2026-10-26T14:48:57.690Z] Task proposals refreshed locally (4 skills).
+[2026-10-26T14:48:57.704Z] Task skill focus: 9 active, 0 ignored for this task.
+[2026-10-26T14:48:57.715Z] Propagated focused skill set to 12 Cursor/Kiro/Copilot path(s).
+[2026-10-26T14:48:57.820Z] 
+=== Task proposals auto-apply (local workspace) ===
++5 installed, 0 enabled locally: self-learning, file-style-conventions, skill-creator, skill-usage-insights, skill-official-updater
+[2026-10-26T14:48:57.822Z] Official skills SessionStart hook installed.
+[2026-10-26T14:48:57.827Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-26T14:48:57.850Z] Propagated workspace skills to 27 other agent path(s) (cursor/kiro/copilot).
+[2026-10-26T14:48:57.852Z] Task proposals auto-applied (5 installed, 0 enabled).
+[2026-10-26T14:48:57.853Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T14:48:57.856Z] 
+=== Scheduled skill set resolver ===
+[2026-10-26T14:48:57.857Z] ## Skill set resolver plan
+
+### Install (relevant, missing)
+- deployment-practical: matches workspace detect_globs
+- doc-coauthoring: matches workspace detect_globs
+- github-actions-ci: matches workspace detect_globs
+- skill-feedback-adaptation: matches workspace detect_globs
+
+[2026-10-26T14:48:57.857Z] Installed: deployment-practical, doc-coauthoring, github-actions-ci, skill-feedback-adaptation
+[2026-10-26T14:48:57.888Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-26T14:48:57.908Z] Propagated workspace skills to 27 other agent path(s) (cursor/kiro/copilot).
+[2026-10-26T14:48:57.909Z] Skill set resolver — installed 4.
+[2026-10-26T14:48:58.381Z] Mirrored cost-discipline artifacts: cursor:attribution-trust.json, cursor:cli-config.json, cursor:project-profile.json, cursor:runs.snapshot.json, cursor:task-active-skills.json, cursor:task-proposals-apply-state.json, kiro:attribution-trust.json, kiro:cli-config.json, kiro:project-profile.json, kiro:runs.snapshot.json, kiro:task-active-skills.json, kiro:task-proposals-apply-state.json.
+[2026-10-26T14:48:58.381Z] Propagated focused skill set to 27 Cursor/Kiro/Copilot path(s).
+[2026-10-26T14:49:01.209Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-26T14:49:02.007Z] CLI MCP server: workspace log path refreshed (1 dir(s)).
+[2026-10-26T14:49:02.007Z] CLI loop-guard hook installed.
+[2026-10-26T14:49:02.007Z] CLI MCP server: already configured — agents can connect.
+[2026-10-26T14:49:02.008Z] Filesystem MCP server: registered for Claude Code, Cursor, Kiro.
+[2026-10-26T14:49:02.008Z] Dir cache guard hook installed.
+[2026-10-26T14:49:04.793Z] Attribution v2 hooks updated (claude/cursor/kiro/copilot as enabled).
+[2026-10-26T14:49:05.639Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-26T15:08:57.757Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T15:23:57.744Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T15:36:25.810Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T15:51:25.810Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T16:06:25.757Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T16:21:25.768Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T16:31:25.792Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T17:00:16.883Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T17:17:53.758Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T17:35:00.776Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T17:52:06.716Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T18:08:05.805Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T18:24:39.766Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T18:40:01.797Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T19:00:03.838Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T19:16:58.771Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T19:32:17.773Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T19:48:36.770Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T20:04:59.767Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T20:20:36.757Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T20:45:28.842Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T21:01:12.751Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T21:18:35.750Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T21:33:46.748Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T21:51:28.733Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T22:08:11.773Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T22:25:02.762Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T22:39:30.759Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T22:56:26.793Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T23:13:02.761Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T23:30:56.736Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-26T23:46:11.716Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T00:03:27.680Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T00:18:32.706Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T00:35:13.716Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T00:57:37.674Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T01:14:04.713Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T01:31:07.718Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T01:41:32.701Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T01:58:46.752Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T02:16:03.705Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T02:31:35.741Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T02:42:33.700Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T02:58:40.732Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T03:14:28.490Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T03:30:36.776Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T03:36:20.133Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T03:36:25.154Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T03:36:34.826Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T03:39:22.324Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T03:39:43.517Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T03:39:48.559Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T03:39:54.416Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T03:50:36.484Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T03:51:00.769Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T04:02:32.212Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T04:02:33.002Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T04:15:36.587Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T04:24:57.318Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T04:29:21.990Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T04:29:22.795Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T04:40:36.591Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T05:09:03.649Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T05:27:04.607Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T05:42:04.381Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T05:52:04.462Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T06:07:04.474Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T06:17:04.481Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T06:38:16.661Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T06:58:16.628Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T07:13:16.652Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T07:28:16.674Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T07:44:45.449Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T07:59:45.385Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T08:09:45.395Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T08:24:47.670Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T08:42:48.786Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T09:04:17.803Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T09:19:17.612Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T09:32:37.619Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T09:55:12.714Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T10:10:09.739Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T10:26:04.677Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T10:43:28.722Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T11:00:24.705Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T11:11:10.735Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T11:31:10.457Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T11:41:10.573Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T11:56:10.502Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T12:06:10.546Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T12:21:10.566Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T12:41:10.525Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T13:01:10.520Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T13:02:31.964Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T13:16:10.377Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T13:31:10.511Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T13:46:10.505Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T14:01:10.519Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T14:16:10.538Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T14:26:10.552Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T14:36:10.555Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T14:46:10.598Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T14:51:10.589Z] Task proposals refreshed locally (6 skills).
+[2026-10-27T14:51:10.631Z] Task skill focus: 10 active, 0 ignored for this task.
+[2026-10-27T14:51:10.684Z] 
+=== Task proposals auto-apply (local workspace) ===
++1 installed, 0 enabled locally: extension-value-audit
+[2026-10-27T14:51:10.688Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-27T14:51:10.688Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-10-27T14:51:10.707Z] Propagated workspace skills to 30 other agent path(s) (cursor/kiro/copilot).
+[2026-10-27T14:51:10.708Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-10-27T14:51:10.709Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-10-27T14:51:10.709Z] Task proposals auto-applied (1 installed, 0 enabled).
+[2026-10-27T14:51:14.284Z] Mirrored cost-discipline artifacts: cursor:runs.snapshot.json, cursor:task-active-skills.json, cursor:task-skill-proposals.json, kiro:runs.snapshot.json, kiro:task-active-skills.json, kiro:task-skill-proposals.json.
+[2026-10-27T14:51:14.284Z] Propagated focused skill set to 30 Cursor/Kiro/Copilot path(s).
+[2026-10-27T15:01:10.618Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T15:16:10.600Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T15:31:10.619Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T15:41:10.671Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T15:56:10.620Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T16:16:49.697Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T16:32:20.679Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T16:46:51.989Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T17:04:32.716Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T17:20:34.963Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T17:35:34.997Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T17:49:39.567Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T18:01:49.971Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T18:14:39.476Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T18:32:32.766Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T18:49:28.666Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T19:06:30.687Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T19:23:12.666Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T19:39:22.676Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T19:57:11.697Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T20:14:13.618Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T20:32:47.722Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T20:47:53.049Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T21:06:36.723Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T21:21:45.345Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T21:37:24.127Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T21:55:39.696Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T22:11:28.611Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T22:29:04.576Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T22:45:27.582Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T23:00:59.554Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T23:19:36.650Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T23:32:21.810Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-27T23:49:24.666Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T00:04:52.598Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T00:24:21.664Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T00:40:45.627Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T00:56:21.295Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T01:14:01.688Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T01:31:13.608Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T01:48:17.597Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T02:05:50.504Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T02:25:09.901Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T02:42:04.532Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T03:02:04.386Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T03:17:04.345Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T03:27:04.391Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T03:42:04.262Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T03:52:04.430Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T04:07:04.440Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T04:17:04.460Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T04:32:04.424Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T04:42:04.470Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T04:57:04.527Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T05:12:03.004Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T05:27:02.863Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T05:52:00.571Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T06:06:18.657Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T06:21:18.628Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T06:31:18.661Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T06:46:18.697Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T07:03:56.639Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T07:15:17.898Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T07:25:18.005Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T07:40:17.975Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T07:55:17.876Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T08:10:17.949Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T08:20:17.970Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T08:30:18.023Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T08:47:09.645Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T09:02:54.596Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T09:18:56.638Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T09:35:18.619Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T09:45:20.654Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T10:11:57.683Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T10:28:45.710Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T10:49:58.615Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T11:06:17.712Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T11:23:52.631Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T11:39:16.966Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T11:59:16.976Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T12:09:17.026Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T12:36:38.723Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T12:51:38.389Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T13:12:23.573Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T13:27:23.394Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T13:42:23.286Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T13:52:23.340Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T14:07:23.308Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T14:29:57.793Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T14:42:00.080Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T14:52:00.034Z] Task proposals refreshed locally (6 skills).
+[2026-10-28T14:52:00.077Z] Task skill focus: 10 active, 0 ignored for this task.
+[2026-10-28T14:52:00.105Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T14:52:04.452Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-28T14:52:04.453Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-10-28T14:52:04.454Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-10-28T14:52:04.454Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-10-28T15:09:45.419Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T15:24:45.294Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T15:40:06.477Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T15:50:55.535Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T16:01:47.119Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T16:18:52.380Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T16:33:52.345Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T16:58:43.654Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T17:16:18.532Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T17:31:52.517Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T17:48:44.489Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T18:05:19.510Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T18:21:38.530Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T18:37:39.471Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T18:57:46.628Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T19:14:22.503Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T19:31:34.482Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T19:56:28.512Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T20:12:09.476Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T20:28:58.470Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T20:44:20.400Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T21:00:21.394Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T21:16:05.440Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T21:32:03.375Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T21:49:40.411Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T22:05:50.449Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T22:22:23.442Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T22:37:27.494Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T22:54:16.411Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T23:12:12.435Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T23:28:20.412Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T23:39:44.529Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-28T23:50:21.407Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T00:07:26.600Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T00:23:38.422Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T00:41:08.406Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T00:57:05.431Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T01:14:06.368Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T01:29:20.370Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T01:51:19.435Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T02:08:09.308Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T02:24:48.354Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T02:50:16.381Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T03:05:51.397Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T03:21:22.395Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T03:31:35.168Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T03:46:35.022Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T04:01:35.002Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T04:16:35.061Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T04:31:35.018Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T04:41:35.045Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T04:56:35.026Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T05:11:35.020Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T05:28:11.503Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T05:39:00.950Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T05:56:35.820Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T06:16:35.638Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T06:26:35.658Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T06:41:35.688Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T06:56:35.701Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T07:14:57.108Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T07:29:56.975Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T07:47:04.920Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T08:17:41.473Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T08:35:20.333Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T08:50:52.343Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T09:07:38.324Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T09:23:08.319Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T09:39:39.334Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T09:54:49.545Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T10:22:04.428Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T10:38:50.449Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T10:54:20.329Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T11:04:30.322Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T11:22:31.424Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T11:38:52.356Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T11:51:50.337Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T12:06:50.218Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T12:16:50.437Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T12:31:50.276Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T12:48:39.684Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T13:01:15.424Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T13:16:15.208Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T13:26:15.397Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T13:36:15.434Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T13:51:15.421Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T14:01:15.436Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T14:16:15.409Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T14:26:15.436Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T14:36:15.442Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T14:55:57.494Z] Task proposals refreshed locally (6 skills).
+[2026-10-29T14:55:57.536Z] Task skill focus: 10 active, 0 ignored for this task.
+[2026-10-29T14:55:57.559Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T15:06:28.267Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-29T15:06:28.269Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-10-29T15:06:28.273Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-10-29T15:06:28.273Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-10-29T15:06:29.019Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T15:26:28.778Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-29T15:39:47.089Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T05:31:18.393Z] Project profile: Multi-agent team — Git analysis: 68 tracked files, 3 branches (3 local, 1 remote), 4 commits (4 last 30d), 2 authors (30d), low activity, ~1 KB git objects, 15d old. Remote git (git@github-gontrand2027:VynelixAI/Data-flow.git): 1 remote branch, 2 remote authors (30d), via remote-tracking. Collaborative or multi-branch product — full sync and attribution.
+[2026-10-30T05:31:18.652Z] Cost control hooks updated (session-size + budget warnings enabled).
+[2026-10-30T05:31:18.852Z] Mirrored cost-discipline artifacts: cursor:attribution-trust.json, cursor:pipeline-cycle.json, cursor:remote-repo-probe.json, cursor:runs.snapshot.json, cursor:skills-catalog.json, cursor:task-active-skills.json, cursor:task-proposals-apply-state.json, cursor:task-skill-proposals.json, cursor:today-cost.json, cursor:workspace-affinity.json, kiro:attribution-trust.json, kiro:pipeline-cycle.json, kiro:remote-repo-probe.json, kiro:runs.snapshot.json, kiro:skills-catalog.json, kiro:task-active-skills.json, kiro:task-proposals-apply-state.json, kiro:task-skill-proposals.json, kiro:today-cost.json, kiro:workspace-affinity.json.
+[2026-10-30T05:31:18.852Z] Propagated focused skill set to 30 Cursor/Kiro/Copilot path(s).
+[2026-10-30T05:31:18.887Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T05:31:22.745Z] Filesystem MCP server: active — all agents already configured.
+[2026-10-30T05:31:22.745Z] CLI MCP server: workspace log path refreshed (1 dir(s)).
+[2026-10-30T05:31:22.746Z] CLI loop-guard hook updated.
+[2026-10-30T05:31:22.746Z] CLI MCP server: already configured — agents can connect.
+[2026-10-30T05:31:22.746Z] Dir cache guard hook updated.
+[2026-10-30T05:36:18.259Z] Attribution v2 hooks updated (claude/cursor/kiro/copilot as enabled).
+[2026-10-30T05:46:18.101Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T05:56:18.151Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T06:11:18.166Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T06:26:18.122Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T06:36:18.150Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T06:46:18.152Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T07:06:18.154Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T07:21:18.091Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T07:43:11.167Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T07:59:25.121Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T08:16:04.085Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T08:30:37.559Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T08:45:37.414Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T09:06:06.085Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T09:18:09.046Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T09:33:09.692Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T09:58:55.149Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T10:15:12.130Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T10:27:42.100Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T10:45:43.152Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T11:01:12.145Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T11:18:17.354Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T11:31:40.831Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T11:46:40.798Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T11:56:40.809Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-30T12:17:03.117Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T15:50:50.692Z] Project profile: Multi-agent team — Git analysis: 68 tracked files, 3 branches (3 local, 1 remote), 4 commits (4 last 30d), 2 authors (30d), low activity, ~1 KB git objects, 17d old. Remote git (git@github-gontrand2027:VynelixAI/Data-flow.git): 1 remote branch, 2 remote authors (30d), via remote-tracking. Collaborative or multi-branch product — full sync and attribution.
+[2026-10-31T15:50:50.891Z] Cost control hooks updated (session-size + budget warnings enabled).
+[2026-10-31T15:50:50.975Z] Task proposals refreshed locally (6 skills).
+[2026-10-31T15:50:51.060Z] Task skill focus: 10 active, 0 ignored for this task.
+[2026-10-31T15:50:51.103Z] Mirrored cost-discipline artifacts: cursor:attribution-trust.json, cursor:pipeline-cycle.json, cursor:project-profile.json, cursor:remote-repo-probe.json, cursor:repo-affinity.json, cursor:skills-catalog.json, cursor:task-skill-proposals.json, cursor:today-cost.json, cursor:workspace-affinity.json, kiro:attribution-trust.json, kiro:pipeline-cycle.json, kiro:project-profile.json, kiro:remote-repo-probe.json, kiro:repo-affinity.json, kiro:skills-catalog.json, kiro:task-skill-proposals.json, kiro:today-cost.json, kiro:workspace-affinity.json.
+[2026-10-31T15:50:51.103Z] Propagated focused skill set to 30 Cursor/Kiro/Copilot path(s).
+[2026-10-31T15:50:51.248Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T15:50:54.834Z] Filesystem MCP server: active — all agents already configured.
+[2026-10-31T15:50:54.834Z] CLI MCP server: workspace log path refreshed (1 dir(s)).
+[2026-10-31T15:50:54.834Z] CLI loop-guard hook updated.
+[2026-10-31T15:50:54.834Z] CLI MCP server: already configured — agents can connect.
+[2026-10-31T15:50:54.835Z] Dir cache guard hook updated.
+[2026-10-31T15:50:55.552Z] Attribution v2 hooks updated (claude/cursor/kiro/copilot as enabled).
+[2026-10-31T15:50:56.038Z] Official skills SessionStart hook updated.
+[2026-10-31T15:50:56.041Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-10-31T15:50:56.042Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-10-31T15:50:56.046Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-10-31T15:50:56.046Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-10-31T16:14:11.078Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T16:32:16.081Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T16:49:48.122Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T17:06:24.109Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T17:22:47.107Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T17:38:29.082Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T17:55:15.057Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T18:10:45.347Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T18:30:46.033Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T18:48:24.723Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T19:13:29.085Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T19:31:14.026Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T19:46:50.021Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T20:03:51.036Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T20:20:50.058Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T20:36:42.041Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T20:54:02.056Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T21:11:12.047Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T21:34:05.024Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T21:51:34.055Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T22:07:20.994Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T22:24:17.011Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T22:41:17.042Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T23:02:09.986Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T23:18:17.934Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T23:34:28.939Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-10-31T23:52:05.921Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T00:09:34.867Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T00:26:54.964Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T00:44:03.918Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T01:03:05.930Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T01:18:55.956Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T01:34:40.884Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T01:47:59.842Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T02:03:29.835Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T02:20:28.894Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T02:35:53.877Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T02:47:49.147Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T02:59:34.985Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T03:20:37.845Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T03:37:18.436Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T03:48:59.897Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T04:05:13.675Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T04:18:02.744Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T04:36:19.347Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T04:48:21.011Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T05:04:26.905Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T05:19:00.220Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T05:36:08.132Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T05:50:59.969Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T06:07:53.947Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T06:23:43.998Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T06:41:29.981Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T06:51:59.974Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T07:09:37.972Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T07:26:59.003Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T07:42:30.076Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T07:53:00.000Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T08:09:51.956Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T08:30:32.006Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T08:50:59.944Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T09:11:50.969Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T09:32:06.931Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T09:52:26.942Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T10:10:43.954Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T10:27:07.935Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T10:43:17.902Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T10:54:06.878Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T11:10:19.868Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T11:26:07.870Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T11:41:29.913Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T11:55:06.971Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T12:10:34.911Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T12:30:20.890Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T12:48:49.896Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T13:11:49.858Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T13:31:13.901Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T13:43:54.893Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T13:57:06.883Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T14:17:21.897Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T14:33:07.858Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T14:50:45.823Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T15:13:41.007Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T15:31:32.864Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T15:50:23.829Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T15:59:06.819Z] Task proposals refreshed locally (6 skills).
+[2026-11-01T15:59:06.857Z] Task skill focus: 10 active, 0 ignored for this task.
+[2026-11-01T15:59:11.246Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-01T15:59:11.248Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-01T15:59:11.253Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-01T15:59:11.253Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-01T16:17:08.819Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T16:36:54.889Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T16:57:12.894Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T17:07:42.310Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T17:20:53.211Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T17:38:21.754Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T17:54:44.696Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T18:16:37.656Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T18:34:31.632Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T18:50:31.609Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T19:02:09.577Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T19:19:49.534Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T19:35:21.669Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T19:50:52.760Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T20:11:31.772Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T20:30:35.805Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T20:51:09.790Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T21:11:51.761Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T21:30:28.808Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T21:51:14.857Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T22:12:43.769Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T22:29:35.761Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T22:45:06.693Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T22:55:22.660Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T23:12:01.666Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T23:33:10.725Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-01T23:52:19.720Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T00:11:15.748Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T00:30:32.806Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T00:47:40.975Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T01:14:26.658Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T01:35:03.768Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T01:50:28.726Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T02:13:53.696Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T02:31:36.114Z] 
+=== Scheduled skill set resolver ===
+[2026-11-02T02:31:36.114Z] ## Skill set resolver plan
+
+### Remove
+- skill-creator: not relevant (unused)
+
+### Keep (9 skill(s))
+- deployment-practical: relevant to workspace
+- doc-coauthoring: relevant to workspace
+- extension-value-audit: relevant to workspace
+- file-style-conventions: protected
+- github-actions-ci: relevant to workspace
+- self-learning: protected
+- skill-feedback-adaptation: relevant to workspace
+- skill-official-updater: protected
+- skill-usage-insights: protected
+[2026-11-02T02:31:36.114Z] Removed: skill-creator
+[2026-11-02T02:31:36.117Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T02:31:36.117Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T02:31:36.130Z] Propagated workspace skills to 27 other agent path(s) (cursor/kiro/copilot).
+[2026-11-02T02:31:36.131Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T02:31:36.131Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T02:31:36.131Z] Skill set resolver — removed 1.
+[2026-11-02T02:31:36.536Z] Mirrored cost-discipline artifacts: cursor:attribution-trust.json, cursor:project-profile.json, cursor:remote-repo-probe.json, cursor:repo-affinity.json, cursor:runs.snapshot.json, cursor:skills-catalog.json, cursor:task-active-skills.json, cursor:task-skill-proposals.json, cursor:today-cost.json, cursor:workspace-affinity.json, kiro:attribution-trust.json, kiro:project-profile.json, kiro:remote-repo-probe.json, kiro:repo-affinity.json, kiro:runs.snapshot.json, kiro:skills-catalog.json, kiro:task-active-skills.json, kiro:task-skill-proposals.json, kiro:today-cost.json, kiro:workspace-affinity.json.
+[2026-11-02T02:31:36.536Z] Propagated focused skill set to 27 Cursor/Kiro/Copilot path(s).
+[2026-11-02T02:31:36.537Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T02:31:40.477Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T02:31:40.477Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T02:31:40.478Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T02:31:40.478Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T02:48:05.572Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T02:58:25.530Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T03:12:17.106Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T03:12:17.884Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:12:17.885Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:12:17.886Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:12:17.886Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:18:09.679Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:18:09.680Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:18:09.684Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:18:09.684Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:26:50.227Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T03:27:25.027Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:27:25.027Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:27:25.031Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:27:25.031Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:27:31.564Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:27:31.565Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:27:31.571Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:27:31.571Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:27:35.079Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:27:35.079Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:27:35.081Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:27:35.081Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:06.773Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:29:06.774Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:06.779Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:06.779Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:11.793Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:29:11.794Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:11.795Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:11.795Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:16.820Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:29:16.820Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:16.823Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:16.823Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:21.850Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:29:21.850Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:21.852Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:21.852Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:26.885Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:29:26.886Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:26.887Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:26.887Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:46.710Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:29:46.710Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:46.715Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:46.715Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:51.747Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:29:51.748Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:51.750Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:51.751Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:56.773Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:29:56.774Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:56.775Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:29:56.775Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:01.787Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:01.787Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:01.789Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:01.789Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:06.813Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:06.814Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:06.816Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:06.816Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:11.842Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:11.843Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:11.844Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:11.844Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:16.873Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:16.874Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:16.876Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:16.876Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:22.902Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:22.902Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:22.904Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:22.904Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:26.919Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:26.920Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:26.921Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:26.922Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:32.952Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:32.953Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:32.954Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:32.954Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:36.973Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:36.974Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:36.976Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:36.976Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:41.989Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:41.989Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:41.991Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:41.991Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:48.517Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:48.517Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:48.519Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:48.519Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:56.036Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:56.037Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:56.038Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:56.038Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:59.558Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:30:59.559Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:59.560Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:30:59.560Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:02.087Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:02.087Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:02.089Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:02.089Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:07.098Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:07.099Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:07.100Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:07.100Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:13.625Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:13.625Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:13.627Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:13.627Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:17.162Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:17.162Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:17.164Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:17.164Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:22.197Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:22.197Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:22.199Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:22.199Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:27.240Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:27.241Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:27.243Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:27.243Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:32.252Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:32.252Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:32.253Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:32.253Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:37.284Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:37.284Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:37.286Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:37.286Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:42.325Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:42.326Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:42.328Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:42.328Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:47.341Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:47.342Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:47.345Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:47.345Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:52.361Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:52.361Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:52.363Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:52.363Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:57.388Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:31:57.388Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:57.390Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:31:57.390Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:02.401Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:02.402Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:02.403Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:02.404Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:11.431Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:11.431Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:11.433Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:11.433Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:13.957Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:13.958Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:13.960Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:13.960Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:18.486Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:18.486Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:18.488Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:18.488Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:22.510Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:22.511Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:22.513Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:22.513Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:27.554Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:27.555Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:27.557Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:27.557Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:32.577Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:32.578Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:32.579Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:32.579Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:37.587Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:37.587Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:37.589Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:37.589Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:45.120Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:45.121Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:45.123Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:45.123Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:47.647Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:47.647Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:47.649Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:47.649Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:52.664Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:52.665Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:52.666Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:52.666Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:57.704Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:32:57.705Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:57.707Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:32:57.708Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:02.721Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:02.722Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:02.724Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:02.724Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:07.741Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:07.742Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:07.743Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:07.743Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:12.771Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:12.772Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:12.774Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:12.774Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:17.803Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:17.804Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:17.806Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:17.806Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:23.826Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:23.827Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:23.828Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:23.828Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:27.841Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:27.842Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:27.844Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:27.844Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:38.893Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:38.894Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:38.896Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:38.896Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:38.907Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:38.908Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:38.909Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:38.909Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:42.931Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:42.931Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:42.933Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:42.933Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:47.952Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:47.952Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:47.954Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:47.954Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:52.970Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:52.971Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:52.973Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:52.973Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:57.988Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:33:57.988Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:57.990Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:33:57.990Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:04.015Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:04.016Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:04.017Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:04.017Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:08.044Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:08.044Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:08.046Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:08.046Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:16.074Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:16.075Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:16.077Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:16.077Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:18.105Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:18.106Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:18.107Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:18.107Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:23.130Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:23.130Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:23.132Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:23.132Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:28.159Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:28.160Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:28.162Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:28.162Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:33.178Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:33.178Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:33.180Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:33.180Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:40.731Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:40.732Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:40.734Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:40.734Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:43.244Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:43.245Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:43.247Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:43.247Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:48.771Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:48.771Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:48.772Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:48.772Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:53.312Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:53.312Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:53.315Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:53.315Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:58.326Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:34:58.326Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:58.328Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:34:58.328Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:03.366Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:03.367Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:03.369Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:03.370Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:08.392Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:08.393Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:08.394Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:08.394Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:13.437Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:13.438Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:13.440Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:13.441Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:18.447Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:18.448Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:18.450Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:18.450Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:23.484Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:23.485Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:23.487Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:23.487Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:28.508Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:28.508Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:28.511Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:28.511Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:33.537Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:33.538Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:33.539Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:33.539Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:38.564Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:38.564Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:38.566Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:38.566Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:43.598Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:43.598Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:43.600Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:43.600Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:48.630Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:48.631Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:48.633Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:48.634Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:53.662Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:35:53.662Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:53.664Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:35:53.664Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:00.202Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:00.203Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:00.206Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:00.206Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:03.745Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:03.746Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:03.748Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:03.748Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:08.760Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:08.760Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:08.761Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:08.761Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:13.793Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:13.794Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:13.795Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:13.795Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:19.325Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:19.325Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:19.326Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:19.326Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:23.858Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:23.859Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:23.861Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:23.861Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:28.880Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:28.881Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:28.882Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:28.882Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:33.903Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:33.904Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:33.906Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:33.906Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:38.932Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:38.933Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:38.934Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:38.934Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:48.469Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:48.470Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:48.472Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:48.472Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:50.484Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:50.484Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:50.485Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:50.485Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:53.140Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T03:36:54.004Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:54.004Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:54.006Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:54.006Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:59.034Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:36:59.035Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:59.037Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:36:59.037Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:04.048Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:04.049Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:04.050Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:04.050Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:09.066Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:09.066Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:09.067Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:09.067Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:14.086Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:14.087Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:14.089Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:14.089Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:19.114Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:19.115Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:19.116Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:19.117Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:24.140Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:24.141Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:24.142Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:24.142Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:29.167Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:29.167Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:29.169Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:29.169Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:34.195Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:34.196Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:34.197Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:34.197Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:39.223Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:39.223Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:39.225Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:39.225Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:44.257Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:44.258Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:44.259Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:44.259Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:49.274Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:49.274Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:49.276Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:49.276Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:54.295Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:54.296Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:54.297Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:54.297Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:59.323Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:37:59.324Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:59.326Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:37:59.326Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:04.338Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:38:04.338Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:04.340Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:04.340Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:09.363Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:38:09.364Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:09.365Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:09.365Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:14.391Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:38:14.392Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:14.393Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:14.393Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:19.415Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T03:38:19.416Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:19.417Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T03:38:19.417Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T03:51:50.330Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T04:03:58.713Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T04:03:59.539Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:03:59.540Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:03:59.543Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:03:59.544Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:04.565Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:04:04.566Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:04.568Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:04.568Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:09.592Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:04:09.593Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:09.595Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:09.595Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:14.624Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:04:14.625Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:14.627Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:04:14.627Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:16:50.351Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T04:26:50.368Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T04:40:31.375Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T04:40:33.648Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:40:33.649Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:33.650Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:33.650Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:37.168Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:40:37.168Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:37.170Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:37.171Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:42.186Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:40:42.186Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:42.188Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:42.188Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:47.218Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:40:47.218Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:47.220Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:47.220Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:52.244Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:40:52.244Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:52.246Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:52.246Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:57.269Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:40:57.270Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:57.271Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:40:57.271Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:28.562Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:47:28.563Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:28.569Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:28.569Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:33.585Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:47:33.585Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:33.588Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:33.588Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:38.617Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:47:38.617Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:38.619Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:38.619Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:43.637Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:47:43.638Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:43.641Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:43.641Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:48.644Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:47:48.644Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:48.645Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:48.646Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:53.669Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:47:53.670Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:53.671Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:47:53.671Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:51:50.472Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T04:59:08.328Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:08.329Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:08.333Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:08.333Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:13.355Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:13.356Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:13.358Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:13.358Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:18.369Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:18.369Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:18.370Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:18.370Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:23.394Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:23.394Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:23.395Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:23.395Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:28.413Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:28.414Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:28.415Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:28.415Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:33.437Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:33.437Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:33.438Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:33.438Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:38.453Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:38.453Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:38.455Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:38.455Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:43.486Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:43.487Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:43.489Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:43.489Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:52.515Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:52.516Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:52.518Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:52.518Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:53.526Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:53.527Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:53.528Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:53.528Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:58.547Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T04:59:58.548Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:58.549Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T04:59:58.549Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:03.573Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:03.573Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:03.575Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:03.575Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:08.590Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:08.591Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:08.592Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:08.592Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:13.617Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:13.617Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:13.619Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:13.619Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:18.636Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:18.636Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:18.638Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:18.638Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:23.665Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:23.665Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:23.668Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:23.668Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:28.684Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:28.685Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:28.686Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:28.686Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:33.715Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:33.716Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:33.718Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:33.718Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:38.740Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:38.741Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:38.743Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:38.743Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:43.755Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:43.755Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:43.756Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:43.757Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:48.788Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:48.789Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:48.791Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:48.791Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:53.810Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:53.811Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:53.813Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:53.813Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:58.824Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:00:58.825Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:58.826Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:00:58.826Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:03.845Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:03.846Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:03.847Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:03.847Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:08.881Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:08.881Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:08.883Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:08.883Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:15.408Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:15.409Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:15.412Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:15.412Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:18.924Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:18.925Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:18.926Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:18.926Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:23.966Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:23.967Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:23.969Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:23.970Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:29.004Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:29.004Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:29.009Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:29.009Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:34.016Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:34.017Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:34.019Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:34.019Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:39.048Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:39.048Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:39.050Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:39.051Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:44.068Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:44.069Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:44.070Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:44.070Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:50.591Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:50.591Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:50.592Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:50.592Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:53.276Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T05:01:54.109Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:54.110Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:54.111Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:54.111Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:59.125Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:01:59.125Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:59.126Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:01:59.126Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:04.142Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:04.143Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:04.144Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:04.144Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:09.159Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:09.159Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:09.160Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:09.160Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:14.177Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:14.177Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:14.179Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:14.179Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:19.196Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:19.196Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:19.197Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:19.198Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:24.232Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:24.232Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:24.234Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:24.234Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:29.258Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:29.259Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:29.261Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:29.261Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:34.272Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:34.273Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:34.274Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:34.274Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:40.791Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:40.792Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:40.793Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:40.793Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:44.316Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:44.316Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:44.317Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:44.317Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:49.346Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:49.346Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:49.348Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:49.348Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:54.377Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:54.378Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:54.379Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:54.379Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:59.403Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:02:59.403Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:59.406Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:02:59.406Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:04.428Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:03:04.428Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:04.429Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:04.429Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:09.455Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:03:09.456Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:09.458Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:09.458Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:14.475Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:03:14.475Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:14.477Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:14.478Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:19.500Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:03:19.501Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:19.502Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:19.503Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:24.539Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:03:24.539Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:24.542Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:24.542Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:29.549Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:03:29.549Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:29.551Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:29.551Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:34.572Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:03:34.572Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:34.574Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:34.574Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:39.592Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:03:39.592Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:39.593Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:03:39.593Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:16:50.474Z] Claude Skills: 1 outdated skill(s) — github-actions-ci (1.0.0 → 1.0.1). Upgrade from the library?
+[2026-11-02T05:23:04.395Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:23:04.396Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:04.401Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:04.401Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:09.426Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:23:09.427Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:09.430Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:09.430Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:14.448Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:23:14.448Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:14.450Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:14.450Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:19.473Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:23:19.474Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:19.476Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:19.476Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:24.501Z] Cost control hook scripts refreshed across Claude, Cursor, Kiro, and Copilot paths.
+[2026-11-02T05:23:24.502Z] SKILL lint: [warning] extension-value-audit: Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:24.503Z] SKILL lint: [warning] extension-value-audit (cursor): Description is 788 chars (recommended max 500)
+[2026-11-02T05:23:24.503Z] SKILL lint: [warning] extension-value-audit (kiro): Description is 788 chars (recommended max 500)

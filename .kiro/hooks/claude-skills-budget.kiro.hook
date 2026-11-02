@@ -1,0 +1,14 @@
+{
+  "name": "Claude Skills — budget watch",
+  "description": "Managed by Claude Skills Manager (claude-skills-budget)",
+  "version": "1",
+  "enabled": true,
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "curl -sf -X POST -H \"Content-Type: application/json\" --data @- \"http://127.0.0.1:51995/hook/budget?agent=kiro&cwd=%2FUsers%2Fpremkumargontrand%2FDownloads%2Fdataflow-agent\" || true",
+    "timeout": 8
+  }
+}

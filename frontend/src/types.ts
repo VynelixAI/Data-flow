@@ -144,6 +144,8 @@ export type Health = {
   databricks_token_configured: boolean;
   databricks_warehouse_configured: boolean;
   openai_configured: boolean;
+  local_model_configured?: boolean;
+  llm_provider?: string;
   agent_runtime?: string;
 };
 

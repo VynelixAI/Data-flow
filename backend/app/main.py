@@ -17,6 +17,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 
 from app.agent.agent import stream_agent
+from app.agent.llm import llm_status
 from app.databricks.client import (
     databricks_host,
     describe_uc_object,
@@ -70,6 +71,7 @@ def health():
     body["status"] = "ok"
     body["databricks_host"] = databricks_host()
     body["agent_runtime"] = "langgraph"
+    body.update(llm_status())
     return body
 
 

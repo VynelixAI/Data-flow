@@ -1,0 +1,29 @@
+{
+  "updatedAt": "2026-11-02T05:16:49.882Z",
+  "workspacePath": "/Users/premkumargontrand/Downloads/dataflow-agent",
+  "transcriptSkills": {
+    "canvas": {
+      "cursor": {
+        "tokens": 859081,
+        "cost": 7.731729,
+        "sessions": 6
+      }
+    },
+    "create-skill": {
+      "cursor": {
+        "tokens": 859081,
+        "cost": 7.731729,
+        "sessions": 6
+      }
+    },
+    "file-style-conventions": {
+      "cursor": {
+        "tokens": 221022,
+        "cost": 1.989198,
+        "sessions": 2
+      }
+    }
+  },
+  "base_context": {},
+  "unattributed": {}
+}
