@@ -96,6 +96,7 @@ def test_execute_rejects_shell_magic():
 
 
 def test_chat_streams_a_configuration_error_without_openai(monkeypatch):
+    monkeypatch.setenv("LLM_PROVIDER", "openai")
     monkeypatch.delenv("OPENAI_API_KEY", raising=False)
     response = client.post("/api/chat", json={"messages": [{"role": "user", "content": "Validate orders"}]})
     assert response.status_code == 200

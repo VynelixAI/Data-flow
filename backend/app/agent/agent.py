@@ -3,24 +3,21 @@
 from __future__ import annotations
 
 import asyncio
-import os
 import uuid
 from collections.abc import AsyncIterator
 from typing import Any
 
 from app.agent.graph import bind_emitter, get_graph, initial_state, release_emitter
+from app.agent.llm import chat_configuration_error
 from app.agent.session_memory import close_thread
 from app.errors import DataflowError
 from app.schemas import ChatRequest
 
 
 async def stream_agent(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
-    if not os.getenv("OPENAI_API_KEY"):
-        raise DataflowError(
-            "Set OPENAI_API_KEY to use the chat agent. Validation, upload, and notebook APIs still work without it.",
-            code="openai_not_configured",
-            status=503,
-        )
+    configuration_error = chat_configuration_error(request.provider)
+    if configuration_error is not None:
+        raise configuration_error
     from langgraph.types import Command
 
     queue: asyncio.Queue = asyncio.Queue()
@@ -36,7 +33,10 @@ async def stream_agent(request: ChatRequest) -> AsyncIterator[dict[str, Any]]:
         thread_id = str(uuid.uuid4())
     bind_emitter(thread_id, queue)
     graph = get_graph()
-    config = {"configurable": {"thread_id": thread_id}, "recursion_limit": 40}
+    config = {
+        "configurable": {"thread_id": thread_id, "llm_provider": request.provider},
+        "recursion_limit": 40,
+    }
 
     async def drive() -> None:
         holding = False

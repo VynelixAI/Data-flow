@@ -43,6 +43,7 @@ class ChatRequest(BaseModel):
     context: ChatContext = Field(default_factory=ChatContext)
     thread_id: str | None = None
     resume: ResumeDecision | None = None
+    provider: Literal["openai", "qwen"] | None = None
 
     @field_validator("messages")
     @classmethod

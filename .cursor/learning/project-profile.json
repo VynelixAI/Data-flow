@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "profileType": "team-multi-agent",
+  "detectedFrom": {
+    "gitRemotes": [
+      "git@github-gontrand2027:VynelixAI/Data-flow.git"
+    ],
+    "teamSize": "small",
+    "aiTools": [
+      "cursor",
+      "claude",
+      "copilot",
+      "kiro"
+    ],
+    "budgetPattern": "none",
+    "hasSharedClaudeSkills": false,
+    "isGitRepo": true,
+    "branchCount": 3,
+    "trackedFileCount": 68,
+    "repoSizeKb": 1,
+    "commitsLast30d": 4,
+    "commitsTotal": 4,
+    "projectAgeDays": 12,
+    "authorCount30d": 2,
+    "activityLevel": "low",
+    "hasAidlcWorkflow": false,
+    "hasPendingProfileInit": false,
+    "remoteReachable": true,
+    "remoteOriginUrl": "git@github-gontrand2027:VynelixAI/Data-flow.git",
+    "remoteBranchCount": 1,
+    "remoteAuthors30d": 2,
+    "upstreamAhead": 0,
+    "upstreamBehind": 0,
+    "remoteProbeSource": "cache"
+  },
+  "enabledFeatures": {
+    "autoOptimizer": true
+  },
+  "costTracking": "full",
+  "confidence": 0.75,
+  "detectedAt": "2026-10-26T14:48:57.534Z",
+  "appliedAt": "2026-10-27T18:02:47.759Z",
+  "userPlan": "accept-detected",
+  "rationale": "Git analysis: 68 tracked files, 3 branches (3 local, 1 remote), 4 commits (4 last 30d), 2 authors (30d), low activity, ~1 KB git objects, 18d old. Remote git (git@github-gontrand2027:VynelixAI/Data-flow.git): 1 remote branch, 2 remote authors (30d), via remote-tracking. Collaborative or multi-branch product — full sync and attribution."
+}

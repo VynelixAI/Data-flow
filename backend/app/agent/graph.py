@@ -1,15 +1,15 @@
 """LangGraph control plane for the data agent.
 
-The model still streams through the OpenAI SDK. The graph only decides what
-happens around that call: run a tool, pause for an operator, or finish.
-A LangChain agent executor is intentionally not used.
+The model streams through OpenAI or the local Qwen weights. Both use the same
+OpenAI function specs. The graph only decides what happens around that call:
+run a tool, pause for an operator, or finish. A LangChain agent executor is
+intentionally not used.
 """
 
 from __future__ import annotations
 
 import asyncio
 import json
-import os
 from typing import Any
 
 from langchain_core.runnables import RunnableConfig
@@ -80,58 +80,21 @@ async def agent_node(state: GraphState, config: RunnableConfig) -> GraphState:
         )
         return {"stop": True, "rounds": rounds, "pending_confirmation": None}
 
-    try:
-        from openai import AsyncOpenAI
-    except ImportError as exc:  # pragma: no cover
-        raise DataflowError("The openai package is not installed.", code="missing_dependency", status=500) from exc
+    from app.agent.llm import stream_model
 
-    client = AsyncOpenAI()
-    model = os.getenv("OPENAI_MODEL", "gpt-4.1")
     messages = list(state.get("messages") or [])
-    try:
-        stream = await client.chat.completions.create(
-            model=model,
-            messages=messages,
-            tools=TOOL_SPECS,
-            temperature=0.2,
-            stream=True,
-        )
-    except Exception as exc:
-        raise DataflowError(f"OpenAI request failed: {exc}", code="openai_error", status=502) from exc
-
     text_parts: list[str] = []
-    tool_calls: dict[int, dict[str, str]] = {}
-    async for chunk in stream:
-        if not chunk.choices:
-            continue
-        delta = chunk.choices[0].delta
-        if delta is None:
-            continue
-        if delta.content:
-            text_parts.append(delta.content)
-            await _emit(config, {"type": "token", "content": delta.content})
-        for call in delta.tool_calls or []:
-            bucket = tool_calls.setdefault(call.index, {"id": "", "name": "", "arguments": ""})
-            if call.id:
-                bucket["id"] = call.id
-            if call.function and call.function.name:
-                bucket["name"] = call.function.name
-            if call.function and call.function.arguments:
-                bucket["arguments"] += call.function.arguments
 
-    if not tool_calls:
+    async def on_token(content: str) -> None:
+        text_parts.append(content)
+        await _emit(config, {"type": "token", "content": content})
+
+    selected = (config.get("configurable") or {}).get("llm_provider")
+    assistant_calls = await stream_model(messages, TOOL_SPECS, on_token, selected)
+
+    if not assistant_calls:
         return {"stop": True, "rounds": rounds + 1, "pending_confirmation": None}
 
-    assistant_calls = []
-    for index in sorted(tool_calls):
-        bucket = tool_calls[index]
-        assistant_calls.append(
-            {
-                "id": bucket["id"] or f"call_{index}",
-                "type": "function",
-                "function": {"name": bucket["name"], "arguments": bucket["arguments"] or "{}"},
-            }
-        )
     messages.append(
         {
             "role": "assistant",

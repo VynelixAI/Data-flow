@@ -44,6 +44,7 @@ type Session = {
   pipelines: PipelineRecord[];
   approvals: Approval[];
   pipelineSeed: { source?: string; destination?: string } | null;
+  modelProvider: "openai" | "qwen" | null;
 };
 
 const EMPTY: Session = {
@@ -62,6 +63,7 @@ const EMPTY: Session = {
   pipelines: [],
   approvals: [],
   pipelineSeed: null,
+  modelProvider: null,
 };
 
 function loadSession(): Session {
@@ -76,6 +78,7 @@ function loadSession(): Session {
       pipelines: parsed.pipelines ?? [],
       approvals: parsed.approvals ?? [],
       workspace: parsed.workspace ?? "desk",
+      modelProvider: parsed.modelProvider === "openai" || parsed.modelProvider === "qwen" ? parsed.modelProvider : null,
       code: null,
       codeTitle: "",
       sql: [],
@@ -113,7 +116,13 @@ export default function App() {
   useEffect(() => {
     void fetch("/api/health")
       .then((response) => response.json())
-      .then(setHealth)
+      .then((body: Health) => {
+        setHealth(body);
+        const provider = body.llm_provider === "qwen" || body.llm_provider === "openai" ? body.llm_provider : null;
+        if (provider) {
+          setSession((current) => (current.modelProvider ? current : { ...current, modelProvider: provider }));
+        }
+      })
       .catch(() => setHealth(null));
   }, []);
 
@@ -248,6 +257,7 @@ export default function App() {
           messages: history.map((message) => ({ role: message.role, content: message.content })),
           thread_id: typed ? resumeThread : null,
           resume: typed ?? null,
+          provider: session.modelProvider,
           context: {
             uploaded_tables: session.uploads.map((upload) => ({
               table: upload.table,
@@ -482,11 +492,18 @@ export default function App() {
           <p className="mt-1 text-xs text-muted">Catalog, quality, and runs</p>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2 text-[11px]">
+          <ModelSwitch
+            value={session.modelProvider}
+            openaiReady={health?.openai_configured}
+            localReady={health?.local_model_configured}
+            onChange={(modelProvider) => setSession((current) => ({ ...current, modelProvider }))}
+          />
           <ThemeToggle />
           <Pill ok={health?.agent_runtime === "langgraph"} label="Agent graph" />
           <Pill ok={health?.databricks_token_configured} label="Databricks" />
           <Pill ok={health?.databricks_warehouse_configured} label="Warehouse" />
           <Pill ok={health?.openai_configured} label="OpenAI" />
+          <Pill ok={health?.local_model_configured} label="Qwen" />
         </div>
       </header>
       {banner && <div className="border-b border-line bg-banner px-4 py-2 text-sm text-amber">{banner}</div>}
@@ -504,6 +521,7 @@ export default function App() {
               report={session.report}
               runs={session.runs}
               health={health}
+              model={session.modelProvider}
               onOpen={(workspace) => setSession((current) => ({ ...current, workspace }))}
             />
           )}
@@ -670,6 +688,42 @@ function replyDecision(text: string, destination: string): ResumePayload | undef
     return { approved: false, destination, action: "decline" };
   }
   return undefined;
+}
+
+function ModelSwitch({
+  value,
+  openaiReady,
+  localReady,
+  onChange,
+}: {
+  value: "openai" | "qwen" | null;
+  openaiReady?: boolean;
+  localReady?: boolean;
+  onChange: (value: "openai" | "qwen") => void;
+}) {
+  const options = [
+    { id: "qwen" as const, label: "Local", ready: Boolean(localReady), hint: "Qwen on this machine" },
+    { id: "openai" as const, label: "OpenAI", ready: Boolean(openaiReady), hint: "Hosted model" },
+  ];
+  return (
+    <div className="flex rounded-full border border-line p-0.5" role="group" aria-label="Chat model">
+      {options.map((option) => (
+        <button
+          key={option.id}
+          type="button"
+          disabled={!option.ready}
+          title={option.ready ? `${option.hint}. Used on the next message.` : `${option.label} is not configured.`}
+          aria-pressed={value === option.id}
+          onClick={() => onChange(option.id)}
+          className={`rounded-full px-2.5 py-1 disabled:cursor-not-allowed disabled:opacity-40 ${
+            value === option.id ? "bg-lime text-white" : "text-muted"
+          }`}
+        >
+          {option.label}
+        </button>
+      ))}
+    </div>
+  );
 }
 
 function ThemeToggle() {

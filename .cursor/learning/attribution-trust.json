@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "updatedAt": "2026-11-02T02:31:36.489Z",
+  "enabled": true,
+  "thresholdPct": 50,
+  "scorePct": 82,
+  "level": "high",
+  "tier": "reliable",
+  "summary": "High confidence — v2 hooks logged 0 invoke(s); per-skill costs are measured where hooks fired.",
+  "shouldInject": false
+}
