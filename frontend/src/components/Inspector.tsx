@@ -1,3 +1,4 @@
+
 import { useEffect, useMemo, useState } from "react";
 import type { RunStatus, ValidationReport } from "../types";
 import CodeViewer from "./CodeViewer";
@@ -32,7 +33,11 @@ export default function Inspector({
   onExecute: () => void;
 }) {
   const [tab, setTab] = useState<InspectorTab>(focus);
-  useEffect(() => setTab(focus), [focus]);
+
+  useEffect(() => {
+    setTab(focus);
+  }, [focus]);
+
   const tabs = useMemo(
     () =>
       [
@@ -45,30 +50,70 @@ export default function Inspector({
   );
 
   return (
-    <aside className="flex min-h-0 flex-col overflow-hidden border-t border-line md:border-t-0 md:border-l">
-      <div className="flex gap-1 border-b border-line px-3 py-2">
+    <aside className="flex h-full w-full min-h-0 min-w-0 flex-col overflow-hidden border-t border-line md:border-t-0 md:border-l">
+
+      {/* Inspector tabs */}
+      <div className="flex w-full min-w-0 shrink-0 gap-1 overflow-x-auto border-b border-line px-3 py-2">
         {tabs.map(([id, label]) => (
           <button
             key={id}
             type="button"
             onClick={() => setTab(id)}
-            className={`rounded-full px-3 py-1.5 text-sm ${tab === id ? "bg-paper text-ink" : "text-muted"}`}
+            className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-sm ${
+              tab === id
+                ? "bg-paper text-ink"
+                : "text-muted"
+            }`}
           >
             {label}
           </button>
         ))}
       </div>
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        {tab === "code" && <CodeViewer code={code} title={codeTitle} sql={sql} />}
-        {tab === "validation" && (
-          <ValidationReportView report={report} warnings={warnings} sql={sql} running={validating} onRun={onRunValidation} />
-        )}
-        {tab === "quarantine" && (
-          <div className="h-full overflow-auto px-4 py-4">
-            <QuarantineTable report={report} />
+
+      {/* Inspector content */}
+      <div className="flex w-full min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+
+        {tab === "code" && (
+          <div className="h-full min-h-0 min-w-0 flex-1 overflow-auto">
+            <CodeViewer
+              code={code}
+              title={codeTitle}
+              sql={sql}
+            />
           </div>
         )}
-        {tab === "run" && <ExecutionStatus run={run} code={code} running={executing} onExecute={onExecute} />}
+
+        {tab === "validation" && (
+          <div className="h-full min-h-0 min-w-0 flex-1 overflow-auto">
+            <ValidationReportView
+              report={report}
+              warnings={warnings}
+              sql={sql}
+              running={validating}
+              onRun={onRunValidation}
+            />
+          </div>
+        )}
+
+        {tab === "quarantine" && (
+          <div className="h-full min-h-0 min-w-0 flex-1 overflow-auto overscroll-contain px-3 py-4 sm:px-4">
+            <div className="w-full min-w-0">
+              <QuarantineTable report={report} />
+            </div>
+          </div>
+        )}
+
+        {tab === "run" && (
+          <div className="h-full min-h-0 min-w-0 flex-1 overflow-auto">
+            <ExecutionStatus
+              run={run}
+              code={code}
+              running={executing}
+              onExecute={onExecute}
+            />
+          </div>
+        )}
+
       </div>
     </aside>
   );

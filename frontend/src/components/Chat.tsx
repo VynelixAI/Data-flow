@@ -270,9 +270,22 @@ const [draft, setDraft] = useState(() => {
             <div className="mt-2 flex flex-wrap items-center gap-2">
               <div className="flex items-center gap-3">
                 <FileUpload onUploaded={onUploaded} disabled={streaming} />
-                <button type="button" onClick={onReset} className="whitespace-nowrap text-xs text-muted">
-                  New conversation
-                </button>
+                <button
+  type="button"
+  onClick={() => {
+    // Clear chat input
+    setDraft("");
+
+    // Clear confirmation comment
+    setComment("");
+
+    // Reset parent conversation state
+    onReset();
+  }}
+  className="whitespace-nowrap text-xs text-muted"
+>
+  New conversation
+</button>
               </div>
               {streaming ? (
                 <button type="button" onClick={onStop} className="ml-auto rounded-full border border-line px-4 py-2 text-sm">

@@ -19,36 +19,36 @@ type PipelineFormDraft = {
   writeMode: "merge" | "overwrite" | "append";
 };
 
-const DEFAULT_PIPELINE_DRAFT: PipelineFormDraft = {
-  name: "Store inventory publish",
-  domain: "stores",
-  stage: "dev",
-  cadence: "after_close",
-  source: "main.bronze.store_inventory",
-  destination: "main.silver.store_inventory",
-  keys: "store_id,sku",
-  writeMode: "merge",
-};
+// const DEFAULT_PIPELINE_DRAFT: PipelineFormDraft = {
+//   name: "Store inventory publish",
+//   domain: "stores",
+//   stage: "dev",
+//   cadence: "after_close",
+//   source: "main.bronze.store_inventory",
+//   destination: "main.silver.store_inventory",
+//   keys: "store_id,sku",
+//   writeMode: "merge",
+// };
 
-function loadPipelineDraft(): PipelineFormDraft {
-  try {
-    const saved = localStorage.getItem(PIPELINE_DRAFT_KEY);
-    if (saved) {
-      return {
-        ...DEFAULT_PIPELINE_DRAFT,
-        ...JSON.parse(saved),
-      };
-    }
-  } catch {
-    // Use defaults if the saved draft cannot be read.
-  }
+// function loadPipelineDraft(): PipelineFormDraft {
+//   try {
+//     const saved = localStorage.getItem(PIPELINE_DRAFT_KEY);
+//     if (saved) {
+//       return {
+//         ...DEFAULT_PIPELINE_DRAFT,
+//         ...JSON.parse(saved),
+//       };
+//     }
+//   } catch {
+//     // Use defaults if the saved draft cannot be read.
+//   }
 
-  return DEFAULT_PIPELINE_DRAFT;
-}
+//   return DEFAULT_PIPELINE_DRAFT;
+// }
 
 export default function PipelinesView({
   pipelines,
-  seed,
+  
   onSave,
   onNeedApproval,
   onSelectCode,
@@ -65,29 +65,27 @@ export default function PipelinesView({
   onSelectCode: (code: string, title: string) => void;
 }) {
   
-const [initialDraft] = useState(loadPipelineDraft);
-
-const [name, setName] = useState(initialDraft.name);
-const [domain, setDomain] = useState<DomainId>(initialDraft.domain);
-const [stage, setStage] = useState<Stage>(initialDraft.stage);
-const [cadence, setCadence] = useState<Cadence>(initialDraft.cadence);
-const [source, setSource] = useState(initialDraft.source);
-const [destination, setDestination] = useState(initialDraft.destination);
-const [keys, setKeys] = useState(initialDraft.keys);
+const [name, setName] = useState("");
+const [domain, setDomain] = useState<DomainId>("stores");
+const [stage, setStage] = useState<Stage>("dev");
+const [cadence, setCadence] = useState<Cadence>("after_close");
+const [source, setSource] = useState("");
+const [destination, setDestination] = useState("");
+const [keys, setKeys] = useState("");
 const [writeMode, setWriteMode] =
-  useState<"merge" | "overwrite" | "append">(initialDraft.writeMode);
-
+  useState<"merge" | "overwrite" | "append">("merge");
   const [selected, setSelected] = useState<string | null>(pipelines[0]?.id ?? null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingDest, setPendingDest] = useState<string | null>(null);
-
+const [selectedSource, setSelectedSource] = useState<string | null>(null);
+const [selectedDestination, setSelectedDestination] = useState<string | null>(null);
   
-useEffect(() => {
-  if (!seed) return;
-  if (seed.source) setSource(seed.source);
-  if (seed.destination) setDestination(seed.destination);
-}, [seed]);
+// useEffect(() => {
+//   if (!seed) return;
+//   if (seed.source) setSource(seed.source);
+//   if (seed.destination) setDestination(seed.destination);
+// }, [seed]);
 
   
 useEffect(() => {
@@ -225,11 +223,16 @@ useEffect(() => {
         </p>
         <div className="mt-4">
           <CatalogSearch
-            onPick={(name, role) => {
-              if (role === "source") setSource(name);
-              else setDestination(name);
-            }}
-          />
+  onPick={(name, role) => {
+    if (role === "source") {
+      setSource(name);
+      setSelectedSource(name);
+    } else {
+      setDestination(name);
+      setSelectedDestination(name);
+    }
+  }}
+/>
         </div>
         <form
           className="mt-4 space-y-3"
@@ -262,8 +265,39 @@ useEffect(() => {
               </option>
             ))}
           </Select>
-          <Field label="Source table or volume file" value={source} onChange={setSource} />
-          <Field label="Destination table or volume file" value={destination} onChange={setDestination} />
+          <div>
+  <Field
+    label="Source table or volume file"
+    value={source}
+    onChange={(value) => {
+      setSource(value);
+      setSelectedSource(null);
+    }}
+  />
+  {selectedSource === source && (
+    <p className="mt-1 text-xs font-medium text-green-600">
+      ✓ Successfully selected as Source
+    </p>
+  )}
+</div>
+
+<div>
+  <Field
+    label="Destination table or volume file"
+    value={destination}
+    onChange={(value) => {
+      setDestination(value);
+      setSelectedDestination(null);
+    }}
+  />
+  {selectedDestination === destination && (
+    <p className="mt-1 text-xs font-medium text-green-600">
+      ✓ Successfully selected as Destination
+    </p>
+  )}
+</div>
+          {/* <Field label="Source table or volume file" value={source} onChange={setSource} />
+          <Field label="Destination table or volume file" value={destination} onChange={setDestination} /> */}
           <Field label="Primary keys" value={keys} onChange={setKeys} />
           <Select label="Write mode" value={writeMode} onChange={(value) => setWriteMode(value as typeof writeMode)}>
             <option value="merge">Merge</option>
@@ -331,12 +365,20 @@ useEffect(() => {
 }
 
 function Field({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
+  const placeholders: Record<string, string> = {
+    Name: "Enter pipeline name",
+    "Source table or volume file": "Enter or select source path",
+    "Destination table or volume file": "Enter or select destination path",
+    "Primary keys": "Example: store_id, sku",
+  };
+
   return (
     <label className="block text-xs text-muted">
       {label}
       <input
         className="mt-1 w-full rounded-xl border border-line bg-ink px-3 py-2 text-sm text-paper outline-none focus:border-lime"
         value={value}
+         placeholder={placeholders[label] ?? ""}
         onChange={(event) => onChange(event.target.value)}
       />
     </label>

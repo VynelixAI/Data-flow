@@ -1,17 +1,30 @@
-import { useEffect, useState, type ReactNode } from "react";import type { MismatchRow, SqlStep, ValidationReport } from "../types";
+
+import { useState, type ReactNode } from "react";
+import type { MismatchRow, SqlStep, ValidationReport } from "../types";
 import { Empty } from "./CodeViewer";
 
 function StatusPill({ status }: { status: ValidationReport["status"] }) {
   const tone =
-    status === "PASS" ? "bg-teal text-ink" : status === "FAIL" ? "bg-coral text-ink" : "bg-amber text-ink";
-  return <span className={`rounded-full px-3 py-1 font-display text-sm font-semibold ${tone}`}>{status}</span>;
+    status === "PASS"
+      ? "bg-teal text-ink"
+      : status === "FAIL"
+        ? "bg-coral text-ink"
+        : "bg-amber text-ink";
+
+  return (
+    <span className={`rounded-full px-3 py-1 font-display text-sm font-semibold ${tone}`}>
+      {status}
+    </span>
+  );
 }
 
 function Metric({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-2xl border border-line bg-panel-2 px-3 py-3">
-      <p className="text-[11px] uppercase tracking-[0.14em] text-muted">{label}</p>
-      <p className="mt-1 font-display text-xl">{value}</p>
+    <div className="min-w-0 rounded-2xl border border-line bg-panel-2 px-3 py-3">
+      <p className="text-[11px] uppercase tracking-[0.14em] text-muted">
+        {label}
+      </p>
+      <p className="mt-1 break-words font-display text-xl">{value}</p>
     </div>
   );
 }
@@ -22,34 +35,119 @@ function keyLabel(row: MismatchRow) {
     .join(", ");
 }
 
-export function QuarantineTable({ rows, report }: { rows?: MismatchRow[]; report?: ValidationReport | null }) {
+// Safely format JSON and long values for display.
+function formatDiffValue(value: unknown): string {
+  if (value === null || value === undefined) return "null";
+
+  if (typeof value === "object") {
+    try {
+      return JSON.stringify(value, null, 2);
+    } catch {
+      return String(value);
+    }
+  }
+
+  if (typeof value !== "string") {
+    return String(value);
+  }
+
+  let candidate = value.trim();
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try {
+      const parsed = JSON.parse(candidate);
+
+      if (typeof parsed === "string") {
+        candidate = parsed.trim();
+        continue;
+      }
+
+      if (typeof parsed === "object" && parsed !== null) {
+        return JSON.stringify(parsed, null, 2);
+      }
+
+      return String(parsed);
+    } catch {
+      if (
+        candidate.startsWith('"{') ||
+        candidate.startsWith('"[')
+      ) {
+        candidate = candidate
+          .replace(/^"|"$/g, "")
+          .replace(/""/g, '"');
+        continue;
+      }
+
+      break;
+    }
+  }
+
+  return candidate;
+}
+
+// Quarantine table and source profile.
+export function QuarantineTable({
+  rows,
+  report,
+}: {
+  rows?: MismatchRow[];
+  report?: ValidationReport | null;
+}) {
   const preview = rows ?? report?.quarantine_preview ?? [];
   const profile = report?.source_profile;
-  const nulls = (report?.null_checks ?? []).filter((item) => item.null_count > 0);
+
+  const nulls = (report?.null_checks ?? []).filter(
+    (item) => item.null_count > 0
+  );
+
   const duplicates = report?.duplicate_key_samples ?? [];
   const profileDuplicates = profile?.duplicate_key_samples ?? [];
-  const profileNulls = (profile?.nulls ?? []).filter((item) => item.null_count > 0);
-  const empty = !preview.length && !nulls.length && !duplicates.length && !profile && !profileDuplicates.length;
+
+  const profileNulls = (profile?.nulls ?? []).filter(
+    (item) => item.null_count > 0
+  );
+
+  const empty =
+    !preview.length &&
+    !nulls.length &&
+    !duplicates.length &&
+    !profile &&
+    !profileDuplicates.length;
+
   if (empty) {
-    return <p className="text-sm text-muted">No quarantined keys in this sample.</p>;
+    return (
+      <p className="text-sm text-muted">
+        No quarantined keys in this sample.
+      </p>
+    );
   }
+
   return (
-    <div className="space-y-4">
+    <div className="w-full min-w-0 space-y-4">
+
+      {/* Source profile */}
       {profile && (
-        <div className="rounded-2xl border border-line bg-panel-2 px-3 py-3 text-sm">
-          <p className="text-[11px] uppercase tracking-[0.14em] text-muted">Source profile</p>
-          <p className="mt-1 font-mono text-xs">{profile.table}</p>
-          <p className="mt-2">
+        <div className="w-full min-w-0 rounded-2xl border border-line bg-panel-2 px-3 py-3 text-sm">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-muted">
+            Source profile
+          </p>
+
+          <p className="mt-1 max-w-full break-all font-mono text-xs leading-5">
+            {profile.table}
+          </p>
+
+          <p className="mt-2 break-words">
             Rows {profile.row_count ?? 0}
             {" · "}
             Duplicate key groups {profile.duplicate_key_groups ?? 0}
             {" · "}
             Duplicate key rows {profile.duplicate_key_rows ?? 0}
           </p>
+
           {profileNulls.length > 0 && (
             <ul className="mt-2 space-y-1 text-xs text-muted">
               {profileNulls.map((item) => (
-                <li key={item.column}>
+                <li key={item.column} className="break-words">
                   {item.column}: {item.null_count} nulls of {item.total}
                 </li>
               ))}
@@ -57,10 +155,15 @@ export function QuarantineTable({ rows, report }: { rows?: MismatchRow[]; report
           )}
         </div>
       )}
+
+      {/* Source duplicate keys */}
       {profileDuplicates.length > 0 && (
-        <ul className="space-y-1 text-sm">
+        <ul className="min-w-0 space-y-1 text-sm">
           {profileDuplicates.map((item, index) => (
-            <li key={`profile-dup-${index}`} className="font-mono text-xs">
+            <li
+              key={`profile-dup-${index}`}
+              className="break-all font-mono text-xs"
+            >
               Source duplicate{" "}
               {Object.entries(item.primary_key)
                 .map(([key, value]) => `${key}=${value ?? "null"}`)
@@ -70,15 +173,24 @@ export function QuarantineTable({ rows, report }: { rows?: MismatchRow[]; report
           ))}
         </ul>
       )}
+
+      {/* Null and duplicate checks */}
       {(nulls.length > 0 || duplicates.length > 0) && (
-        <div className="space-y-1 text-sm">
+        <div className="min-w-0 space-y-2 text-sm">
           {nulls.map((item) => (
-            <p key={`${item.side}-${item.column}`}>
+            <p
+              key={`${item.side}-${item.column}`}
+              className="break-words"
+            >
               {item.side}.{item.column}: {item.null_count} nulls of {item.total}
             </p>
           ))}
+
           {duplicates.map((item, index) => (
-            <p key={`dup-${index}`} className="font-mono text-xs">
+            <p
+              key={`dup-${index}`}
+              className="break-all font-mono text-xs"
+            >
               {item.side}{" "}
               {Object.entries(item.primary_key)
                 .map(([key, value]) => `${key}=${value ?? "null"}`)
@@ -88,36 +200,95 @@ export function QuarantineTable({ rows, report }: { rows?: MismatchRow[]; report
           ))}
         </div>
       )}
-      {preview.length > 0 && <QuarantineRows rows={preview} />}
+
+      {/* Quarantine mismatch table */}
+      {preview.length > 0 && (
+        <QuarantineRows rows={preview} />
+      )}
     </div>
   );
 }
 
+// Responsive quarantine rows table.
 function QuarantineRows({ rows }: { rows: MismatchRow[] }) {
   return (
-    <div className="overflow-auto rounded-2xl border border-line">
-      <table className="w-full min-w-[640px] text-left text-sm">
+    <div className="w-full min-w-0 max-w-full overflow-x-auto overscroll-x-contain rounded-2xl border border-line">
+
+      <table className="w-full min-w-[560px] table-fixed text-left text-sm">
+
+        <colgroup>
+          <col className="w-[24%]" />
+          <col className="w-[23%]" />
+          <col className="w-[53%]" />
+        </colgroup>
+
         <thead className="bg-panel-2 text-xs uppercase tracking-wider text-muted">
           <tr>
-            <th className="px-3 py-2 font-medium">Primary key</th>
-            <th className="px-3 py-2 font-medium">Type</th>
-            <th className="px-3 py-2 font-medium">Column differences</th>
+            <th className="break-words px-3 py-3 font-medium">
+              Primary key
+            </th>
+
+            <th className="break-words px-3 py-3 font-medium">
+              Type
+            </th>
+
+            <th className="break-words px-3 py-3 font-medium">
+              Column differences
+            </th>
           </tr>
         </thead>
+
         <tbody>
           {rows.map((row, index) => (
-            <tr key={`${keyLabel(row)}-${index}`} className="border-t border-line align-top">
-              <td className="px-3 py-2 font-mono text-xs">{keyLabel(row)}</td>
-              <td className="px-3 py-2">{row.mismatch_type.replaceAll("_", " ")}</td>
-              <td className="px-3 py-2 text-xs leading-5 text-muted">
-                {row.column_diffs.length
-                  ? row.column_diffs.map((diff) => (
-                      <div key={diff.column}>
-                        <span className="text-paper">{diff.column}</span>: {diff.source_value ?? "null"} →{" "}
-                        {diff.target_value ?? "null"}
+            <tr
+              key={`${keyLabel(row)}-${index}`}
+              className="border-t border-line align-top"
+            >
+              <td className="break-all px-3 py-3 font-mono text-xs">
+                {keyLabel(row)}
+              </td>
+
+              <td className="break-words px-3 py-3 text-xs leading-5">
+                {row.mismatch_type.replaceAll("_", " ")}
+              </td>
+
+              <td className="min-w-0 px-3 py-3 text-xs leading-5 text-muted">
+                {row.column_diffs.length > 0 ? (
+                  <div className="min-w-0 space-y-3">
+                    {row.column_diffs.map((diff) => (
+                      <div
+                        key={diff.column}
+                        className="min-w-0 space-y-2"
+                      >
+                        <p className="break-all font-semibold text-paper">
+                          {diff.column}
+                        </p>
+
+                        <div className="min-w-0 rounded-lg bg-panel-2 p-2">
+                          <p className="mb-1 text-[10px] uppercase tracking-wider text-muted">
+                            Source value
+                          </p>
+
+                          <pre className="max-w-full whitespace-pre-wrap break-words font-mono text-xs leading-5 [overflow-wrap:anywhere]">
+                            {formatDiffValue(diff.source_value)}
+                          </pre>
+                        </div>
+
+                        <div className="min-w-0 rounded-lg bg-panel-2 p-2">
+                          <p className="mb-1 text-[10px] uppercase tracking-wider text-muted">
+                            Target value
+                          </p>
+
+                          <pre className="max-w-full whitespace-pre-wrap break-words font-mono text-xs leading-5 [overflow-wrap:anywhere]">
+                            {formatDiffValue(diff.target_value)}
+                          </pre>
+                        </div>
                       </div>
-                    ))
-                  : "Key missing on one side"}
+                    ))}
+                  </div>
+                ) : (
+                  "Key missing on one side"
+                )}
               </td>
             </tr>
           ))}
@@ -140,28 +311,15 @@ export default function ValidationReportView({
   onRun: (payload: Record<string, unknown>) => void;
   running: boolean;
 }) {
-  
-  const [source, setSource] = useState(() => {
-    try {
-      return localStorage.getItem("dataflow-quality-source") ?? "";
-    } catch {
-      return "";
-    }
-  });
-  const [target, setTarget] = useState(() => {
-    try {
-      return localStorage.getItem("dataflow-quality-target") ?? "";
-    } catch {
-      return "";
-    }
-  });
-  const [keys, setKeys] = useState(() => {
-    try {
-      return localStorage.getItem("dataflow-quality-keys") ?? "order_id";
-    } catch {
-      return "order_id";
-    }
-  });
+ 
+const [source, setSource] = useState("");
+const [target, setTarget] = useState("");
+const [keys, setKeys] = useState("");
+
+ 
+
+ 
+
   const [compare, setCompare] = useState(() => {
     try {
       return localStorage.getItem("dataflow-quality-compare") ?? "";
@@ -169,6 +327,7 @@ export default function ValidationReportView({
       return "";
     }
   });
+
   const [timestampColumn, setTimestampColumn] = useState(() => {
     try {
       return localStorage.getItem("dataflow-quality-timestamp") ?? "domain_published_ts";
@@ -176,6 +335,7 @@ export default function ValidationReportView({
       return "domain_published_ts";
     }
   });
+
   const [alignment, setAlignment] = useState(() => {
     try {
       return localStorage.getItem("dataflow-quality-alignment") ?? "latest_each";
@@ -183,6 +343,7 @@ export default function ValidationReportView({
       return "latest_each";
     }
   });
+
   const [softDelete, setSoftDelete] = useState(() => {
     try {
       return localStorage.getItem("dataflow-quality-soft-delete") ?? "";
@@ -190,6 +351,7 @@ export default function ValidationReportView({
       return "";
     }
   });
+
   const [execute, setExecute] = useState(() => {
     try {
       return localStorage.getItem("dataflow-quality-execute") !== "false";
@@ -197,53 +359,68 @@ export default function ValidationReportView({
       return true;
     }
   });
+
   const [advanced, setAdvanced] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
-  
-  useEffect(() => {
-    try {
-      localStorage.setItem("dataflow-quality-source", source);
-      localStorage.setItem("dataflow-quality-target", target);
-      localStorage.setItem("dataflow-quality-keys", keys);
-      localStorage.setItem("dataflow-quality-compare", compare);
-      localStorage.setItem("dataflow-quality-timestamp", timestampColumn);
-      localStorage.setItem("dataflow-quality-alignment", alignment);
-      localStorage.setItem("dataflow-quality-soft-delete", softDelete);
-      localStorage.setItem("dataflow-quality-execute", String(execute));
-    } catch {
-      // Keep Quality usable if storage is unavailable.
-    }
-  }, [
-    source,
-    target,
-    keys,
-    compare,
-    timestampColumn,
-    alignment,
-    softDelete,
-    execute,
-  ]);
 
+  // Persist validation form values.
+  // useEffect(() => {
+  //   try {
+  //     localStorage.setItem("dataflow-quality-source", source);
+  //     localStorage.setItem("dataflow-quality-target", target);
+  //     localStorage.setItem("dataflow-quality-keys", keys);
+  //     localStorage.setItem("dataflow-quality-compare", compare);
+  //     localStorage.setItem("dataflow-quality-timestamp", timestampColumn);
+  //     localStorage.setItem("dataflow-quality-alignment", alignment);
+  //     localStorage.setItem("dataflow-quality-soft-delete", softDelete);
+  //     localStorage.setItem("dataflow-quality-execute", String(execute));
+  //   } catch {
+  //     // Keep Quality usable if storage is unavailable.
+  //   }
+  // }, [
+  //   source,
+  //   target,
+  //   keys,
+  //   compare,
+  //   timestampColumn,
+  //   alignment,
+  //   softDelete,
+  //   execute,
+  // ]);
 
   return (
-    <div className="flex h-full min-h-0 flex-col overflow-auto">
+    <div className="flex h-full min-h-0 min-w-0 w-full flex-col overflow-auto">
+
+      {/* Direct validation form */}
       <form
-        className="space-y-3 border-b border-line px-4 py-4"
+        className="min-w-0 space-y-3 border-b border-line px-4 py-4"
         onSubmit={(event) => {
           event.preventDefault();
+
           const sourceName = source.trim();
           const targetName = target.trim();
-          const primaryKeys = keys.split(",").map((item) => item.trim()).filter(Boolean);
+
+          const primaryKeys = keys
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean);
+
           if (!sourceName || !targetName || primaryKeys.length === 0) {
-            setFormError("Enter a source, a destination, and at least one primary key.");
+            setFormError(
+              "Enter a source, a destination, and at least one primary key."
+            );
             return;
           }
+
           setFormError(null);
+
           onRun({
             source_table: sourceName,
             target_table: targetName,
             primary_keys: primaryKeys,
-            compare_columns: compare.trim() ? compare.split(",").map((item) => item.trim()).filter(Boolean) : null,
+            compare_columns: compare.trim()
+              ? compare.split(",").map((item) => item.trim()).filter(Boolean)
+              : null,
             timestamp_column: timestampColumn.trim() || "domain_published_ts",
             timestamp_alignment: alignment,
             soft_delete_column: softDelete.trim() || null,
@@ -252,42 +429,95 @@ export default function ValidationReportView({
           });
         }}
       >
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           <p className="font-display text-sm">Direct validation</p>
-          <button type="button" className="text-xs text-muted underline" onClick={() => setAdvanced((value) => !value)}>
+
+          <button
+            type="button"
+            className="shrink-0 text-xs text-muted underline"
+            onClick={() => setAdvanced((value) => !value)}
+          >
             {advanced ? "Hide options" : "Options"}
           </button>
         </div>
-        <div className="grid gap-2 sm:grid-cols-2">
-          <Field label="Source table or volume file" value={source} onChange={setSource} placeholder="catalog.schema.table or /Volumes/.../file.csv" />
-          <Field label="Destination table or volume file" value={target} onChange={setTarget} placeholder="catalog.schema.table or /Volumes/.../file.csv" />
+
+        <div className="grid min-w-0 gap-2 sm:grid-cols-2">
+          <Field
+            label="Source table or volume file"
+            value={source}
+            onChange={setSource}
+            placeholder="catalog.schema.table or /Volumes/.../file.csv"
+          />
+
+          <Field
+            label="Destination table or volume file"
+            value={target}
+            onChange={setTarget}
+            placeholder="catalog.schema.table or /Volumes/.../file.csv"
+          />
         </div>
-        <Field label="Primary keys" value={keys} onChange={setKeys} />
+
+        <Field
+          label="Primary keys"
+          value={keys}
+          onChange={setKeys}
+        />
+
         {advanced && (
-          <div className="grid gap-2">
-            <Field label="Compare columns" value={compare} onChange={setCompare} />
-            <div className="grid gap-2 sm:grid-cols-2">
-              <Field label="Timestamp column" value={timestampColumn} onChange={setTimestampColumn} />
-              <label className="block text-xs text-muted">
+          <div className="grid min-w-0 gap-2">
+            <Field
+              label="Compare columns"
+              value={compare}
+              onChange={setCompare}
+            />
+
+            <div className="grid min-w-0 gap-2 sm:grid-cols-2">
+              <Field
+                label="Timestamp column"
+                value={timestampColumn}
+                onChange={setTimestampColumn}
+              />
+
+              <label className="block min-w-0 text-xs text-muted">
                 Alignment
+
                 <select
-                  className="mt-1 w-full rounded-xl border border-line bg-ink px-3 py-2 text-sm text-paper"
+                  className="mt-1 w-full min-w-0 rounded-xl border border-line bg-ink px-3 py-2 text-sm text-paper"
                   value={alignment}
                   onChange={(event) => setAlignment(event.target.value)}
                 >
-                  <option value="latest_each">Latest snapshot on each side</option>
-                  <option value="common_max">Shared published timestamp</option>
+                  <option value="latest_each">
+                    Latest snapshot on each side
+                  </option>
+
+                  <option value="common_max">
+                    Shared published timestamp
+                  </option>
                 </select>
               </label>
             </div>
-            <Field label="Soft-delete column" value={softDelete} onChange={setSoftDelete} />
+
+            <Field
+              label="Soft-delete column"
+              value={softDelete}
+              onChange={setSoftDelete}
+            />
           </div>
         )}
-        <label className="flex items-center gap-2 text-sm text-muted">
-          <input type="checkbox" checked={execute} onChange={(event) => setExecute(event.target.checked)} />
+
+        <label className="flex flex-wrap items-center gap-2 text-sm text-muted">
+          <input
+            type="checkbox"
+            checked={execute}
+            onChange={(event) => setExecute(event.target.checked)}
+          />
           Run the check and return a report
         </label>
-        {formError && <p className="text-sm text-amber">{formError}</p>}
+
+        {formError && (
+          <p className="text-sm text-amber">{formError}</p>
+        )}
+
         <button
           type="submit"
           disabled={running}
@@ -297,18 +527,25 @@ export default function ValidationReportView({
         </button>
       </form>
 
+      {/* SQL or validation report */}
       {!report ? (
         sql.length > 0 ? (
-          <div className="space-y-3 px-4 py-4">
+          <div className="min-w-0 space-y-4 px-3 py-4 sm:px-4">
             {warnings.map((warning) => (
-              <p key={warning} className="text-sm text-amber">
+              <p key={warning} className="break-words text-sm text-amber">
                 {warning}
               </p>
             ))}
+
             {sql.map((step) => (
-              <section key={step.name}>
-                <p className="text-xs uppercase tracking-[0.14em] text-muted">{step.name}</p>
-                <pre className="mt-2 overflow-auto rounded-2xl border border-line bg-ink p-3 text-xs leading-5">{step.sql}</pre>
+              <section key={step.name} className="min-w-0">
+                <p className="break-words text-xs uppercase tracking-[0.14em] text-muted">
+                  {step.name}
+                </p>
+
+                <pre className="mt-2 max-w-full overflow-auto rounded-2xl border border-line bg-ink p-3 text-xs leading-5">
+                  {step.sql}
+                </pre>
               </section>
             ))}
           </div>
@@ -319,82 +556,121 @@ export default function ValidationReportView({
           />
         )
       ) : (
-        <div className="space-y-4 px-4 py-4">
-          <div className="flex flex-wrap items-center gap-3">
+        <div className="min-w-0 space-y-4 px-3 py-4 sm:px-4">
+
+          <div className="flex min-w-0 flex-wrap items-center gap-3">
             <StatusPill status={report.status} />
-            <p className="text-sm text-muted">
+
+            <p className="min-w-0 break-all text-sm text-muted">
               {report.source_table} → {report.target_table}
             </p>
           </div>
+
           {report.status_reasons.length > 0 && (
-            <ul className="space-y-1 text-sm text-paper">
+            <ul className="min-w-0 space-y-1 text-sm text-paper">
               {report.status_reasons.map((reason) => (
-                <li key={reason}>{reason}</li>
+                <li key={reason} className="break-words">
+                  {reason}
+                </li>
               ))}
             </ul>
           )}
-          <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+
+          {/* Summary metrics */}
+          <div className="grid min-w-0 grid-cols-2 gap-2 lg:grid-cols-4">
             <Metric label="Source rows" value={report.source_count} />
             <Metric label="Target rows" value={report.target_count} />
             <Metric label="Mismatches" value={report.mismatch_count} />
             <Metric label="Value diffs" value={report.value_mismatch_count} />
           </div>
-          <div className="grid gap-2 text-sm sm:grid-cols-2">
-            <p>
-              <span className="text-muted">Source {report.timestamp_column}: </span>
+
+          {/* Validation details */}
+          <div className="grid min-w-0 gap-2 text-sm sm:grid-cols-2">
+            <p className="break-words">
+              <span className="text-muted">
+                Source {report.timestamp_column}:{" "}
+              </span>
               {report.source_domain_published_ts ?? "n/a"}
             </p>
-            <p>
-              <span className="text-muted">Target {report.timestamp_column}: </span>
+
+            <p className="break-words">
+              <span className="text-muted">
+                Target {report.timestamp_column}:{" "}
+              </span>
               {report.target_domain_published_ts ?? "n/a"}
             </p>
+
             <p>
               <span className="text-muted">Missing in target: </span>
               {report.missing_in_target_count}
             </p>
+
             <p>
               <span className="text-muted">Missing in source: </span>
               {report.missing_in_source_count}
             </p>
+
             <p>
               <span className="text-muted">Duplicate keys: </span>
               {report.duplicate_keys_source} / {report.duplicate_keys_target}
             </p>
+
             <p>
               <span className="text-muted">Null keys: </span>
               {report.null_pk_source} / {report.null_pk_target}
             </p>
-            <p className="sm:col-span-2 text-xs text-muted">Audited {report.execution_ts}</p>
+
+            <p className="break-words text-xs text-muted sm:col-span-2">
+              Audited {report.execution_ts}
+            </p>
           </div>
+
+          {/* Schema drift */}
           <Section title="Schema drift">
-            <p className="text-sm text-muted">
-              Only in source: {report.schema_drift.only_in_source.join(", ") || "none"}
+            <p className="break-words text-sm text-muted">
+              Only in source:{" "}
+              {report.schema_drift.only_in_source.join(", ") || "none"}
             </p>
-            <p className="text-sm text-muted">
-              Only in target: {report.schema_drift.only_in_target.join(", ") || "none"}
+
+            <p className="break-words text-sm text-muted">
+              Only in target:{" "}
+              {report.schema_drift.only_in_target.join(", ") || "none"}
             </p>
+
             {report.schema_drift.type_mismatches.map((item) => (
-              <p key={item.column} className="text-sm">
+              <p key={item.column} className="break-words text-sm">
                 {item.column}: {item.source_type} vs {item.target_type} ({item.severity})
               </p>
             ))}
           </Section>
+
+          {/* Source profile */}
           {report.source_profile?.table && (
             <Section title="Source profile">
-              <p className="font-mono text-xs">{report.source_profile.table}</p>
+              <p className="break-all font-mono text-xs">
+                {report.source_profile.table}
+              </p>
+
               <p className="text-sm">
                 Rows {report.source_profile.row_count ?? 0}. Duplicate key groups{" "}
                 {report.source_profile.duplicate_key_groups ?? 0}.
               </p>
             </Section>
           )}
+
+          {/* Mismatched keys */}
           <Section title="Mismatched keys">
             <QuarantineTable rows={report.mismatched_keys} />
           </Section>
+
+          {/* Aggregates */}
           {report.aggregate_mismatches.length > 0 && (
             <Section title="Aggregates">
               {report.aggregate_mismatches.slice(0, 30).map((item, index) => (
-                <p key={`${item.metric}-${index}`} className="text-sm">
+                <p
+                  key={`${item.metric}-${index}`}
+                  className="break-words text-sm"
+                >
                   {Object.entries(item.dimension)
                     .map(([key, value]) => `${key}=${value ?? "null"}`)
                     .join(", ")}{" "}
@@ -403,22 +679,29 @@ export default function ValidationReportView({
               ))}
             </Section>
           )}
+
+          {/* Formats and deserialization */}
           {(report.format_checks.some((item) => item.failure_count) ||
             report.deserialization_failures.some((item) => item.failure_count)) && (
             <Section title="Formats and deserialization">
               {[...report.format_checks, ...report.deserialization_failures]
                 .filter((item) => item.failure_count > 0)
                 .map((item) => (
-                  <p key={`${item.side}-${item.column}-${item.rule}`} className="text-sm">
+                  <p
+                    key={`${item.side}-${item.column}-${item.rule}`}
+                    className="break-words text-sm"
+                  >
                     {item.side}.{item.column} failed {item.rule} ({item.failure_count})
                   </p>
                 ))}
             </Section>
           )}
+
+          {/* Warnings */}
           {warnings.length > 0 && (
             <Section title="Warnings">
               {warnings.map((warning) => (
-                <p key={warning} className="text-sm text-amber">
+                <p key={warning} className="break-words text-sm text-amber">
                   {warning}
                 </p>
               ))}
@@ -430,6 +713,7 @@ export default function ValidationReportView({
   );
 }
 
+// Reusable input field.
 function Field({
   label,
   value,
@@ -442,10 +726,11 @@ function Field({
   placeholder?: string;
 }) {
   return (
-    <label className="block text-xs text-muted">
+    <label className="block min-w-0 text-xs text-muted">
       {label}
+
       <input
-        className="mt-1 w-full rounded-xl border border-line bg-ink px-3 py-2 text-sm text-paper outline-none focus:border-lime"
+        className="mt-1 w-full min-w-0 rounded-xl border border-line bg-ink px-3 py-2 text-sm text-paper outline-none focus:border-lime"
         value={value}
         placeholder={placeholder}
         onChange={(event) => onChange(event.target.value)}
@@ -454,9 +739,16 @@ function Field({
   );
 }
 
-function Section({ title, children }: { title: string; children: ReactNode }) {
+// Reusable report section.
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: ReactNode;
+}) {
   return (
-    <section className="space-y-2">
+    <section className="min-w-0 space-y-2">
       <h3 className="font-display text-sm">{title}</h3>
       {children}
     </section>

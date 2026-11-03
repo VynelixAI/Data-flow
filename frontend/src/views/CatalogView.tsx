@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { apiError } from "../apiError";
 import CatalogSearch from "../components/CatalogSearch";
 
@@ -21,124 +21,28 @@ export default function CatalogView({
 }: {
   onUse: (fullName: string, role: "source" | "destination") => void;
 }) {
-  
-const [catalog, setCatalog] = useState(() => {
-  try {
-    return localStorage.getItem("dataflow-catalog") ?? "main";
-  } catch {
-    return "main";
-  }
-});
-
-const [schema, setSchema] = useState(() => {
-  try {
-    return localStorage.getItem("dataflow-schema") ?? "dataflow";
-  } catch {
-    return "dataflow";
-  }
-});
+  // Start with empty fields. No previous values are restored.
+  const [catalog, setCatalog] = useState("");
+  const [schema, setSchema] = useState("");
+  const [volume, setVolume] = useState("");
 
   const [tables, setTables] = useState<TableRow[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
-  
-const [volume, setVolume] = useState(() => {
-  try {
-    return localStorage.getItem("dataflow-volume") ?? "dummy_data";
-  } catch {
-    return "dummy_data";
-  }
-});
-
   const [files, setFiles] = useState<VolumeFile[]>([]);
   const [filesError, setFilesError] = useState<string | null>(null);
   const [filesBusy, setFilesBusy] = useState(false);
   const [filesLoaded, setFilesLoaded] = useState(false);
-  
-useEffect(() => {
-  try {
-    localStorage.setItem("dataflow-catalog", catalog);
-    localStorage.setItem("dataflow-schema", schema);
-    localStorage.setItem("dataflow-volume", volume);
-  } catch {
-    // Keep Catalog usable if storage is unavailable.
-  }
-}, [catalog, schema, volume]);
 
-  // Load available catalogs.
-  useEffect(() => {
-    let cancelled = false;
-
-    void (async () => {
-      try {
-        const response = await fetch("/api/catalogs");
-        const body = await response.json();
-
-        if (!response.ok || cancelled) return;
-
-        const names = (body.catalogs || []) as string[];
-
-        setCatalog((current) => {
-          if (names.includes(current)) return current;
-
-          return (
-            names.find((name) => name === "workspace") ||
-            names.find(
-              (name) =>
-                !["system", "samples", "hive_metastore"].includes(name)
-            ) ||
-            current
-          );
-        });
-      } catch {
-        // Keep the current catalog if discovery fails.
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  // Load schemas when the catalog changes.
-  useEffect(() => {
-    const name = catalog.trim();
-    if (!name) return;
-
-    let cancelled = false;
-
-    void (async () => {
-      try {
-        const response = await fetch(
-          `/api/catalog/schemas?catalog=${encodeURIComponent(name)}`
-        );
-        const body = await response.json();
-
-        if (!response.ok || cancelled) return;
-
-        const names = (body.schemas || []) as string[];
-
-        setSchema((current) =>
-          names.includes(current)
-            ? current
-            : names.includes("default")
-              ? "default"
-              : names[0] || current
-        );
-      } catch {
-        // Keep the current schema if discovery fails.
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [catalog]);
+  const [selectedSource, setSelectedSource] = useState<string | null>(null);
+  const [selectedDestination, setSelectedDestination] = useState<string | null>(null);
 
   // List Unity Catalog tables.
   async function load() {
+    if (!catalog.trim() || !schema.trim()) return;
+
     setBusy(true);
     setError(null);
 
@@ -151,6 +55,7 @@ useEffect(() => {
       const response = await fetch(
         `/api/catalog/tables?${params.toString()}`
       );
+
       const body = await response.json();
 
       if (!response.ok) {
@@ -174,6 +79,8 @@ useEffect(() => {
 
   // List files from an existing Unity Catalog volume.
   async function loadVolumeFiles() {
+    if (!catalog.trim() || !schema.trim() || !volume.trim()) return;
+
     setFilesBusy(true);
     setFilesError(null);
 
@@ -187,6 +94,7 @@ useEffect(() => {
       const response = await fetch(
         `/api/catalog/volume-files?${params.toString()}`
       );
+
       const body = await response.json();
 
       if (!response.ok) {
@@ -212,6 +120,20 @@ useEffect(() => {
 
   const regularFiles = files.filter((file) => !file.is_directory);
 
+  // Handle source and destination selection.
+  function handleUseFile(
+    path: string,
+    role: "source" | "destination"
+  ) {
+    if (role === "source") {
+      setSelectedSource(path);
+    } else {
+      setSelectedDestination(path);
+    }
+
+    onUse(path, role);
+  }
+
   return (
     <div className="h-full overflow-auto px-4 py-6 sm:px-8">
       <div className="mx-auto max-w-4xl">
@@ -228,9 +150,9 @@ useEffect(() => {
           files in volumes. It does not create anything.
         </p>
 
-        {/* Existing catalog search */}
+        {/* Catalog search */}
         <div className="mt-5">
-          <CatalogSearch onPick={onUse} />
+          <CatalogSearch onPick={handleUseFile} />
         </div>
 
         {/* Catalog and schema selection */}
@@ -246,10 +168,13 @@ useEffect(() => {
             <input
               className="mt-1 block rounded-xl border border-line bg-ink px-3 py-2 text-sm text-paper"
               value={catalog}
+              placeholder="Enter catalog name"
               onChange={(event) => {
                 setCatalog(event.target.value);
                 setLoaded(false);
+                setTables([]);
                 setFilesLoaded(false);
+                setFiles([]);
               }}
             />
           </label>
@@ -259,17 +184,21 @@ useEffect(() => {
             <input
               className="mt-1 block rounded-xl border border-line bg-ink px-3 py-2 text-sm text-paper"
               value={schema}
+              placeholder="Enter schema name"
               onChange={(event) => {
                 setSchema(event.target.value);
                 setLoaded(false);
+                setTables([]);
                 setFilesLoaded(false);
+                setFiles([]);
               }}
             />
           </label>
 
           <button
             type="submit"
-            disabled={busy || !catalog.trim() || !schema.trim()}
+            // disabled={busy || !catalog.trim() || !schema.trim()}
+            disabled={busy}
             className="rounded-full bg-lime px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
           >
             {busy ? "Loading…" : "List tables"}
@@ -289,33 +218,65 @@ useEffect(() => {
 
         {tables.length > 0 && (
           <ul className="mt-5 divide-y divide-line rounded-2xl border border-line">
-            {tables.map((table) => (
-              <li
-                key={table.full_name}
-                className="flex items-center justify-between gap-3 px-4 py-3"
-              >
-                <div className="min-w-0">
-                  <p className="break-all font-mono text-sm">
-                    {table.full_name}
-                  </p>
-                  <p className="text-xs text-muted">
-                    {table.table_type || "table"}
-                  </p>
-                </div>
+            {tables.map((table) => {
+              const isSource = selectedSource === table.full_name;
+              const isDestination =
+                selectedDestination === table.full_name;
 
-                <button
-                  type="button"
-                  onClick={() => onUse(table.full_name, "source")}
-                  className="shrink-0 rounded-full border border-line px-3 py-1.5 text-xs"
+              return (
+                <li
+                  key={table.full_name}
+                  className="flex flex-wrap items-center justify-between gap-3 px-4 py-3"
                 >
-                  Use as source
-                </button>
-              </li>
-            ))}
+                  <div className="min-w-0 flex-1">
+                    <p className="break-all font-mono text-sm">
+                      {table.full_name}
+                    </p>
+                    <p className="text-xs text-muted">
+                      {table.table_type || "table"}
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      aria-pressed={isSource}
+                      onClick={() =>
+                        handleUseFile(table.full_name, "source")
+                      }
+                      className={`rounded-full border px-3 py-2 text-xs font-semibold transition-colors ${
+                        isSource
+                          ? "border-green-600 bg-green-600 text-white"
+                          : "border-line hover:border-green-500 hover:bg-green-50 hover:text-green-800"
+                      }`}
+                    >
+                      {isSource ? "✓ Source Selected" : "Use as source"}
+                    </button>
+
+                    <button
+                      type="button"
+                      aria-pressed={isDestination}
+                      onClick={() =>
+                        handleUseFile(table.full_name, "destination")
+                      }
+                      className={`rounded-full border px-3 py-2 text-xs font-semibold transition-colors ${
+                        isDestination
+                          ? "border-green-600 bg-green-600 text-white"
+                          : "border-line hover:border-green-500 hover:bg-green-50 hover:text-green-800"
+                      }`}
+                    >
+                      {isDestination
+                        ? "✓ Destination Selected"
+                        : "Use as destination"}
+                    </button>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         )}
 
-        {/* Volume files browser: separate from table results */}
+        {/* Volume files browser */}
         <section className="mt-8 border-t border-line pt-6">
           <h2 className="text-xl font-semibold">Volume files</h2>
 
@@ -336,9 +297,11 @@ useEffect(() => {
               <input
                 className="mt-1 block rounded-xl border border-line bg-ink px-3 py-2 text-sm text-paper"
                 value={volume}
+                placeholder="Enter volume name"
                 onChange={(event) => {
                   setVolume(event.target.value);
                   setFilesLoaded(false);
+                  setFiles([]);
                 }}
                 required
               />
@@ -346,12 +309,13 @@ useEffect(() => {
 
             <button
               type="submit"
-              disabled={
-                filesBusy ||
-                !catalog.trim() ||
-                !schema.trim() ||
-                !volume.trim()
-              }
+              // disabled={
+              //   filesBusy ||
+              //   !catalog.trim() ||
+              //   !schema.trim() ||
+              //   !volume.trim()
+              // }
+              disabled={filesBusy}
               className="rounded-full bg-lime px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
             >
               {filesBusy ? "Loading…" : "List volume files"}
@@ -394,18 +358,36 @@ useEffect(() => {
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      onClick={() => onUse(file.path, "source")}
-                      className="rounded-full border border-line px-3 py-1.5 text-xs"
+                      aria-pressed={selectedSource === file.path}
+                      onClick={() =>
+                        handleUseFile(file.path, "source")
+                      }
+                      className={`rounded-full border px-3 py-2 text-xs font-semibold transition-colors ${
+                        selectedSource === file.path
+                          ? "border-green-600 bg-green-600 text-white"
+                          : "border-line hover:border-green-500 hover:bg-green-50 hover:text-green-800"
+                      }`}
                     >
-                      Use as source
+                      {selectedSource === file.path
+                        ? "✓ Source Selected"
+                        : "Use as source"}
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => onUse(file.path, "destination")}
-                      className="rounded-full border border-line px-3 py-1.5 text-xs"
+                      aria-pressed={selectedDestination === file.path}
+                      onClick={() =>
+                        handleUseFile(file.path, "destination")
+                      }
+                      className={`rounded-full border px-3 py-2 text-xs font-semibold transition-colors ${
+                        selectedDestination === file.path
+                          ? "border-green-600 bg-green-600 text-white"
+                          : "border-line hover:border-green-500 hover:bg-green-50 hover:text-green-800"
+                      }`}
                     >
-                      Use as destination
+                      {selectedDestination === file.path
+                        ? "✓ Destination Selected"
+                        : "Use as destination"}
                     </button>
                   </div>
                 </li>

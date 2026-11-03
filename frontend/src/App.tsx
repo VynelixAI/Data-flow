@@ -63,7 +63,7 @@ const EMPTY: Session = {
   pipelines: [],
   approvals: [],
   pipelineSeed: null,
-  modelProvider: null,
+  modelProvider: "qwen",
 };
 
 function loadSession(): Session {
@@ -78,7 +78,7 @@ function loadSession(): Session {
       pipelines: parsed.pipelines ?? [],
       approvals: parsed.approvals ?? [],
       workspace: parsed.workspace ?? "desk",
-      modelProvider: parsed.modelProvider === "openai" || parsed.modelProvider === "qwen" ? parsed.modelProvider : null,
+      modelProvider: parsed.modelProvider === "openai" || parsed.modelProvider === "qwen" ? parsed.modelProvider : "qwen",
       code: null,
       codeTitle: "",
       sql: [],
@@ -257,7 +257,7 @@ export default function App() {
           messages: history.map((message) => ({ role: message.role, content: message.content })),
           thread_id: typed ? resumeThread : null,
           resume: typed ?? null,
-          provider: session.modelProvider,
+          provider: session.modelProvider ??  "qwen",
           context: {
             uploaded_tables: session.uploads.map((upload) => ({
               table: upload.table,
@@ -537,20 +537,40 @@ export default function App() {
                 confirmation={session.confirmation}
                 onSend={(text, resume) => void send(text, resume)}
                 onStop={() => controller?.abort()}
-                onReset={() =>
-                  setSession((current) => ({
-                    ...current,
-                    messages: [],
-                    confirmation: null,
-                    agentThreadId: null,
-                    code: null,
-                    codeTitle: "",
-                    sql: [],
-                    report: null,
-                    warnings: [],
-                    run: null,
-                  }))
-                }
+               onReset={() => {
+  // Stop any running chat request
+  controller?.abort();
+  setController(null);
+  setStreaming(false);
+
+  // Reset inspector and notifications
+  setInspectorTab("code");
+  setBanner(null);
+
+  // Start a completely fresh conversation
+  setSession((current) => ({
+    ...current,
+    workspace: "chat",
+
+    // Chat history
+    messages: [],
+
+    // IMPORTANT: Remove previous uploaded dataset references
+    uploads: [],
+
+    // Agent conversation
+    agentThreadId: null,
+    confirmation: null,
+
+    // Generated content
+    code: null,
+    codeTitle: "",
+    sql: [],
+    report: null,
+    warnings: [],
+    run: null,
+  }));
+}}
                 onUploaded={(upload) => {
                   setSession((current) => ({ ...current, uploads: [...current.uploads, upload] }));
                   setBanner(`Created ${upload.table}. Mention it in the next message and the agent can use it.`);

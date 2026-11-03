@@ -32,7 +32,7 @@ def provider() -> str:
 
 def resolve_provider(choice: str | None) -> str:
     """Pick openai or qwen. An explicit choice wins over LLM_PROVIDER."""
-    raw = (choice if choice is not None else os.getenv("LLM_PROVIDER") or "openai").strip().lower()
+    raw = (choice if choice is not None else os.getenv("LLM_PROVIDER","qwen") or "openai").strip().lower()
     if raw in {"qwen", "local", "huggingface"}:
         return "qwen"
     if raw in {"openai", "gpt"}:
